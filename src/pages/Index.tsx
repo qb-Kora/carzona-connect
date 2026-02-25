@@ -1,12 +1,23 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Header from "@/components/carzona/Header";
+import Hero from "@/components/carzona/Hero";
+import Services from "@/components/carzona/Services";
+import Stats from "@/components/carzona/Stats";
+import WhyUs from "@/components/carzona/WhyUs";
+import Reviews from "@/components/carzona/Reviews";
+import Contact from "@/components/carzona/Contact";
+import Footer from "@/components/carzona/Footer";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Header />
+      <Hero />
+      <Services />
+      <Stats />
+      <WhyUs />
+      <Reviews />
+      <Contact />
+      <Footer />
     </div>
   );
 };
