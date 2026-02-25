@@ -25,13 +25,16 @@ const Header = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass shadow-lg shadow-background/50" : "bg-transparent"
+        scrolled ? "glass-strong shadow-lg shadow-background/50" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <a href="#" className="flex items-center gap-2">
-            <span className="text-2xl font-bold tracking-tight font-[Space_Grotesk]">
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+              <span className="text-primary-foreground font-black text-sm">C</span>
+            </div>
+            <span className="text-xl font-bold tracking-tight font-[Space_Grotesk]">
               CAR<span className="text-primary">ZONA</span>
             </span>
           </a>
@@ -73,7 +76,7 @@ const Header = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass overflow-hidden"
+            className="md:hidden glass-strong overflow-hidden"
           >
             <nav className="flex flex-col p-4 gap-1">
               {links.map((l) => (
