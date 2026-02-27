@@ -4,6 +4,56 @@ import { Phone, ArrowDown, Shield, Clock, Award } from "lucide-react";
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden noise">
+      {/* Mechanical parallax background */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Gear 1 - large, top-right */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          className="absolute -top-32 -right-32 w-[500px] h-[500px] opacity-[0.03]"
+        >
+          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 20 L108 40 L120 25 L122 48 L138 38 L134 60 L152 55 L142 75 L162 76 L148 92 L168 98 L150 108 L166 120 L145 122 L155 140 L134 135 L138 155 L118 144 L115 165 L100 148 L85 165 L82 144 L62 155 L66 135 L45 140 L55 122 L34 120 L50 108 L32 98 L52 92 L38 76 L58 75 L48 55 L66 60 L62 38 L78 48 L80 25 L92 40 L100 20Z" fill="currentColor"/>
+            <circle cx="100" cy="100" r="30" fill="hsl(var(--background))"/>
+          </svg>
+        </motion.div>
+        {/* Gear 2 - medium, bottom-left */}
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+          className="absolute -bottom-20 -left-20 w-[350px] h-[350px] opacity-[0.04]"
+        >
+          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 15 L110 42 L125 22 L127 52 L148 35 L140 64 L162 55 L148 80 L172 78 L152 98 L175 102 L152 115 L170 125 L147 128 L158 148 L135 142 L140 162 L118 150 L115 172 L100 152 L85 172 L82 150 L60 162 L65 142 L42 148 L53 128 L30 125 L48 115 L25 102 L48 98 L28 78 L52 80 L38 55 L60 64 L52 35 L73 52 L75 22 L90 42 L100 15Z" fill="currentColor"/>
+            <circle cx="100" cy="100" r="35" fill="hsl(var(--background))"/>
+          </svg>
+        </motion.div>
+        {/* Gear 3 - small, center-left */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          className="absolute top-1/3 left-[8%] w-[180px] h-[180px] opacity-[0.03]"
+        >
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 8 L55 22 L65 12 L63 28 L76 20 L70 35 L84 32 L74 45 L90 48 L76 55 L88 64 L73 64 L82 76 L67 72 L72 86 L58 78 L55 92 L50 78 L45 92 L42 78 L28 86 L33 72 L18 76 L27 64 L12 64 L24 55 L10 48 L26 45 L16 32 L30 35 L24 20 L37 28 L35 12 L45 22 L50 8Z" fill="currentColor"/>
+            <circle cx="50" cy="50" r="15" fill="hsl(var(--background))"/>
+          </svg>
+        </motion.div>
+        {/* Piston/connecting rod - right side */}
+        <motion.div
+          animate={{ y: [0, 20, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[60%] right-[12%] w-[60px] opacity-[0.04]"
+        >
+          <svg viewBox="0 0 40 120" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="0" width="20" height="40" rx="4"/>
+            <rect x="16" y="40" width="8" height="50"/>
+            <circle cx="20" cy="100" r="12"/>
+            <circle cx="20" cy="100" r="6" fill="hsl(var(--background))"/>
+          </svg>
+        </motion.div>
+      </div>
+
       {/* Animated grid */}
       <div className="absolute inset-0 opacity-[0.04]" style={{
         backgroundImage: `linear-gradient(hsl(var(--primary) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.3) 1px, transparent 1px)`,
@@ -52,7 +102,7 @@ const Hero = () => {
           >
             Twój samochód
             <br />
-            <span className="text-gradient-green">zasługuje na więcej</span>
+            <span className="text-gradient-blue">zasługuje na więcej</span>
           </motion.h1>
 
           {/* Subtitle */}
