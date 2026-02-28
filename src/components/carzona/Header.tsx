@@ -8,7 +8,7 @@ const Header = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -16,6 +16,8 @@ const Header = () => {
     { label: "Usługi", href: "#uslugi" },
     { label: "Dlaczego my", href: "#dlaczego" },
     { label: "Opinie", href: "#opinie" },
+    { label: "Galeria", href: "#galeria" },
+    { label: "FAQ", href: "#faq" },
     { label: "Kontakt", href: "#kontakt" },
   ];
 
@@ -30,8 +32,8 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <a href="#" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+          <a href="#" className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
               <span className="text-primary-foreground font-black text-sm">C</span>
             </div>
             <span className="text-xl font-bold tracking-tight font-[Space_Grotesk]">
@@ -39,7 +41,7 @@ const Header = () => {
             </span>
           </a>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-7">
             {links.map((l) => (
               <a
                 key={l.href}
@@ -54,14 +56,20 @@ const Header = () => {
           <div className="flex items-center gap-3">
             <a
               href="tel:663881585"
-              className="hidden sm:inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:scale-105"
+              className="hidden sm:inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              <Phone className="w-4 h-4" />
-              663 881 585
+              <Phone className="w-4 h-4 text-primary" />
+              <span className="font-semibold text-foreground">663 881 585</span>
+            </a>
+            <a
+              href="#kontakt"
+              className="hidden md:inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold btn-shine hover:shadow-lg hover:shadow-primary/25 transition-all duration-300"
+            >
+              Umów wizytę
             </a>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden text-foreground p-2"
+              className="lg:hidden text-foreground p-2"
               aria-label="Menu"
             >
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -76,7 +84,7 @@ const Header = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-strong overflow-hidden"
+            className="lg:hidden glass-strong overflow-hidden"
           >
             <nav className="flex flex-col p-4 gap-1">
               {links.map((l) => (
@@ -84,17 +92,17 @@ const Header = () => {
                   key={l.href}
                   href={l.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-foreground py-3 px-4 rounded-lg hover:bg-secondary transition-colors"
+                  className="text-foreground py-3 px-4 rounded-xl hover:bg-secondary transition-colors"
                 >
                   {l.label}
                 </a>
               ))}
               <a
                 href="tel:663881585"
-                className="flex items-center justify-center gap-2 bg-primary text-primary-foreground py-3 px-4 rounded-full mt-2 font-semibold"
+                className="flex items-center justify-center gap-2 bg-primary text-primary-foreground py-3.5 px-4 rounded-full mt-3 font-semibold"
               >
                 <Phone className="w-4 h-4" />
-                Zadzwoń teraz
+                Zadzwoń: 663 881 585
               </a>
             </nav>
           </motion.div>
