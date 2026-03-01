@@ -24,7 +24,7 @@
     --muted: 225 12% 13%;
     --muted-foreground: 220 10% 50%;
 
-    --accent: 84 76% 50%;
+    --accent: 84 70% 40%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
@@ -61,7 +61,7 @@
     --secondary-foreground: 220 15% 90%;
     --muted: 225 12% 13%;
     --muted-foreground: 220 10% 50%;
-    --accent: 84 76% 50%;
+    --accent: 84 70% 40%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 220 40% 98%;
@@ -111,19 +111,19 @@
 
   .text-gradient-accent {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(84 76% 40%) 100%);
+    background-image: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(84 70% 30%) 100%);
   }
 
   .glow-primary {
-    box-shadow: 0 0 60px -10px hsl(var(--primary) / 0.4);
+    box-shadow: 0 0 40px -15px hsl(var(--primary) / 0.3);
   }
 
   .glow-accent {
-    box-shadow: 0 0 60px -10px hsl(var(--accent) / 0.4);
+    box-shadow: 0 0 40px -15px hsl(var(--accent) / 0.3);
   }
 
   .glow-text {
-    text-shadow: 0 0 40px hsl(var(--primary) / 0.5);
+    text-shadow: 0 0 30px hsl(var(--primary) / 0.3);
   }
 
   .glass {
@@ -172,9 +172,9 @@
   }
 
   .card-hover:hover {
-    border-color: hsl(var(--primary) / 0.3);
-    box-shadow: 0 20px 60px -15px hsl(var(--primary) / 0.1), 0 0 0 1px hsl(var(--primary) / 0.05);
-    transform: translateY(-4px);
+    border-color: hsl(var(--primary) / 0.25);
+    box-shadow: 0 8px 30px -12px hsl(var(--primary) / 0.12), 0 0 0 1px hsl(var(--primary) / 0.05);
+    transform: translateY(-2px);
   }
 
   .btn-shine {

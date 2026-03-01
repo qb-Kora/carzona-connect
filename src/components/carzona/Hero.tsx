@@ -51,14 +51,14 @@ const Hero = () => {
 
       {/* Glow orbs */}
       <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.15, 0.08] }}
+        animate={{ scale: [1, 1.15, 1], opacity: [0.06, 0.1, 0.06] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 -left-48 w-[500px] h-[500px] rounded-full bg-primary/20 blur-[180px]"
+        className="absolute top-1/4 -left-48 w-[500px] h-[500px] rounded-full bg-primary/15 blur-[180px]"
       />
       <motion.div
-        animate={{ scale: [1.2, 1, 1.2], opacity: [0.06, 0.12, 0.06] }}
+        animate={{ scale: [1.15, 1, 1.15], opacity: [0.04, 0.08, 0.04] }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-1/4 -right-48 w-[500px] h-[500px] rounded-full bg-accent/10 blur-[180px]"
+        className="absolute bottom-1/4 -right-48 w-[500px] h-[500px] rounded-full bg-accent/8 blur-[180px]"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40">
@@ -108,7 +108,7 @@ const Hero = () => {
           >
             <a
               href="#kontakt"
-              className="group relative flex items-center gap-3 bg-accent text-accent-foreground px-10 py-5 rounded-2xl text-lg font-bold btn-shine hover:shadow-2xl hover:shadow-accent/30 transition-all duration-500 hover:scale-[1.03]"
+              className="group relative flex items-center gap-3 bg-accent text-accent-foreground px-10 py-5 rounded-2xl text-lg font-bold btn-shine hover:shadow-lg hover:shadow-accent/20 transition-all duration-500 hover:scale-[1.02]"
             >
               <CalendarCheck className="w-5 h-5" />
               Umów wizytę
