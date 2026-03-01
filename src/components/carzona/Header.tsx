@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Menu, X } from "lucide-react";
+import logoCarzona from "@/assets/logo-carzona.png";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -32,13 +33,8 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <a href="#" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-black text-sm">C</span>
-            </div>
-            <span className="text-xl font-bold tracking-tight font-[Space_Grotesk]">
-              CAR<span className="text-primary">ZONA</span>
-            </span>
+          <a href="#" className="flex items-center gap-2">
+            <img src={logoCarzona} alt="CARZONA Q Service" className="h-10 w-auto object-contain" />
           </a>
 
           <nav className="hidden lg:flex items-center gap-7">

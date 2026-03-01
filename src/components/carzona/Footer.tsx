@@ -1,4 +1,5 @@
 import { Phone, Mail, MapPin } from "lucide-react";
+import logoCarzona from "@/assets/logo-carzona.png";
 
 const Footer = () => (
   <footer className="border-t border-border py-16 relative">
@@ -6,12 +7,7 @@ const Footer = () => (
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         <div>
           <div className="flex items-center gap-2.5 mb-5">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-black text-sm">C</span>
-            </div>
-            <span className="text-xl font-bold tracking-tight font-[Space_Grotesk]">
-              CAR<span className="text-primary">ZONA</span>
-            </span>
+            <img src={logoCarzona} alt="CARZONA Q Service" className="h-12 w-auto object-contain" />
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed mb-3">
             Profesjonalny serwis samochodowy w Rybniku. Kompleksowa obsługa pojazdów wszystkich marek.
