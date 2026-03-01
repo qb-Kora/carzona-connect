@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Menu, X } from "lucide-react";
-import logoCarzona from "@/assets/logo-carzona.png";
+import Logo from "./Logo";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -33,8 +33,8 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <a href="#" className="flex items-center gap-2">
-            <img src={logoCarzona} alt="CARZONA Q Service" className="h-10 w-auto object-contain" />
+          <a href="#" className="flex items-center">
+            <Logo className="h-9 w-auto" />
           </a>
 
           <nav className="hidden lg:flex items-center gap-7">
@@ -59,7 +59,7 @@ const Header = () => {
             </a>
             <a
               href="#kontakt"
-              className="hidden md:inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold btn-shine hover:shadow-lg hover:shadow-primary/25 transition-all duration-300"
+              className="hidden md:inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold btn-shine hover:shadow-md hover:shadow-primary/20 transition-all duration-300"
             >
               Umów wizytę
             </a>

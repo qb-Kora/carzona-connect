@@ -129,7 +129,7 @@ const Contact = () => {
                 </div>
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-2 w-full bg-accent text-accent-foreground py-4 rounded-2xl font-bold text-base btn-shine hover:shadow-lg hover:shadow-accent/25 transition-all duration-300 hover:scale-[1.02]"
+                  className="flex items-center justify-center gap-2 w-full bg-accent text-accent-foreground py-4 rounded-2xl font-bold text-base btn-shine hover:shadow-md hover:shadow-accent/15 transition-all duration-300 hover:scale-[1.01]"
                 >
                   <Send className="w-5 h-5" />
                   Wyślij wiadomość
