@@ -33,8 +33,8 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <a href="#" className="flex items-center">
-            <Logo className="h-9 w-auto" />
+          <a href="#" className="flex items-center text-2xl">
+            <Logo />
           </a>
 
           <nav className="hidden lg:flex items-center gap-7">
