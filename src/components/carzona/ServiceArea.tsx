@@ -47,14 +47,14 @@ const ServiceArea = () => (
           className="rounded-3xl overflow-hidden border border-border h-80 lg:h-96"
         >
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2560.5!2d18.53!3d50.09!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTDCsDA1JzI0LjAiTiAxOMKwMzEnNDguMCJF!5e0!3m2!1spl!2spl!4v1"
+            src="https://maps.google.com/maps?q=Konarskiego+17,+44-274+Rybnik,+Polska&t=&z=15&ie=UTF8&iwloc=&output=embed"
             width="100%"
             height="100%"
             style={{ border: 0, filter: "invert(0.9) hue-rotate(180deg) saturate(0.3) brightness(0.8)" }}
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="CARZONA lokalizacja Rybnik"
+            title="CARZONA lokalizacja — ul. Konarskiego 17, Rybnik"
           />
         </motion.div>
       </div>
