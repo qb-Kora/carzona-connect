@@ -14,13 +14,13 @@ const Header = () => {
   }, []);
 
   const links = [
-    { label: "Usługi", href: "#uslugi" },
-    { label: "Dlaczego my", href: "#dlaczego" },
-    { label: "Opinie", href: "#opinie" },
-    { label: "Galeria", href: "#galeria" },
-    { label: "FAQ", href: "#faq" },
-    { label: "Kontakt", href: "#kontakt" },
-  ];
+  { label: "Usługi", href: "#uslugi" },
+  { label: "Dlaczego my", href: "#dlaczego" },
+  { label: "Opinie", href: "#opinie" },
+  { label: "Galeria", href: "#galeria" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Kontakt", href: "#kontakt" }];
+
 
   return (
     <motion.header
@@ -28,9 +28,9 @@ const Header = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass-strong shadow-lg shadow-background/50" : "bg-transparent"
-      }`}
-    >
+      scrolled ? "glass-strong shadow-lg shadow-background/50" : "bg-transparent"}`
+      }>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <a href="#" className="flex items-center text-2xl">
@@ -38,36 +38,36 @@ const Header = () => {
           </a>
 
           <nav className="hidden lg:flex items-center gap-7">
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
-              >
+            {links.map((l) =>
+            <a
+              key={l.href}
+              href={l.href}
+              className="text-muted-foreground hover:text-foreground transition-colors duration-300 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full text-lg">
+
                 {l.label}
               </a>
-            ))}
+            )}
           </nav>
 
           <div className="flex items-center gap-3">
             <a
               href="tel:663881585"
-              className="hidden sm:inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
+              className="hidden sm:inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+
               <Phone className="w-4 h-4 text-primary" />
               <span className="font-semibold text-foreground">663 881 585</span>
             </a>
             <a
               href="#kontakt"
-              className="hidden md:inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold btn-shine hover:shadow-md hover:shadow-primary/20 transition-all duration-300"
-            >
+              className="hidden md:inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold btn-shine hover:shadow-md hover:shadow-primary/20 transition-all duration-300">
+
               Umów wizytę
             </a>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden text-foreground p-2"
-              aria-label="Menu"
-            >
+              aria-label="Menu">
+
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
@@ -75,37 +75,37 @@ const Header = () => {
       </div>
 
       <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden glass-strong overflow-hidden"
-          >
+        {mobileOpen &&
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          className="lg:hidden glass-strong overflow-hidden">
+
             <nav className="flex flex-col p-4 gap-1">
-              {links.map((l) => (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-foreground py-3 px-4 rounded-xl hover:bg-secondary transition-colors"
-                >
+              {links.map((l) =>
+            <a
+              key={l.href}
+              href={l.href}
+              onClick={() => setMobileOpen(false)}
+              className="text-foreground py-3 px-4 rounded-xl hover:bg-secondary transition-colors">
+
                   {l.label}
                 </a>
-              ))}
+            )}
               <a
-                href="tel:663881585"
-                className="flex items-center justify-center gap-2 bg-primary text-primary-foreground py-3.5 px-4 rounded-full mt-3 font-semibold"
-              >
+              href="tel:663881585"
+              className="flex items-center justify-center gap-2 bg-primary text-primary-foreground py-3.5 px-4 rounded-full mt-3 font-semibold">
+
                 <Phone className="w-4 h-4" />
                 Zadzwoń: 663 881 585
               </a>
             </nav>
           </motion.div>
-        )}
+        }
       </AnimatePresence>
-    </motion.header>
-  );
+    </motion.header>);
+
 };
 
 export default Header;
