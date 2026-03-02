@@ -33,7 +33,7 @@ const Header = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <a href="#" className="flex items-center text-2xl">
+          <a href="#" className="flex items-center text-3xl">
             <Logo />
           </a>
 
@@ -42,7 +42,7 @@ const Header = () => {
             <a
               key={l.href}
               href={l.href}
-              className="text-muted-foreground hover:text-foreground transition-colors duration-300 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full text-lg">
+              className="text-muted-foreground hover:text-foreground transition-colors duration-300 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full text-lg">
 
                 {l.label}
               </a>
