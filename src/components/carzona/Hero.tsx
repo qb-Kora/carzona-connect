@@ -10,94 +10,24 @@ const usps = [
 const Hero = () => {
   return (
     <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
-      {/* Cinematic animated background */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Animated road/speed lines */}
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ x: "110%", opacity: 0 }}
-            animate={{ x: "-110%", opacity: [0, 0.06, 0.06, 0] }}
-            transition={{
-              duration: 3 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.7,
-              ease: "linear",
-            }}
-            className="absolute h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent"
-            style={{
-              top: `${20 + i * 8}%`,
-              width: `${120 + i * 30}px`,
-            }}
-          />
-        ))}
-
-        {/* Rotating gear — large */}
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
-          className="absolute -top-32 -right-32 w-[500px] h-[500px] opacity-[0.02]"
+      {/* Video background */}
+      <div className="absolute inset-0">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
         >
-          <svg viewBox="0 0 200 200" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M100 20 L108 40 L120 25 L122 48 L138 38 L134 60 L152 55 L142 75 L162 76 L148 92 L168 98 L150 108 L166 120 L145 122 L155 140 L134 135 L138 155 L118 144 L115 165 L100 148 L85 165 L82 144 L62 155 L66 135 L45 140 L55 122 L34 120 L50 108 L32 98 L52 92 L38 76 L58 75 L48 55 L66 60 L62 38 L78 48 L80 25 L92 40 L100 20Z"/>
-            <circle cx="100" cy="100" r="30" fill="hsl(var(--background))"/>
-          </svg>
-        </motion.div>
-
-        {/* Rotating gear — small */}
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-          className="absolute -bottom-16 -left-16 w-[300px] h-[300px] opacity-[0.025]"
-        >
-          <svg viewBox="0 0 200 200" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M100 15 L110 42 L125 22 L127 52 L148 35 L140 64 L162 55 L148 80 L172 78 L152 98 L175 102 L152 115 L170 125 L147 128 L158 148 L135 142 L140 162 L118 150 L115 172 L100 152 L85 172 L82 150 L60 162 L65 142 L42 148 L53 128 L30 125 L48 115 L25 102 L48 98 L28 78 L52 80 L38 55 L60 64 L52 35 L73 52 L75 22 L90 42 L100 15Z"/>
-            <circle cx="100" cy="100" r="35" fill="hsl(var(--background))"/>
-          </svg>
-        </motion.div>
-
-        {/* Animated floating sparks */}
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={`spark-${i}`}
-            animate={{
-              y: [0, -80, 0],
-              x: [0, (i % 2 === 0 ? 20 : -20), 0],
-              opacity: [0, 0.4, 0],
-              scale: [0.5, 1, 0.5],
-            }}
-            transition={{
-              duration: 4 + i,
-              repeat: Infinity,
-              delay: i * 1.2,
-              ease: "easeInOut",
-            }}
-            className="absolute w-1 h-1 rounded-full bg-accent"
-            style={{
-              left: `${15 + i * 18}%`,
-              top: `${60 + (i % 3) * 10}%`,
-            }}
-          />
-        ))}
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+        </video>
       </div>
 
-      {/* Grid overlay */}
-      <div className="absolute inset-0 opacity-[0.025]" style={{
-        backgroundImage: `linear-gradient(hsl(var(--primary) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.3) 1px, transparent 1px)`,
-        backgroundSize: '80px 80px'
-      }} />
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background/90" />
 
-      {/* Glow orbs */}
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.05, 0.1, 0.05] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 -left-48 w-[500px] h-[500px] rounded-full bg-primary/15 blur-[180px]"
-      />
-      <motion.div
-        animate={{ scale: [1.2, 1, 1.2], opacity: [0.03, 0.07, 0.03] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-1/4 -right-48 w-[500px] h-[500px] rounded-full bg-accent/10 blur-[180px]"
-      />
+      {/* Accent glow */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.05] via-transparent to-accent/[0.05]" />
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-28 sm:py-32 md:py-40">
