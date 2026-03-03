@@ -24,7 +24,7 @@ const Hero = () => {
       </div>
 
       {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background/90" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/85 to-background/95" />
 
       {/* Accent glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.05] via-transparent to-accent/[0.05]" />
