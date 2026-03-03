@@ -40,10 +40,10 @@ const items = [
 ];
 
 const TrustBar = () => (
-  <section id="zaufanie" className="relative py-10 md:py-16 line-glow">
+  <section id="zaufanie" className="relative py-8 sm:py-12 md:py-16 line-glow">
     <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.03] via-transparent to-primary/[0.03]" />
-    <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {items.map((item, i) => (
           <motion.div
             key={item.label}
@@ -51,18 +51,18 @@ const TrustBar = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="flex items-center gap-3 md:gap-4 group"
+            className="flex items-center gap-2.5 sm:gap-4 group"
           >
-            <div className="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
-              <item.icon className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
+              <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             </div>
-            <div>
+            <div className="min-w-0">
               {item.value > 0 ? (
-                <div className="text-lg md:text-2xl font-bold text-foreground">
+                <div className="text-base sm:text-lg md:text-2xl font-bold text-foreground leading-tight">
                   <CountUp target={item.value} suffix={item.suffix} />
                 </div>
               ) : null}
-              <div className="text-xs md:text-sm text-muted-foreground">{item.label}</div>
+              <div className="text-[11px] sm:text-xs md:text-sm text-muted-foreground leading-tight">{item.label}</div>
             </div>
           </motion.div>
         ))}

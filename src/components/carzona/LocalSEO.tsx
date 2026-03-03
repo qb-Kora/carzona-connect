@@ -2,13 +2,13 @@ import AnimatedSection from "./AnimatedSection";
 
 const LocalSEO = () => {
   return (
-    <section className="py-20 md:py-28">
+    <section className="py-14 sm:py-16 md:py-28">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-6 text-foreground">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight mb-4 sm:mb-6 text-foreground">
             Mechanik samochodowy Rybnik
           </h2>
-          <div className="text-muted-foreground leading-relaxed space-y-4 text-sm md:text-base">
+          <div className="text-muted-foreground leading-relaxed space-y-3 sm:space-y-4 text-xs sm:text-sm md:text-base">
             <p>
               CARZONA to profesjonalny warsztat samochodowy w Rybniku, specjalizujący się w kompleksowej obsłudze
               pojazdów osobowych wszystkich marek. Nasz warsztat przy ul. Konarskiego 17 oferuje pełen zakres usług
