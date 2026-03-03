@@ -4,10 +4,12 @@ import TrustBar from "@/components/carzona/TrustBar";
 import WhyUs from "@/components/carzona/WhyUs";
 import Services from "@/components/carzona/Services";
 import Reviews from "@/components/carzona/Reviews";
+import Realizations from "@/components/carzona/Realizations";
 import Gallery from "@/components/carzona/Gallery";
 import ServiceArea from "@/components/carzona/ServiceArea";
 import FAQ from "@/components/carzona/FAQ";
 import Contact from "@/components/carzona/Contact";
+import LocalSEO from "@/components/carzona/LocalSEO";
 import Footer from "@/components/carzona/Footer";
 import MobileCTA from "@/components/carzona/MobileCTA";
 
@@ -20,10 +22,12 @@ const Index = () => {
       <WhyUs />
       <Services />
       <Reviews />
+      <Realizations />
       <Gallery />
       <ServiceArea />
       <FAQ />
       <Contact />
+      <LocalSEO />
       <Footer />
       <MobileCTA />
     </div>
