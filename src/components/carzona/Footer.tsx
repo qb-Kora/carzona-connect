@@ -2,9 +2,9 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import Logo from "./Logo";
 
 const Footer = () => (
-  <footer className="border-t border-border py-16 relative">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+  <footer className="border-t border-border py-12 md:py-16 relative pb-24 md:pb-16">
+    <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 mb-10 md:mb-12">
         <div>
           <div className="mb-5 text-3xl">
             <Logo />
@@ -18,7 +18,7 @@ const Footer = () => (
         </div>
 
         <div>
-          <h4 className="font-semibold text-foreground mb-5">Usługi</h4>
+          <h4 className="font-semibold text-foreground mb-4 md:mb-5">Usługi</h4>
           <ul className="space-y-2.5 text-sm text-muted-foreground">
             <li><a href="#uslugi" className="hover:text-foreground transition-colors">Mechanika ogólna</a></li>
             <li><a href="#uslugi" className="hover:text-foreground transition-colors">Diagnostyka komputerowa</a></li>
@@ -29,7 +29,7 @@ const Footer = () => (
         </div>
 
         <div>
-          <h4 className="font-semibold text-foreground mb-5">Godziny otwarcia</h4>
+          <h4 className="font-semibold text-foreground mb-4 md:mb-5">Godziny otwarcia</h4>
           <ul className="space-y-2.5 text-sm text-muted-foreground">
             <li>Poniedziałek – Piątek: 8:00–17:00</li>
             <li>Sobota: 8:00–13:00</li>
@@ -38,7 +38,7 @@ const Footer = () => (
         </div>
 
         <div>
-          <h4 className="font-semibold text-foreground mb-5">Kontakt</h4>
+          <h4 className="font-semibold text-foreground mb-4 md:mb-5">Kontakt</h4>
           <ul className="space-y-3 text-sm text-muted-foreground">
             <li className="flex items-center gap-2.5">
               <Phone className="w-4 h-4 text-primary" />
