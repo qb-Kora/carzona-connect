@@ -20,16 +20,16 @@ const Reviews = () => {
 
   return (
     <ParallaxSection imageUrl="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80&fit=crop" overlayOpacity={0.9}>
-      <section id="opinie" className="py-24 md:py-32 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-16">
+      <section id="opinie" className="py-20 md:py-32 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center mb-12 md:mb-16">
             <span className="text-accent text-sm font-semibold tracking-widest uppercase mb-4 block">
               Opinie
             </span>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
               Co mówią nasi klienci
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto text-lg">
+            <p className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg">
               Zaufanie klientów to nasza największa nagroda. Sprawdź opinie.
             </p>
           </AnimatedSection>
@@ -81,7 +81,7 @@ const Reviews = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -40 }}
                 transition={{ duration: 0.3 }}
-                className="card-hover p-6 rounded-3xl backdrop-blur-sm"
+                className="card-hover p-5 rounded-3xl backdrop-blur-sm"
               >
                 <Quote className="w-7 h-7 text-primary/15 mb-3" />
                 <div className="flex gap-0.5 mb-3">
@@ -89,7 +89,7 @@ const Reviews = () => {
                     <Star key={j} className="w-4 h-4 fill-accent text-accent" />
                   ))}
                 </div>
-                <p className="text-muted-foreground leading-relaxed mb-5">
+                <p className="text-muted-foreground leading-relaxed mb-5 text-sm">
                   "{reviews[current].text}"
                 </p>
                 <div className="border-t border-border pt-4 flex items-center gap-3">
@@ -110,7 +110,7 @@ const Reviews = () => {
             <button
               onClick={() => setCurrent(c => Math.max(0, c - 1))}
               disabled={current === 0}
-              className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all disabled:opacity-30"
+              className="w-11 h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all disabled:opacity-30 touch-target"
               aria-label="Poprzednie opinie"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -120,8 +120,8 @@ const Reviews = () => {
                 <button
                   key={i}
                   onClick={() => setCurrent(i)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                    i === current ? "bg-primary w-8" : "bg-border hover:bg-muted-foreground"
+                  className={`h-2.5 rounded-full transition-all duration-300 touch-target ${
+                    i === current ? "bg-primary w-8" : "bg-border hover:bg-muted-foreground w-2.5"
                   }`}
                   aria-label={`Strona ${i + 1}`}
                 />
@@ -130,7 +130,7 @@ const Reviews = () => {
             <button
               onClick={() => setCurrent(c => Math.min(maxPage, c + 1))}
               disabled={current === maxPage}
-              className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all disabled:opacity-30"
+              className="w-11 h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all disabled:opacity-30 touch-target"
               aria-label="Następne opinie"
             >
               <ChevronRight className="w-4 h-4" />

@@ -89,6 +89,7 @@
     font-family: 'Outfit', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -98,6 +99,7 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
+    overflow-x: hidden;
   }
 
   /* Improve text rendering */
@@ -107,6 +109,19 @@
 
   h2 {
     line-height: 1.15;
+  }
+
+  /* Disable hover effects on touch devices */
+  @media (hover: none) {
+    .card-hover:hover {
+      border-color: hsl(var(--border)) !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    .btn-shine:hover::after {
+      transform: translateX(-200%) !important;
+    }
   }
 }
 
@@ -181,6 +196,7 @@
 
   .card-hover {
     @apply relative overflow-hidden rounded-2xl bg-card border border-border transition-all duration-500;
+    will-change: transform;
   }
 
   .card-hover:hover {
@@ -221,5 +237,11 @@
     width: 120px;
     height: 1px;
     background: linear-gradient(90deg, transparent, hsl(var(--accent) / 0.4), transparent);
+  }
+
+  /* Touch-friendly min heights */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
   }
 }

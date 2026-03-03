@@ -35,21 +35,21 @@ const realizations = [
 
 const Realizations = () => {
   return (
-    <section id="realizacje" className="py-24 md:py-32 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection className="text-center mb-16">
+    <section id="realizacje" className="py-20 md:py-32 relative">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+        <AnimatedSection className="text-center mb-12 md:mb-16">
           <span className="text-accent text-sm font-semibold tracking-widest uppercase mb-4 block">
             Realizacje
           </span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
             Nasze ostatnie naprawy
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto text-lg">
+          <p className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg">
             Każda naprawa to dla nas wyzwanie, które podejmujemy z pasją.
           </p>
         </AnimatedSection>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {realizations.map((r, i) => (
             <motion.div
               key={r.title}
@@ -57,10 +57,10 @@ const Realizations = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="card-hover p-7 rounded-3xl group"
+              className="card-hover p-5 md:p-7 rounded-3xl group"
             >
-              <div className="flex items-start justify-between mb-4">
-                <h3 className="font-bold text-foreground text-lg leading-tight pr-4">{r.title}</h3>
+              <div className="flex items-start justify-between mb-4 gap-3">
+                <h3 className="font-bold text-foreground text-base md:text-lg leading-tight">{r.title}</h3>
                 <div className={`flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold ${r.color}`}>
                   <Clock className="w-3.5 h-3.5" />
                   {r.time}

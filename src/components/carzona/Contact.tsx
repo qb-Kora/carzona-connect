@@ -55,16 +55,16 @@ const Contact = () => {
   };
 
   const inputClass = (field: string) =>
-    `w-full px-4 py-3.5 rounded-2xl bg-secondary border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all ${errors[field] ? "border-destructive" : "border-border"}`;
+    `w-full px-4 py-3.5 rounded-2xl bg-secondary border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all touch-target ${errors[field] ? "border-destructive" : "border-border"}`;
 
   if (submitted) {
     return (
-      <section id="kontakt" className="py-24 md:py-32">
-        <div className="max-w-2xl mx-auto px-4 text-center">
+      <section id="kontakt" className="py-20 md:py-32">
+        <div className="max-w-2xl mx-auto px-5 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="p-12 rounded-3xl bg-card border border-accent/20"
+            className="p-10 md:p-12 rounded-3xl bg-card border border-accent/20"
           >
             <div className="w-20 h-20 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-10 h-10 text-accent" />
@@ -73,7 +73,7 @@ const Contact = () => {
             <p className="text-muted-foreground mb-6">Twoje zgłoszenie zostało wysłane. Oddzwonimy w ciągu godziny.</p>
             <button
               onClick={() => { setSubmitted(false); setForm({ name: "", phone: "", email: "", service: "", car: "", date: "", time: "", message: "", rodo: false }); }}
-              className="text-accent font-semibold hover:underline"
+              className="text-accent font-semibold hover:underline touch-target"
             >
               Wyślij kolejne zgłoszenie
             </button>
@@ -84,47 +84,47 @@ const Contact = () => {
   }
 
   return (
-    <section id="kontakt" className="py-24 md:py-32 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection className="text-center mb-16">
+    <section id="kontakt" className="py-20 md:py-32 relative">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+        <AnimatedSection className="text-center mb-12 md:mb-16">
           <span className="text-accent text-sm font-semibold tracking-widest uppercase mb-4 block">
             Kontakt
           </span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
             Umów wizytę online
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto text-lg">
+          <p className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg">
             Wypełnij formularz — oddzwonimy w ciągu godziny i potwierdzimy termin.
           </p>
         </AnimatedSection>
 
-        <div className="grid lg:grid-cols-5 gap-8">
+        <div className="grid lg:grid-cols-5 gap-6 md:gap-8">
           {/* Info cards */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="lg:col-span-2 space-y-4"
+            className="lg:col-span-2 space-y-3 md:space-y-4"
           >
             <a
               href="tel:663881585"
-              className="group flex items-center gap-4 p-6 rounded-3xl bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300"
+              className="group flex items-center gap-4 p-5 md:p-6 rounded-3xl bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300 touch-target"
             >
-              <div className="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                <Phone className="w-6 h-6 text-accent" />
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-accent/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <Phone className="w-5 h-5 md:w-6 md:h-6 text-accent" />
               </div>
               <div>
                 <div className="font-semibold text-foreground text-sm mb-0.5">Zadzwoń teraz</div>
-                <div className="text-accent font-bold text-xl">663 881 585</div>
+                <div className="text-accent font-bold text-lg md:text-xl">663 881 585</div>
               </div>
             </a>
 
             <a
               href="mailto:sebastian@carzona.pl"
-              className="group flex items-center gap-4 p-5 rounded-3xl bg-card border border-border hover:border-primary/30 transition-all duration-300"
+              className="group flex items-center gap-4 p-4 md:p-5 rounded-3xl bg-card border border-border hover:border-primary/30 transition-all duration-300 touch-target"
             >
-              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
                 <Mail className="w-5 h-5 text-primary" />
               </div>
               <div>
@@ -133,8 +133,8 @@ const Contact = () => {
               </div>
             </a>
 
-            <div className="flex items-center gap-4 p-5 rounded-3xl bg-card border border-border">
-              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-4 p-4 md:p-5 rounded-3xl bg-card border border-border">
+              <div className="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
                 <MapPin className="w-5 h-5 text-primary" />
               </div>
               <div>
@@ -143,8 +143,8 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 p-5 rounded-3xl bg-card border border-border">
-              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-4 p-4 md:p-5 rounded-3xl bg-card border border-border">
+              <div className="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
                 <Clock className="w-5 h-5 text-primary" />
               </div>
               <div>
@@ -164,10 +164,10 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-3"
           >
-            <div className="p-7 md:p-10 rounded-3xl bg-card border border-border">
+            <div className="p-5 md:p-10 rounded-3xl bg-card border border-border">
               <h3 className="font-bold text-foreground text-xl mb-2">Zarezerwuj termin</h3>
-              <p className="text-muted-foreground text-sm mb-8">Wszystkie pola oznaczone * są wymagane.</p>
-              <form className="space-y-5" onSubmit={handleSubmit}>
+              <p className="text-muted-foreground text-sm mb-6 md:mb-8">Wszystkie pola oznaczone * są wymagane.</p>
+              <form className="space-y-4 md:space-y-5" onSubmit={handleSubmit}>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">Imię i nazwisko *</label>
@@ -225,7 +225,7 @@ const Contact = () => {
 
                 <div>
                   <label className="flex items-start gap-3 cursor-pointer">
-                    <input type="checkbox" checked={form.rodo} onChange={(e) => update("rodo", e.target.checked)} className="mt-1 w-4 h-4 rounded border-border accent-accent" />
+                    <input type="checkbox" checked={form.rodo} onChange={(e) => update("rodo", e.target.checked)} className="mt-1 w-5 h-5 rounded border-border accent-accent touch-target" />
                     <span className="text-xs text-muted-foreground leading-relaxed">
                       Wyrażam zgodę na przetwarzanie moich danych osobowych w celu realizacji usługi zgodnie z <a href="#" className="text-accent hover:underline">polityką prywatności</a>. *
                     </span>
@@ -235,7 +235,7 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-2 w-full bg-accent text-accent-foreground py-4 rounded-2xl font-bold text-base btn-shine hover:shadow-md hover:shadow-accent/15 transition-all duration-300 hover:scale-[1.01]"
+                  className="flex items-center justify-center gap-2 w-full bg-accent text-accent-foreground py-4 rounded-2xl font-bold text-base btn-shine hover:shadow-md hover:shadow-accent/15 transition-all duration-300 hover:scale-[1.01] touch-target"
                 >
                   <Send className="w-5 h-5" />
                   Umów wizytę
