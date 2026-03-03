@@ -3,7 +3,6 @@ import Hero from "@/components/carzona/Hero";
 import TrustBar from "@/components/carzona/TrustBar";
 import WhyUs from "@/components/carzona/WhyUs";
 import Services from "@/components/carzona/Services";
-import HowWeWork from "@/components/carzona/HowWeWork";
 import Reviews from "@/components/carzona/Reviews";
 import Realizations from "@/components/carzona/Realizations";
 import Gallery from "@/components/carzona/Gallery";
@@ -22,7 +21,6 @@ const Index = () => {
       <TrustBar />
       <WhyUs />
       <Services />
-      <HowWeWork />
       <Reviews />
       <Realizations />
       <Gallery />
