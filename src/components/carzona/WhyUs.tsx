@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
+import ParallaxSection from "./ParallaxSection";
 import { CheckCircle2, Timer, Banknote, HeartHandshake } from "lucide-react";
 
 const reasons = [
@@ -10,40 +11,42 @@ const reasons = [
 ];
 
 const WhyUs = () => (
-  <section id="dlaczego" className="py-24 md:py-32 relative">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <AnimatedSection className="text-center mb-16">
-        <span className="text-accent text-sm font-semibold tracking-widest uppercase mb-4 block">
-          Dlaczego my
-        </span>
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-          Zaufaj profesjonalistom
-        </h2>
-        <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-          CARZONA to nie zwykły warsztat — to miejsce, gdzie pasja do motoryzacji łączy się z najwyższą jakością obsługi.
-        </p>
-      </AnimatedSection>
+  <ParallaxSection imageUrl="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1920&q=80&fit=crop" overlayOpacity={0.88}>
+    <section id="dlaczego" className="py-24 md:py-32 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AnimatedSection className="text-center mb-16">
+          <span className="text-accent text-sm font-semibold tracking-widest uppercase mb-4 block">
+            Dlaczego my
+          </span>
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+            Zaufaj profesjonalistom
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto text-lg">
+            CARZONA to nie zwykły warsztat — to miejsce, gdzie pasja do motoryzacji łączy się z najwyższą jakością obsługi.
+          </p>
+        </AnimatedSection>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {reasons.map((reason, i) => (
-          <motion.div
-            key={reason.title}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="card-hover p-7 rounded-3xl cursor-default group"
-          >
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-              <reason.icon className="w-7 h-7 text-primary" />
-            </div>
-            <h3 className="font-bold text-foreground text-lg mb-2">{reason.title}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{reason.desc}</p>
-          </motion.div>
-        ))}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {reasons.map((reason, i) => (
+            <motion.div
+              key={reason.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="card-hover p-7 rounded-3xl cursor-default group backdrop-blur-sm"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                <reason.icon className="w-7 h-7 text-primary" />
+              </div>
+              <h3 className="font-bold text-foreground text-lg mb-2">{reason.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{reason.desc}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </ParallaxSection>
 );
 
 export default WhyUs;
