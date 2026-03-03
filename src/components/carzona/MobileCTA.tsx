@@ -1,4 +1,4 @@
-import { Phone } from "lucide-react";
+import { Phone, CalendarCheck } from "lucide-react";
 import { motion } from "framer-motion";
 
 const MobileCTA = () => (
@@ -8,13 +8,22 @@ const MobileCTA = () => (
     transition={{ delay: 1.5, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
     className="fixed bottom-0 left-0 right-0 z-40 md:hidden p-3 glass-strong"
   >
-    <a
-      href="tel:663881585"
-      className="flex items-center justify-center gap-3 bg-accent text-accent-foreground w-full py-4 rounded-2xl font-bold text-base btn-shine"
-    >
-      <Phone className="w-5 h-5" />
-      Zadzwoń teraz — 663 881 585
-    </a>
+    <div className="flex gap-2">
+      <a
+        href="tel:663881585"
+        className="flex items-center justify-center gap-2 bg-card border border-border text-foreground flex-1 py-3.5 rounded-2xl font-semibold text-sm"
+      >
+        <Phone className="w-4 h-4 text-primary" />
+        Zadzwoń
+      </a>
+      <a
+        href="#kontakt"
+        className="flex items-center justify-center gap-2 bg-accent text-accent-foreground flex-1 py-3.5 rounded-2xl font-bold text-sm btn-shine"
+      >
+        <CalendarCheck className="w-4 h-4" />
+        Umów wizytę
+      </a>
+    </div>
   </motion.div>
 );
 

@@ -1,10 +1,87 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
-import { Phone, Mail, MapPin, Send, Clock } from "lucide-react";
+import { Phone, Mail, MapPin, Send, Clock, CheckCircle } from "lucide-react";
+
+const services = [
+  "Diagnostyka komputerowa",
+  "Mechanika ogólna",
+  "Wymiana rozrządu",
+  "Serwis klimatyzacji",
+  "Wymiana oleju i filtrów",
+  "Serwis hamulców",
+  "Zawieszenie i geometria",
+  "Elektryka samochodowa",
+  "Przeglądy okresowe",
+  "Inne",
+];
+
+const hours = [
+  "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
+  "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
+  "14:00", "14:30", "15:00", "15:30", "16:00", "16:30",
+];
 
 const Contact = () => {
-  const [form, setForm] = useState({ name: "", phone: "", message: "" });
+  const [form, setForm] = useState({
+    name: "", phone: "", email: "", service: "", car: "", date: "", time: "", message: "", rodo: false,
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!form.name.trim()) e.name = "Podaj imię i nazwisko";
+    if (!form.phone.trim() || form.phone.replace(/\D/g, "").length < 9) e.phone = "Podaj poprawny numer telefonu";
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Podaj poprawny email";
+    if (!form.service) e.service = "Wybierz usługę";
+    if (!form.car.trim()) e.car = "Podaj markę i model auta";
+    if (!form.date) e.date = "Wybierz datę";
+    if (!form.rodo) e.rodo = "Wymagana zgoda RODO";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validate()) {
+      setSubmitted(true);
+    }
+  };
+
+  const update = (field: string, value: string | boolean) => {
+    setForm(s => ({ ...s, [field]: value }));
+    if (errors[field]) setErrors(e => { const n = { ...e }; delete n[field]; return n; });
+  };
+
+  const inputClass = (field: string) =>
+    `w-full px-4 py-3.5 rounded-2xl bg-secondary border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all ${errors[field] ? "border-destructive" : "border-border"}`;
+
+  if (submitted) {
+    return (
+      <section id="kontakt" className="py-24 md:py-32">
+        <div className="max-w-2xl mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-12 rounded-3xl bg-card border border-accent/20"
+          >
+            <div className="w-20 h-20 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-10 h-10 text-accent" />
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-3">Dziękujemy!</h3>
+            <p className="text-muted-foreground mb-6">Twoje zgłoszenie zostało wysłane. Oddzwonimy w ciągu godziny.</p>
+            <button
+              onClick={() => { setSubmitted(false); setForm({ name: "", phone: "", email: "", service: "", car: "", date: "", time: "", message: "", rodo: false }); }}
+              className="text-accent font-semibold hover:underline"
+            >
+              Wyślij kolejne zgłoszenie
+            </button>
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="kontakt" className="py-24 md:py-32 relative">
@@ -14,10 +91,10 @@ const Contact = () => {
             Kontakt
           </span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-            Skontaktuj się z nami
+            Umów wizytę online
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-            Zadzwoń lub napisz — odpowiemy najszybciej jak to możliwe.
+            Wypełnij formularz — oddzwonimy w ciągu godziny i potwierdzimy termin.
           </p>
         </AnimatedSection>
 
@@ -30,7 +107,6 @@ const Contact = () => {
             transition={{ duration: 0.6 }}
             className="lg:col-span-2 space-y-4"
           >
-            {/* Phone - prominent */}
             <a
               href="tel:663881585"
               className="group flex items-center gap-4 p-6 rounded-3xl bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300"
@@ -89,50 +165,80 @@ const Contact = () => {
             className="lg:col-span-3"
           >
             <div className="p-7 md:p-10 rounded-3xl bg-card border border-border">
-              <h3 className="font-bold text-foreground text-xl mb-2">Umów wizytę</h3>
-              <p className="text-muted-foreground text-sm mb-8">Wypełnij formularz, oddzwonimy w ciągu godziny.</p>
-              <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+              <h3 className="font-bold text-foreground text-xl mb-2">Zarezerwuj termin</h3>
+              <p className="text-muted-foreground text-sm mb-8">Wszystkie pola oznaczone * są wymagane.</p>
+              <form className="space-y-5" onSubmit={handleSubmit}>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">Imię</label>
-                    <input
-                      id="name"
-                      type="text"
-                      placeholder="Jan"
-                      value={form.name}
-                      onChange={(e) => setForm(s => ({ ...s, name: e.target.value }))}
-                      className="w-full px-4 py-3.5 rounded-2xl bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
-                    />
+                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">Imię i nazwisko *</label>
+                    <input id="name" type="text" placeholder="Jan Kowalski" value={form.name} onChange={(e) => update("name", e.target.value)} className={inputClass("name")} />
+                    {errors.name && <p className="text-destructive text-xs mt-1">{errors.name}</p>}
                   </div>
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">Telefon</label>
-                    <input
-                      id="phone"
-                      type="tel"
-                      placeholder="600 000 000"
-                      value={form.phone}
-                      onChange={(e) => setForm(s => ({ ...s, phone: e.target.value }))}
-                      className="w-full px-4 py-3.5 rounded-2xl bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
-                    />
+                    <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">Telefon *</label>
+                    <input id="phone" type="tel" placeholder="600 000 000" value={form.phone} onChange={(e) => update("phone", e.target.value)} className={inputClass("phone")} />
+                    {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
                   </div>
                 </div>
-                <div>
-                  <label htmlFor="msg" className="block text-sm font-medium text-foreground mb-2">Wiadomość (opcjonalnie)</label>
-                  <textarea
-                    id="msg"
-                    placeholder="Opisz problem lub usługę..."
-                    rows={4}
-                    value={form.message}
-                    onChange={(e) => setForm(s => ({ ...s, message: e.target.value }))}
-                    className="w-full px-4 py-3.5 rounded-2xl bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all resize-none"
-                  />
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">Email</label>
+                    <input id="email" type="email" placeholder="jan@email.com" value={form.email} onChange={(e) => update("email", e.target.value)} className={inputClass("email")} />
+                    {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
+                  </div>
+                  <div>
+                    <label htmlFor="car" className="block text-sm font-medium text-foreground mb-2">Marka i model auta *</label>
+                    <input id="car" type="text" placeholder="np. BMW 320d F30" value={form.car} onChange={(e) => update("car", e.target.value)} className={inputClass("car")} />
+                    {errors.car && <p className="text-destructive text-xs mt-1">{errors.car}</p>}
+                  </div>
                 </div>
+
+                <div>
+                  <label htmlFor="service" className="block text-sm font-medium text-foreground mb-2">Usługa *</label>
+                  <select id="service" value={form.service} onChange={(e) => update("service", e.target.value)} className={inputClass("service")}>
+                    <option value="">Wybierz usługę...</option>
+                    {services.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                  {errors.service && <p className="text-destructive text-xs mt-1">{errors.service}</p>}
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="date" className="block text-sm font-medium text-foreground mb-2">Preferowana data *</label>
+                    <input id="date" type="date" value={form.date} onChange={(e) => update("date", e.target.value)} className={inputClass("date")} />
+                    {errors.date && <p className="text-destructive text-xs mt-1">{errors.date}</p>}
+                  </div>
+                  <div>
+                    <label htmlFor="time" className="block text-sm font-medium text-foreground mb-2">Preferowana godzina</label>
+                    <select id="time" value={form.time} onChange={(e) => update("time", e.target.value)} className={inputClass("time")}>
+                      <option value="">Dowolna</option>
+                      {hours.map(h => <option key={h} value={h}>{h}</option>)}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="msg" className="block text-sm font-medium text-foreground mb-2">Dodatkowe uwagi</label>
+                  <textarea id="msg" placeholder="Opisz problem lub dodaj numer VIN..." rows={3} value={form.message} onChange={(e) => update("message", e.target.value)} className={`${inputClass("message")} resize-none`} />
+                </div>
+
+                <div>
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" checked={form.rodo} onChange={(e) => update("rodo", e.target.checked)} className="mt-1 w-4 h-4 rounded border-border accent-accent" />
+                    <span className="text-xs text-muted-foreground leading-relaxed">
+                      Wyrażam zgodę na przetwarzanie moich danych osobowych w celu realizacji usługi zgodnie z <a href="#" className="text-accent hover:underline">polityką prywatności</a>. *
+                    </span>
+                  </label>
+                  {errors.rodo && <p className="text-destructive text-xs mt-1">{errors.rodo}</p>}
+                </div>
+
                 <button
                   type="submit"
                   className="flex items-center justify-center gap-2 w-full bg-accent text-accent-foreground py-4 rounded-2xl font-bold text-base btn-shine hover:shadow-md hover:shadow-accent/15 transition-all duration-300 hover:scale-[1.01]"
                 >
                   <Send className="w-5 h-5" />
-                  Wyślij wiadomość
+                  Umów wizytę
                 </button>
               </form>
             </div>
