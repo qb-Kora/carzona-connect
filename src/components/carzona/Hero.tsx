@@ -67,7 +67,7 @@ const Hero = () => {
             Profesjonalny warsztat
             <br />
             samochodowy{" "}
-            <span className="text-gradient-accent">w Rybniku</span>
+            <span className="text-accent">w</span>{" "}<span className="text-primary">Rybniku</span>
           </motion.h1>
 
           {/* Subtitle */}
