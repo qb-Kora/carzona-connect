@@ -9,8 +9,8 @@ const NeonDivider = forwardRef<HTMLDivElement>((_, ref) => (
   >
     {/* Core bright line */}
     <motion.div
-      animate={{ opacity: [0.6, 1, 0.6] }}
-      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ opacity: [0.75, 1, 0.75] }}
+      transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
       className="absolute left-0 right-0 top-0 h-[1px]"
       style={{
         background: "hsl(var(--accent) / 0.85)",
@@ -19,8 +19,8 @@ const NeonDivider = forwardRef<HTMLDivElement>((_, ref) => (
     />
     {/* Pulsing glow overlay — stronger pulse */}
     <motion.div
-      animate={{ opacity: [0.15, 0.9, 0.15] }}
-      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ opacity: [0.3, 0.65, 0.3] }}
+      transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
       className="absolute left-[3%] right-[3%] -top-[12px] h-[26px]"
       style={{
         background: "radial-gradient(ellipse at center, hsl(var(--accent) / 0.35) 0%, transparent 70%)",
