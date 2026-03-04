@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import { MapPin } from "lucide-react";
 import { useEffect, useRef, useCallback } from "react";
-import carzonaStreet from "@/assets/carzona-street.png";
+
 
 const cities = [
   "Rybnik", "Żory", "Jastrzębie-Zdrój", "Wodzisław Śląski", "Racibórz",
@@ -170,18 +170,9 @@ const LaserCanvas = () => {
 
 const ServiceArea = () => (
   <section className="py-16 sm:py-20 md:py-32 relative overflow-hidden">
-    {/* Photo background with heavy darkening and blur */}
-    <div className="absolute inset-0 z-0">
-      <img
-        src={carzonaStreet}
-        alt=""
-        aria-hidden="true"
-        className="w-full h-full object-cover"
-        style={{ filter: "blur(2px) brightness(0.07) saturate(0.2)" }}
-      />
-      {/* Blue blur overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.08] via-transparent to-accent/[0.08]" />
-    </div>
+    {/* Background */}
+    <div className="absolute inset-0 z-0 bg-background" />
+    <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/[0.08] via-transparent to-accent/[0.08]" />
 
     <LaserCanvas />
 
