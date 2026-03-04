@@ -38,7 +38,7 @@ const CarCrashCTA = () => {
           {/* Left car — facing right */}
           <motion.div
             initial={{ x: -120 }}
-            animate={phase === "driving" ? { x: 0, rotate: 0 } : { x: 15, rotate: 10 }}
+            animate={phase === "driving" ? { x: 10, rotate: 0 } : { x: 25, rotate: 10 }}
             transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
             className="absolute bottom-0 left-0"
           >
@@ -48,7 +48,7 @@ const CarCrashCTA = () => {
           {/* Right car — facing left */}
           <motion.div
             initial={{ x: 220 }}
-            animate={phase === "driving" ? { x: 60, rotate: 0 } : { x: 45, rotate: -10 }}
+            animate={phase === "driving" ? { x: 50, rotate: 0 } : { x: 35, rotate: -10 }}
             transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
             className="absolute bottom-0 left-0"
           >
