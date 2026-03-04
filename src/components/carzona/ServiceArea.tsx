@@ -141,9 +141,6 @@ const LaserCanvas = () => {
           ctx.restore();
         }
 
-          ctx.restore();
-        }
-
         // Respawn only when fully off-screen
         if (
           l.x < -100 || l.x > cw + 100 ||
