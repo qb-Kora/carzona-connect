@@ -40,7 +40,7 @@ const items = [
 ];
 
 const TrustBar = () => (
-  <section id="zaufanie" className="relative py-8 sm:py-12 md:py-16 line-glow">
+  <section id="zaufanie" className="relative py-8 sm:py-12 md:py-16">
     <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.03] via-transparent to-primary/[0.03]" />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">

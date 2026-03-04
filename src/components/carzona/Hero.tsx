@@ -35,6 +35,8 @@ const Hero = () => {
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/85 to-background/95" />
       <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.05] via-transparent to-accent/[0.05]" />
+      {/* Bottom neon glow bleed */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-primary/[0.12] via-primary/[0.04] to-transparent blur-sm pointer-events-none" />
 
       {/* Content */}
       <motion.div
