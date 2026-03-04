@@ -1,68 +1,146 @@
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Wrench, ChevronRight } from "lucide-react";
 import Logo from "./Logo";
 
 const Footer = () => (
-  <footer className="border-t border-border py-10 sm:py-12 md:py-16 relative pb-20 md:pb-16">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-10 mb-8 sm:mb-10 md:mb-12">
-        <div className="col-span-2 lg:col-span-1">
-          <div className="mb-4 sm:mb-5 text-2xl sm:text-3xl">
+  <footer className="relative border-t border-border/50 pt-12 sm:pt-16 md:pt-20 pb-24 md:pb-12 overflow-hidden">
+    {/* Subtle glow */}
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[80px] bg-primary/5 blur-[60px] rounded-full" />
+
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Top — brand + CTA */}
+      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10 sm:mb-14">
+        <div>
+          <div className="text-3xl sm:text-4xl mb-3">
             <Logo />
           </div>
-          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-2 sm:mb-3">
-            Profesjonalny serwis samochodowy w Rybniku. Kompleksowa obsługa pojazdów wszystkich marek.
+          <p className="text-sm sm:text-base text-muted-foreground max-w-md leading-relaxed">
+            Profesjonalny serwis samochodowy w&nbsp;Rybniku.
+            <br className="hidden sm:block" />
+            Kompleksowa obsługa pojazdów wszystkich marek.
           </p>
-          <p className="text-[10px] sm:text-xs text-muted-foreground/50">
-            Autoryzowany partner Q Service Castrol
-          </p>
         </div>
+        <a
+          href="tel:663881585"
+          className="inline-flex items-center gap-2.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-3.5 rounded-xl transition-all text-sm sm:text-base btn-shine touch-target"
+        >
+          <Phone className="w-4 h-4" />
+          Zadzwoń: 663 881 585
+        </a>
+      </div>
 
+      {/* Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-6 mb-10 sm:mb-14">
+        {/* Usługi */}
         <div>
-          <h4 className="font-semibold text-foreground text-sm mb-3 sm:mb-5">Usługi</h4>
-          <ul className="space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-muted-foreground">
-            <li><a href="#uslugi" className="hover:text-foreground transition-colors">Mechanika ogólna</a></li>
-            <li><a href="#uslugi" className="hover:text-foreground transition-colors">Diagnostyka komputerowa</a></li>
-            <li><a href="#uslugi" className="hover:text-foreground transition-colors">Hamulce i zawieszenie</a></li>
-            <li><a href="#uslugi" className="hover:text-foreground transition-colors">Serwis klimatyzacji</a></li>
-            <li><a href="#uslugi" className="hover:text-foreground transition-colors">Przeglądy okresowe</a></li>
+          <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
+            <Wrench className="w-4 h-4 text-primary" />
+            Usługi
+          </h4>
+          <ul className="space-y-2.5 text-sm text-muted-foreground">
+            {[
+              "Mechanika ogólna",
+              "Diagnostyka komputerowa",
+              "Hamulce i zawieszenie",
+              "Serwis klimatyzacji",
+              "Przeglądy okresowe",
+            ].map((s) => (
+              <li key={s}>
+                <a
+                  href="#uslugi"
+                  className="group flex items-center gap-1.5 hover:text-foreground transition-colors"
+                >
+                  <ChevronRight className="w-3 h-3 text-primary/60 group-hover:translate-x-0.5 transition-transform" />
+                  {s}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
 
+        {/* Godziny */}
         <div>
-          <h4 className="font-semibold text-foreground text-sm mb-3 sm:mb-5">Godziny otwarcia</h4>
-          <ul className="space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-muted-foreground">
-            <li>Pon – Pt: 8:00–17:00</li>
-            <li>Sob: 8:00–13:00</li>
-            <li>Ndz: Zamknięte</li>
+          <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
+            <Clock className="w-4 h-4 text-primary" />
+            Godziny otwarcia
+          </h4>
+          <ul className="space-y-2.5 text-sm text-muted-foreground">
+            <li className="flex justify-between max-w-[200px]">
+              <span>Pon – Pt</span>
+              <span className="text-foreground font-medium">8:00–17:00</span>
+            </li>
+            <li className="flex justify-between max-w-[200px]">
+              <span>Sobota</span>
+              <span className="text-foreground font-medium">8:00–13:00</span>
+            </li>
+            <li className="flex justify-between max-w-[200px]">
+              <span>Niedziela</span>
+              <span className="text-destructive/80 font-medium">Zamknięte</span>
+            </li>
           </ul>
         </div>
 
+        {/* Kontakt */}
         <div>
-          <h4 className="font-semibold text-foreground text-sm mb-3 sm:mb-5">Kontakt</h4>
-          <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-muted-foreground">
-            <li className="flex items-center gap-2">
-              <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary shrink-0" />
-              <a href="tel:663881585" className="hover:text-foreground transition-colors font-semibold">663 881 585</a>
+          <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
+            <Mail className="w-4 h-4 text-primary" />
+            Kontakt
+          </h4>
+          <ul className="space-y-3 text-sm text-muted-foreground">
+            <li>
+              <a
+                href="tel:663881585"
+                className="hover:text-foreground transition-colors font-medium text-foreground"
+              >
+                663 881 585
+              </a>
             </li>
-            <li className="flex items-center gap-2">
-              <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary shrink-0" />
-              <a href="mailto:sebastian@carzona.pl" className="hover:text-foreground transition-colors truncate">sebastian@carzona.pl</a>
-            </li>
-            <li className="flex items-start gap-2">
-              <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary mt-0.5 shrink-0" />
-              <span>ul. Konarskiego 17<br />44-274 Rybnik</span>
+            <li>
+              <a
+                href="mailto:sebastian@carzona.pl"
+                className="hover:text-foreground transition-colors break-all"
+              >
+                sebastian@carzona.pl
+              </a>
             </li>
           </ul>
+        </div>
+
+        {/* Adres */}
+        <div>
+          <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" />
+            Gdzie jesteśmy
+          </h4>
+          <address className="not-italic text-sm text-muted-foreground leading-relaxed mb-3">
+            ul. Konarskiego 17
+            <br />
+            44-274 Rybnik
+          </address>
+          <a
+            href="https://maps.google.com/?q=ul.+Konarskiego+17,+44-274+Rybnik"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors font-medium"
+          >
+            Otwórz w mapach
+            <ChevronRight className="w-3 h-3" />
+          </a>
         </div>
       </div>
 
-      <div className="border-t border-border pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-        <p className="text-[10px] sm:text-xs text-muted-foreground">
-          © {new Date().getFullYear()} CARZONA. Wszelkie prawa zastrzeżone.
+      {/* Bottom bar */}
+      <div className="border-t border-border/50 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p className="text-xs text-muted-foreground/60">
+          © {new Date().getFullYear()} CARZONA · Wszelkie prawa zastrzeżone
         </p>
-        <div className="flex gap-4 sm:gap-6 text-[10px] sm:text-xs text-muted-foreground">
-          <a href="#" className="hover:text-foreground transition-colors">Polityka prywatności</a>
-          <a href="#" className="hover:text-foreground transition-colors">Regulamin</a>
+        <div className="flex gap-5 text-xs text-muted-foreground/60">
+          <a href="#" className="hover:text-foreground transition-colors">
+            Polityka prywatności
+          </a>
+          <a href="#" className="hover:text-foreground transition-colors">
+            Regulamin
+          </a>
         </div>
       </div>
     </div>
