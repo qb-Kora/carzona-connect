@@ -11,55 +11,54 @@ const cities = [
 ];
 
 const LASER_COUNT = 10;
+const MARGIN = 60;
 
 interface Laser {
-  x: number;
-  y: number;
   angle: number;
   speed: number;
   trail: { x: number; y: number }[];
+  // phase: "entering" = head on-screen, trail growing
+  //        "exiting"  = head off-screen, trail shrinking from tail
+  //        "done"     = fully gone, ready to respawn
+  phase: "entering" | "exiting" | "done";
 }
+
+const isOnScreen = (x: number, y: number, w: number, h: number) =>
+  x >= -MARGIN && x <= w + MARGIN && y >= -MARGIN && y <= h + MARGIN;
 
 const LaserCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lasersRef = useRef<Laser[]>([]);
 
   const createLaser = useCallback((w: number, h: number): Laser => {
-    // Start from a random edge (outside visible area)
-    const edge = Math.floor(Math.random() * 4); // 0=top,1=right,2=bottom,3=left
+    const edge = Math.floor(Math.random() * 4);
     let startX: number, startY: number, angle: number;
-    const margin = 20;
+    const off = MARGIN + 30;
 
     switch (edge) {
-      case 0: // top
-        startX = Math.random() * w;
-        startY = -margin;
-        angle = Math.PI / 4 + Math.random() * Math.PI / 2; // downward
+      case 0:
+        startX = Math.random() * w; startY = -off;
+        angle = Math.PI / 4 + Math.random() * Math.PI / 2;
         break;
-      case 1: // right
-        startX = w + margin;
-        startY = Math.random() * h;
-        angle = Math.PI * 0.6 + Math.random() * Math.PI * 0.8; // leftward
+      case 1:
+        startX = w + off; startY = Math.random() * h;
+        angle = Math.PI * 0.6 + Math.random() * Math.PI * 0.8;
         break;
-      case 2: // bottom
-        startX = Math.random() * w;
-        startY = h + margin;
-        angle = -Math.PI / 4 - Math.random() * Math.PI / 2; // upward
+      case 2:
+        startX = Math.random() * w; startY = h + off;
+        angle = -Math.PI / 4 - Math.random() * Math.PI / 2;
         break;
-      default: // left
-        startX = -margin;
-        startY = Math.random() * h;
-        angle = -Math.PI * 0.4 + Math.random() * Math.PI * 0.8; // rightward
+      default:
+        startX = -off; startY = Math.random() * h;
+        angle = -Math.PI * 0.4 + Math.random() * Math.PI * 0.8;
         break;
     }
 
-    const speed = 4 + Math.random() * 3;
     return {
-      x: startX,
-      y: startY,
       angle,
-      speed,
+      speed: 3 + Math.random() * 2.5,
       trail: [{ x: startX, y: startY }],
+      phase: "entering",
     };
   }, []);
 
@@ -84,6 +83,8 @@ const LaserCanvas = () => {
     lasersRef.current = Array.from({ length: LASER_COUNT }, () => createLaser(w(), h()));
 
     let raf: number;
+    const TAIL_SPEED = 6; // how many trail points to remove per frame when exiting
+
     const draw = () => {
       const cw = w();
       const ch = h();
@@ -93,12 +94,33 @@ const LaserCanvas = () => {
       for (let i = 0; i < lasers.length; i++) {
         const l = lasers[i];
 
-        l.x += Math.cos(l.angle) * l.speed;
-        l.y += Math.sin(l.angle) * l.speed;
+        if (l.phase === "entering") {
+          // Move head forward
+          const head = l.trail[l.trail.length - 1];
+          const nx = head.x + Math.cos(l.angle) * l.speed;
+          const ny = head.y + Math.sin(l.angle) * l.speed;
+          l.trail.push({ x: nx, y: ny });
 
-        l.trail.push({ x: l.x, y: l.y });
-        if (l.trail.length > 120) l.trail.shift();
+          // Check if head left the screen
+          if (!isOnScreen(nx, ny, cw, ch)) {
+            l.phase = "exiting";
+          }
+        } else if (l.phase === "exiting") {
+          // Remove points from tail
+          for (let r = 0; r < TAIL_SPEED && l.trail.length > 0; r++) {
+            l.trail.shift();
+          }
+          if (l.trail.length === 0) {
+            l.phase = "done";
+          }
+        }
 
+        if (l.phase === "done") {
+          lasers[i] = createLaser(cw, ch);
+          continue;
+        }
+
+        // Draw the trail
         if (l.trail.length > 1) {
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
@@ -107,46 +129,39 @@ const LaserCanvas = () => {
 
           const len = l.trail.length;
 
-          // Draw trail segments with gradual fade from tail to head
+          // Outer glow — single path for performance
+          ctx.lineWidth = 4;
+          ctx.strokeStyle = "hsla(217, 91%, 60%, 0.15)";
+          ctx.beginPath();
+          ctx.moveTo(l.trail[0].x, l.trail[0].y);
           for (let t = 1; t < len; t++) {
-            const progress = t / len; // 0 = tail, 1 = head
-            const alpha = 0.05 + progress * 0.25; // tail: 0.05, head: 0.30
-
-            // Neon outer glow
-            ctx.lineWidth = 3 + progress * 2;
-            ctx.beginPath();
-            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
             ctx.lineTo(l.trail[t].x, l.trail[t].y);
-            ctx.strokeStyle = `hsla(217, 91%, 60%, ${alpha * 0.5})`;
-            ctx.stroke();
+          }
+          ctx.stroke();
 
-            // Neon core
-            ctx.lineWidth = 0.8 + progress * 0.7;
-            ctx.beginPath();
-            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
+          // Core line
+          ctx.lineWidth = 1.2;
+          ctx.strokeStyle = "hsla(210, 100%, 85%, 0.3)";
+          ctx.beginPath();
+          ctx.moveTo(l.trail[0].x, l.trail[0].y);
+          for (let t = 1; t < len; t++) {
             ctx.lineTo(l.trail[t].x, l.trail[t].y);
-            ctx.strokeStyle = `hsla(210, 100%, 85%, ${alpha})`;
-            ctx.stroke();
+          }
+          ctx.stroke();
+
+          // Bright head dot (only while entering)
+          if (l.phase === "entering") {
+            const head = l.trail[len - 1];
+            ctx.shadowColor = "hsla(217, 91%, 60%, 0.7)";
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = "hsla(210, 100%, 92%, 0.7)";
+            ctx.beginPath();
+            ctx.arc(head.x, head.y, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
           }
 
-          // Bright neon head
-          ctx.shadowColor = "hsla(217, 91%, 60%, 0.6)";
-          ctx.shadowBlur = 8;
-          ctx.fillStyle = `hsla(210, 100%, 90%, 0.5)`;
-          ctx.beginPath();
-          ctx.arc(l.x, l.y, 1.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
-
           ctx.restore();
-        }
-
-        // Respawn only when fully off-screen
-        if (
-          l.x < -100 || l.x > cw + 100 ||
-          l.y < -100 || l.y > ch + 100
-        ) {
-          lasers[i] = createLaser(cw, ch);
         }
       }
 
