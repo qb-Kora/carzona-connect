@@ -106,29 +106,29 @@ const LaserCanvas = () => {
           ctx.lineJoin = "round";
 
           // Outer glow
-          ctx.lineWidth = 6;
+          ctx.lineWidth = 2;
           ctx.beginPath();
           ctx.moveTo(l.trail[0].x, l.trail[0].y);
           for (let t = 1; t < l.trail.length; t++) {
             ctx.lineTo(l.trail[t].x, l.trail[t].y);
           }
-          ctx.strokeStyle = `hsla(217, 91%, 60%, 0.25)`;
+          ctx.strokeStyle = `hsla(217, 91%, 60%, 0.08)`;
           ctx.stroke();
 
           // Core
-          ctx.lineWidth = 1.5;
+          ctx.lineWidth = 0.5;
           ctx.beginPath();
           ctx.moveTo(l.trail[0].x, l.trail[0].y);
           for (let t = 1; t < l.trail.length; t++) {
             ctx.lineTo(l.trail[t].x, l.trail[t].y);
           }
-          ctx.strokeStyle = `hsla(210, 100%, 85%, 0.6)`;
+          ctx.strokeStyle = `hsla(210, 100%, 85%, 0.15)`;
           ctx.stroke();
 
           // Bright head
-          ctx.fillStyle = `hsla(210, 100%, 90%, 1)`;
+          ctx.fillStyle = `hsla(210, 100%, 90%, 0.3)`;
           ctx.beginPath();
-          ctx.arc(l.x, l.y, 2, 0, Math.PI * 2);
+          ctx.arc(l.x, l.y, 1, 0, Math.PI * 2);
           ctx.fill();
 
           ctx.restore();
@@ -170,7 +170,7 @@ const ServiceArea = () => (
         alt=""
         aria-hidden="true"
         className="w-full h-full object-cover"
-        style={{ filter: "blur(2px) brightness(0.15) saturate(0.3)" }}
+        style={{ filter: "blur(2px) brightness(0.08) saturate(0.2)" }}
       />
     </div>
 
