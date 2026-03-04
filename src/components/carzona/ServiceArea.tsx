@@ -9,7 +9,7 @@ const cities = [
   "Gliwice", "Zabrze", "Tychy", "Mikołów", "Ornontowice",
 ];
 
-const LIGHT_COUNT = 18;
+const LIGHT_COUNT = 9;
 
 interface FlyingLight {
   x: number;
@@ -50,7 +50,7 @@ const FlyingLights = () => {
         y: Math.random() * h(),
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        size: 1.5 + Math.random() * 3,
+        size: (1.5 + Math.random() * 3) * 0.25,
         opacity: 0.4 + Math.random() * 0.6,
       };
     });
