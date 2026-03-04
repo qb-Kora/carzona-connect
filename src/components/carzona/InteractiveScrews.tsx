@@ -13,7 +13,7 @@ interface Screw {
   opacity: number;
 }
 
-const SCREW_COUNT = 45;
+const SCREW_COUNT = 100;
 const PUSH_RADIUS = 90;
 const PUSH_FORCE = 2.5;
 const FRICTION = 0.96;
@@ -24,7 +24,6 @@ const ScrewSVG = ({ type, size }: { type: string; size: number }) => {
   const colorLight = "hsl(220, 10%, 55%)";
 
   if (type === "flathead") {
-    // Flathead screw - circle with single slot
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="1.5" fill="none" opacity="0.5" />
@@ -35,7 +34,6 @@ const ScrewSVG = ({ type, size }: { type: string; size: number }) => {
   }
 
   if (type === "phillips") {
-    // Phillips screw - circle with cross
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="1.5" fill="none" opacity="0.5" />
@@ -47,7 +45,6 @@ const ScrewSVG = ({ type, size }: { type: string; size: number }) => {
   }
 
   if (type === "hex-bolt") {
-    // Hex bolt - hexagonal head with circle in center
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <polygon
@@ -57,7 +54,6 @@ const ScrewSVG = ({ type, size }: { type: string; size: number }) => {
           fill="none"
           opacity="0.5"
         />
-        {/* Inner hex detail */}
         <polygon
           points="12,5 17.5,8.5 17.5,15.5 12,19 6.5,15.5 6.5,8.5"
           stroke={colorLight}
@@ -71,7 +67,6 @@ const ScrewSVG = ({ type, size }: { type: string; size: number }) => {
   }
 
   if (type === "nut") {
-    // Hex nut - hexagon with large center hole
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <polygon
@@ -82,13 +77,12 @@ const ScrewSVG = ({ type, size }: { type: string; size: number }) => {
           opacity="0.5"
         />
         <circle cx="12" cy="12" r="5.5" stroke={color} strokeWidth="1.2" fill="none" opacity="0.45" />
-        {/* Thread lines inside */}
         <circle cx="12" cy="12" r="4.5" stroke={colorLight} strokeWidth="0.3" fill="none" opacity="0.2" strokeDasharray="2 1.5" />
       </svg>
     );
   }
 
-  // washer - simple ring
+  // washer
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="1.5" fill="none" opacity="0.45" />
@@ -98,7 +92,11 @@ const ScrewSVG = ({ type, size }: { type: string; size: number }) => {
   );
 };
 
-const InteractiveScrews = () => {
+interface InteractiveScrewsProps {
+  sectionRef?: React.RefObject<HTMLElement>;
+}
+
+const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const screwsRef = useRef<Screw[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
@@ -121,9 +119,9 @@ const InteractiveScrews = () => {
       vy: 0,
       rotation: Math.random() * 360,
       vr: 0,
-      size: 10 + Math.random() * 28, // wide range: 10px to 38px
+      size: 8 + Math.random() * 30,
       type: types[Math.floor(Math.random() * types.length)],
-      opacity: 0.2 + Math.random() * 0.35,
+      opacity: 0.15 + Math.random() * 0.4,
     }));
     initializedRef.current = true;
     setRenderKey(k => k + 1);
@@ -138,25 +136,26 @@ const InteractiveScrews = () => {
     };
   }, [initScrews]);
 
+  // Listen on the whole section so mouse works even over cards/text
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+    const target = sectionRef?.current || containerRef.current;
+    if (!target) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
+      const rect = (containerRef.current || target).getBoundingClientRect();
       mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
     const handleMouseLeave = () => {
       mouseRef.current = { x: -1000, y: -1000 };
     };
 
-    container.addEventListener("mousemove", handleMouseMove);
-    container.addEventListener("mouseleave", handleMouseLeave);
+    target.addEventListener("mousemove", handleMouseMove);
+    target.addEventListener("mouseleave", handleMouseLeave);
     return () => {
-      container.removeEventListener("mousemove", handleMouseMove);
-      container.removeEventListener("mouseleave", handleMouseLeave);
+      target.removeEventListener("mousemove", handleMouseMove);
+      target.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, []);
+  }, [sectionRef]);
 
   useEffect(() => {
     let lastTime = performance.now();
@@ -219,8 +218,8 @@ const InteractiveScrews = () => {
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 overflow-hidden pointer-events-auto"
-      style={{ zIndex: 0 }}
+      className="absolute inset-0 overflow-hidden pointer-events-none"
+      style={{ zIndex: 5 }}
       data-render={renderKey}
     >
       {screwsRef.current.map((screw) => (
