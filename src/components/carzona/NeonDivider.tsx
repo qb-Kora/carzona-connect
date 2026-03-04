@@ -11,7 +11,7 @@ const NeonDivider = forwardRef<HTMLDivElement>((_, ref) => (
     <div
       className="absolute left-0 right-0 top-0 h-[2px]"
       style={{
-        background: "linear-gradient(90deg, transparent 0%, hsl(var(--accent) / 0.8) 3%, hsl(var(--accent) / 0.9) 50%, hsl(var(--accent) / 0.8) 97%, transparent 100%)",
+        background: "hsl(var(--accent) / 0.85)",
         boxShadow: "0 0 8px 2px hsl(var(--accent) / 0.35), 0 0 20px 4px hsl(var(--accent) / 0.12)",
       }}
     />
