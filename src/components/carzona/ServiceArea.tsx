@@ -97,7 +97,7 @@ const LaserCanvas = () => {
         l.y += Math.sin(l.angle) * l.speed;
 
         l.trail.push({ x: l.x, y: l.y });
-        if (l.trail.length > 80) l.trail.shift();
+        if (l.trail.length > 120) l.trail.shift();
 
         if (l.trail.length > 1) {
           ctx.save();
@@ -105,31 +105,38 @@ const LaserCanvas = () => {
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
 
-          // Outer glow
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(l.trail[0].x, l.trail[0].y);
-          for (let t = 1; t < l.trail.length; t++) {
-            ctx.lineTo(l.trail[t].x, l.trail[t].y);
-          }
-          ctx.strokeStyle = `hsla(217, 91%, 60%, 0.08)`;
-          ctx.stroke();
+          const len = l.trail.length;
 
-          // Core
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(l.trail[0].x, l.trail[0].y);
-          for (let t = 1; t < l.trail.length; t++) {
-            ctx.lineTo(l.trail[t].x, l.trail[t].y);
-          }
-          ctx.strokeStyle = `hsla(210, 100%, 85%, 0.15)`;
-          ctx.stroke();
+          // Draw trail segments with gradual fade from tail to head
+          for (let t = 1; t < len; t++) {
+            const progress = t / len; // 0 = tail, 1 = head
+            const alpha = 0.05 + progress * 0.25; // tail: 0.05, head: 0.30
 
-          // Bright head
-          ctx.fillStyle = `hsla(210, 100%, 90%, 0.3)`;
+            // Neon outer glow
+            ctx.lineWidth = 3 + progress * 2;
+            ctx.beginPath();
+            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
+            ctx.lineTo(l.trail[t].x, l.trail[t].y);
+            ctx.strokeStyle = `hsla(217, 91%, 60%, ${alpha * 0.5})`;
+            ctx.stroke();
+
+            // Neon core
+            ctx.lineWidth = 0.8 + progress * 0.7;
+            ctx.beginPath();
+            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
+            ctx.lineTo(l.trail[t].x, l.trail[t].y);
+            ctx.strokeStyle = `hsla(210, 100%, 85%, ${alpha})`;
+            ctx.stroke();
+          }
+
+          // Bright neon head
+          ctx.shadowColor = "hsla(217, 91%, 60%, 0.6)";
+          ctx.shadowBlur = 8;
+          ctx.fillStyle = `hsla(210, 100%, 90%, 0.5)`;
           ctx.beginPath();
-          ctx.arc(l.x, l.y, 1, 0, Math.PI * 2);
+          ctx.arc(l.x, l.y, 1.5, 0, Math.PI * 2);
           ctx.fill();
+          ctx.shadowBlur = 0;
 
           ctx.restore();
         }
