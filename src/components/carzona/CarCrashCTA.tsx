@@ -66,7 +66,7 @@ const CarCrashCTA = () => {
         className="absolute bottom-3"
         style={{ fontSize: "2.5rem", lineHeight: 1 }}
       >
-        🚗
+        🚙
       </motion.div>
 
       {/* Crash flash */}
