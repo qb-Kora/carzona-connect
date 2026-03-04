@@ -92,7 +92,6 @@ const LaserCanvas = () => {
       const lasers = lasersRef.current;
       for (let i = 0; i < lasers.length; i++) {
         const l = lasers[i];
-        l.life++;
 
         l.x += Math.cos(l.angle) * l.speed;
         l.y += Math.sin(l.angle) * l.speed;
@@ -100,35 +99,34 @@ const LaserCanvas = () => {
         l.trail.push({ x: l.x, y: l.y });
         if (l.trail.length > 80) l.trail.shift();
 
-        const alive = 1 - l.life / l.maxLife;
-        if (alive > 0 && l.trail.length > 1) {
+        if (l.trail.length > 1) {
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
 
-          // Outer glow — single gradient path, no shadowBlur
+          // Outer glow
           ctx.lineWidth = 6;
           ctx.beginPath();
           ctx.moveTo(l.trail[0].x, l.trail[0].y);
           for (let t = 1; t < l.trail.length; t++) {
             ctx.lineTo(l.trail[t].x, l.trail[t].y);
           }
-          ctx.strokeStyle = `hsla(217, 91%, 60%, ${alive * 0.25})`;
+          ctx.strokeStyle = `hsla(217, 91%, 60%, 0.25)`;
           ctx.stroke();
 
-          // Core — single path
+          // Core
           ctx.lineWidth = 1.5;
           ctx.beginPath();
           ctx.moveTo(l.trail[0].x, l.trail[0].y);
           for (let t = 1; t < l.trail.length; t++) {
             ctx.lineTo(l.trail[t].x, l.trail[t].y);
           }
-          ctx.strokeStyle = `hsla(210, 100%, 85%, ${alive * 0.6})`;
+          ctx.strokeStyle = `hsla(210, 100%, 85%, 0.6)`;
           ctx.stroke();
 
-          // Bright head dot
-          ctx.fillStyle = `hsla(210, 100%, 90%, ${alive})`;
+          // Bright head
+          ctx.fillStyle = `hsla(210, 100%, 90%, 1)`;
           ctx.beginPath();
           ctx.arc(l.x, l.y, 2, 0, Math.PI * 2);
           ctx.fill();
@@ -136,12 +134,13 @@ const LaserCanvas = () => {
           ctx.restore();
         }
 
+        // Respawn only when fully off-screen
         if (
-          l.life >= l.maxLife ||
           l.x < -100 || l.x > cw + 100 ||
           l.y < -100 || l.y > ch + 100
         ) {
           lasers[i] = createLaser(cw, ch);
+        }
         }
       }
 
