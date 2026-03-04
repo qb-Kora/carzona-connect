@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import { MapPin } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
+import carzonaStreet from "@/assets/carzona-street.png";
 
 const cities = [
   "Rybnik", "Żory", "Jastrzębie-Zdrój", "Wodzisław Śląski", "Racibórz",
@@ -9,20 +10,40 @@ const cities = [
   "Gliwice", "Zabrze", "Tychy", "Mikołów", "Ornontowice",
 ];
 
-const LIGHT_COUNT = 9;
+const LASER_COUNT = 12;
 
-interface FlyingLight {
+interface Laser {
   x: number;
   y: number;
-  vx: number;
-  vy: number;
-  size: number;
-  opacity: number;
+  angle: number;
+  speed: number;
+  length: number;
+  life: number;
+  maxLife: number;
+  isGreen: boolean;
 }
 
-const FlyingLights = () => {
+const LaserScratchCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const lightsRef = useRef<FlyingLight[]>([]);
+  const maskRef = useRef<HTMLCanvasElement | null>(null);
+  const lasersRef = useRef<Laser[]>([]);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const imgLoaded = useRef(false);
+
+  const createLaser = useCallback((w: number, h: number): Laser => {
+    const angle = Math.random() * Math.PI * 2;
+    const isGreen = Math.random() < 0.15;
+    return {
+      x: Math.random() * w,
+      y: Math.random() * h,
+      angle,
+      speed: 8 + Math.random() * 14,
+      length: 30 + Math.random() * 80,
+      life: 0,
+      maxLife: 8 + Math.floor(Math.random() * 18),
+      isGreen,
+    };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -30,69 +51,152 @@ const FlyingLights = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Create off-screen mask canvas for scratch reveal
+    const mask = document.createElement("canvas");
+    maskRef.current = mask;
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      const dpr = window.devicePixelRatio;
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      mask.width = w * dpr;
+      mask.height = h * dpr;
+      const mctx = mask.getContext("2d");
+      if (mctx) mctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
 
-    // Init lights
+    // Load image
+    const img = new Image();
+    img.src = carzonaStreet;
+    img.onload = () => {
+      imgRef.current = img;
+      imgLoaded.current = true;
+    };
+
     const w = () => canvas.offsetWidth;
     const h = () => canvas.offsetHeight;
 
-    lightsRef.current = Array.from({ length: LIGHT_COUNT }, () => {
-      const speed = 3 + Math.random() * 6;
-      const angle = Math.random() * Math.PI * 2;
-      return {
-        x: Math.random() * w(),
-        y: Math.random() * h(),
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        size: (1.5 + Math.random() * 3) * 0.25,
-        opacity: 0.4 + Math.random() * 0.6,
-      };
-    });
+    // Init lasers
+    lasersRef.current = Array.from({ length: LASER_COUNT }, () => createLaser(w(), h()));
 
     let raf: number;
     const draw = () => {
-      // Long-exposure trail effect — fade previous frame instead of clearing
-      ctx.globalCompositeOperation = "destination-in";
-      ctx.fillStyle = "rgba(0, 0, 0, 0.92)";
-      ctx.fillRect(0, 0, w(), h());
-      ctx.globalCompositeOperation = "lighter";
+      const cw = w();
+      const ch = h();
+      const mctx = mask.getContext("2d");
 
-      const lights = lightsRef.current;
+      // Clear main canvas
+      ctx.clearRect(0, 0, cw, ch);
 
-      for (const l of lights) {
-        l.x += l.vx;
-        l.y += l.vy;
+      // Update & draw lasers
+      const lasers = lasersRef.current;
+      for (let i = 0; i < lasers.length; i++) {
+        const l = lasers[i];
+        l.life++;
 
-        // Wrap around (reset trail on wrap)
-        if (l.x < -10) { l.x = w() + 10; }
-        if (l.x > w() + 10) { l.x = -10; }
-        if (l.y < -10) { l.y = h() + 10; }
-        if (l.y > h() + 10) { l.y = -10; }
+        // Move
+        l.x += Math.cos(l.angle) * l.speed;
+        l.y += Math.sin(l.angle) * l.speed;
 
-        // Outer glow
-        const grad = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.size * 10);
-        grad.addColorStop(0, `hsla(217, 91%, 65%, ${l.opacity * 0.9})`);
-        grad.addColorStop(0.25, `hsla(217, 91%, 55%, ${l.opacity * 0.35})`);
-        grad.addColorStop(1, `hsla(217, 91%, 50%, 0)`);
-        ctx.beginPath();
-        ctx.arc(l.x, l.y, l.size * 10, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
+        // Scratch the mask where laser travels
+        if (mctx) {
+          mctx.globalCompositeOperation = "source-over";
+          mctx.strokeStyle = "white";
+          mctx.lineWidth = 2 + Math.random() * 3;
+          mctx.lineCap = "round";
+          mctx.globalAlpha = 0.12 + Math.random() * 0.08;
+          mctx.beginPath();
+          mctx.moveTo(
+            l.x - Math.cos(l.angle) * l.speed,
+            l.y - Math.sin(l.angle) * l.speed
+          );
+          mctx.lineTo(l.x, l.y);
+          mctx.stroke();
+          mctx.globalAlpha = 1;
+        }
 
-        // Bright core
-        ctx.beginPath();
-        ctx.arc(l.x, l.y, l.size * 1.2, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(210, 100%, 85%, ${l.opacity})`;
-        ctx.fill();
+        // Draw laser line on main canvas
+        const alpha = 1 - l.life / l.maxLife;
+        if (alpha > 0) {
+          const hue = l.isGreen ? "142, 71%, 45%" : "217, 91%, 60%";
+          const hueCore = l.isGreen ? "142, 80%, 75%" : "210, 100%, 85%";
+
+          // Glow
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.strokeStyle = `hsla(${hue}, ${alpha * 0.5})`;
+          ctx.lineWidth = 6;
+          ctx.lineCap = "round";
+          ctx.shadowColor = `hsla(${hue}, 0.8)`;
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          const tailX = l.x - Math.cos(l.angle) * l.length;
+          const tailY = l.y - Math.sin(l.angle) * l.length;
+          ctx.moveTo(tailX, tailY);
+          ctx.lineTo(l.x, l.y);
+          ctx.stroke();
+
+          // Core
+          ctx.strokeStyle = `hsla(${hueCore}, ${alpha * 0.9})`;
+          ctx.lineWidth = 1.5;
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.moveTo(tailX, tailY);
+          ctx.lineTo(l.x, l.y);
+          ctx.stroke();
+
+          // Bright head
+          ctx.fillStyle = `hsla(${hueCore}, ${alpha})`;
+          ctx.shadowBlur = 12;
+          ctx.beginPath();
+          ctx.arc(l.x, l.y, 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Respawn when dead or off-screen
+        if (
+          l.life >= l.maxLife ||
+          l.x < -100 || l.x > cw + 100 ||
+          l.y < -100 || l.y > ch + 100
+        ) {
+          lasers[i] = createLaser(cw, ch);
+        }
       }
 
-      ctx.globalCompositeOperation = "source-over";
+      // Draw the photo revealed through the scratch mask
+      if (imgLoaded.current && imgRef.current && mctx) {
+        ctx.save();
+        ctx.globalCompositeOperation = "destination-over";
+
+        // Use mask as clip
+        ctx.drawImage(mask, 0, 0, cw, ch);
+
+        // Draw image behind everything, clipped by mask
+        ctx.globalCompositeOperation = "source-in";
+        // Cover the canvas with the image
+        const imgAspect = imgRef.current.width / imgRef.current.height;
+        const canvasAspect = cw / ch;
+        let sx = 0, sy = 0, sw = imgRef.current.width, sh = imgRef.current.height;
+        if (imgAspect > canvasAspect) {
+          sw = imgRef.current.height * canvasAspect;
+          sx = (imgRef.current.width - sw) / 2;
+        } else {
+          sh = imgRef.current.width / canvasAspect;
+          sy = (imgRef.current.height - sh) / 2;
+        }
+        ctx.drawImage(imgRef.current, sx, sy, sw, sh, 0, 0, cw, ch);
+        ctx.globalAlpha = 0.35;
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, cw, ch);
+        ctx.restore();
+      }
 
       raf = requestAnimationFrame(draw);
     };
@@ -102,7 +206,7 @@ const FlyingLights = () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [createLaser]);
 
   return (
     <canvas
@@ -114,7 +218,7 @@ const FlyingLights = () => {
 
 const ServiceArea = () => (
   <section className="py-16 sm:py-20 md:py-32 relative overflow-hidden">
-    <FlyingLights />
+    <LaserScratchCanvas />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
         <AnimatedSection>
