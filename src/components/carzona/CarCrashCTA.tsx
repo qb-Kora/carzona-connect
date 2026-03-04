@@ -20,13 +20,13 @@ const CarCrashCTA = () => {
 
   return (
     <div className="fixed bottom-6 sm:bottom-8 left-0 right-0 z-50 pointer-events-none" style={{ height: 90 }}>
-      {/* Left car – faces right → */}
+      {/* Left car – heading right → (default emoji faces left, so flip it) */}
       <motion.div
         initial={{ x: "-80px" }}
         animate={
           phase === "driving"
             ? { x: "calc(50vw - 55px)", rotate: 0 }
-            : { x: "calc(50vw - 40px)", rotate: 8 }
+            : { x: "calc(50vw - 40px)", rotate: 12 }
         }
         transition={
           phase === "driving"
@@ -34,18 +34,18 @@ const CarCrashCTA = () => {
             : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }
         }
         className="absolute bottom-3"
-        style={{ fontSize: "2.5rem", lineHeight: 1 }}
+        style={{ fontSize: "2.5rem", lineHeight: 1, transform: "scaleX(-1)" }}
       >
-        <span style={{ display: "inline-block", transform: "scaleX(-1)" }}>🚘</span>
+        🚗
       </motion.div>
 
-      {/* Right car – faces left ← */}
+      {/* Right car – heading left ← (default emoji faces left, no flip needed) */}
       <motion.div
         initial={{ x: "calc(100vw + 40px)" }}
         animate={
           phase === "driving"
             ? { x: "calc(50vw + 5px)", rotate: 0 }
-            : { x: "calc(50vw - 10px)", rotate: -8 }
+            : { x: "calc(50vw - 10px)", rotate: -12 }
         }
         transition={
           phase === "driving"
@@ -55,7 +55,7 @@ const CarCrashCTA = () => {
         className="absolute bottom-3"
         style={{ fontSize: "2.5rem", lineHeight: 1 }}
       >
-        🚘
+        🚗
       </motion.div>
 
       {/* Crash flash */}
