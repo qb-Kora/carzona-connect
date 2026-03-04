@@ -85,6 +85,9 @@ const LaserScratchCanvas = () => {
     // Init lasers
     lasersRef.current = Array.from({ length: LASER_COUNT }, () => createLaser(w(), h()));
 
+    // Temporary canvas for compositing the photo reveal
+    const revealCanvas = document.createElement("canvas");
+
     let raf: number;
     const draw = () => {
       const cw = w();
@@ -127,7 +130,6 @@ const LaserScratchCanvas = () => {
           const hue = l.isGreen ? "142, 71%, 45%" : "217, 91%, 60%";
           const hueCore = l.isGreen ? "142, 80%, 75%" : "210, 100%, 85%";
 
-          // Glow
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
           ctx.strokeStyle = `hsla(${hue}, ${alpha * 0.5})`;
@@ -142,7 +144,6 @@ const LaserScratchCanvas = () => {
           ctx.lineTo(l.x, l.y);
           ctx.stroke();
 
-          // Core
           ctx.strokeStyle = `hsla(${hueCore}, ${alpha * 0.9})`;
           ctx.lineWidth = 1.5;
           ctx.shadowBlur = 8;
@@ -151,7 +152,6 @@ const LaserScratchCanvas = () => {
           ctx.lineTo(l.x, l.y);
           ctx.stroke();
 
-          // Bright head
           ctx.fillStyle = `hsla(${hueCore}, ${alpha})`;
           ctx.shadowBlur = 12;
           ctx.beginPath();
@@ -170,32 +170,43 @@ const LaserScratchCanvas = () => {
         }
       }
 
-      // Draw the photo revealed through the scratch mask
-      if (imgLoaded.current && imgRef.current && mctx) {
-        ctx.save();
-        ctx.globalCompositeOperation = "destination-over";
+      // Draw the photo revealed through the scratch mask behind lasers
+      if (imgLoaded.current && imgRef.current) {
+        const dpr = window.devicePixelRatio;
+        revealCanvas.width = cw * dpr;
+        revealCanvas.height = ch * dpr;
+        const rctx = revealCanvas.getContext("2d");
+        if (rctx) {
+          rctx.clearRect(0, 0, revealCanvas.width, revealCanvas.height);
+          rctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        // Use mask as clip
-        ctx.drawImage(mask, 0, 0, cw, ch);
+          // Draw the image first
+          const imgAspect = imgRef.current.width / imgRef.current.height;
+          const canvasAspect = cw / ch;
+          let sx = 0, sy = 0, sw = imgRef.current.width, sh = imgRef.current.height;
+          if (imgAspect > canvasAspect) {
+            sw = imgRef.current.height * canvasAspect;
+            sx = (imgRef.current.width - sw) / 2;
+          } else {
+            sh = imgRef.current.width / canvasAspect;
+            sy = (imgRef.current.height - sh) / 2;
+          }
+          rctx.drawImage(imgRef.current, sx, sy, sw, sh, 0, 0, cw, ch);
 
-        // Draw image behind everything, clipped by mask
-        ctx.globalCompositeOperation = "source-in";
-        // Cover the canvas with the image
-        const imgAspect = imgRef.current.width / imgRef.current.height;
-        const canvasAspect = cw / ch;
-        let sx = 0, sy = 0, sw = imgRef.current.width, sh = imgRef.current.height;
-        if (imgAspect > canvasAspect) {
-          sw = imgRef.current.height * canvasAspect;
-          sx = (imgRef.current.width - sw) / 2;
-        } else {
-          sh = imgRef.current.width / canvasAspect;
-          sy = (imgRef.current.height - sh) / 2;
+          // Darken it
+          rctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+          rctx.fillRect(0, 0, cw, ch);
+
+          // Use mask to clip — only show where scratched
+          rctx.globalCompositeOperation = "destination-in";
+          rctx.drawImage(mask, 0, 0, cw, ch);
+
+          // Draw behind lasers on main canvas
+          ctx.save();
+          ctx.globalCompositeOperation = "destination-over";
+          ctx.drawImage(revealCanvas, 0, 0, cw, ch);
+          ctx.restore();
         }
-        ctx.drawImage(imgRef.current, sx, sy, sw, sh, 0, 0, cw, ch);
-        ctx.globalAlpha = 0.35;
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, cw, ch);
-        ctx.restore();
       }
 
       raf = requestAnimationFrame(draw);
