@@ -50,7 +50,7 @@ const CarCrashCTA = () => {
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
           className="absolute bottom-3"
         >
-          <CarFront size={40} className="text-accent" strokeWidth={1.5} />
+          <CarFront size={40} className="text-accent" strokeWidth={1.5} style={{ transform: "rotate(90deg)" }} />
         </motion.div>
 
         {/* Crash flash */}
@@ -120,7 +120,7 @@ const CarCrashCTA = () => {
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
           className="absolute bottom-1"
         >
-          <CarFront size={24} className="text-accent" strokeWidth={1.5} />
+          <CarFront size={24} className="text-accent" strokeWidth={1.5} style={{ transform: "rotate(90deg)" }} />
         </motion.div>
 
         {/* Crash flash */}
