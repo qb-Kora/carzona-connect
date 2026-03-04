@@ -9,7 +9,7 @@ const NeonDivider = forwardRef<HTMLDivElement>((_, ref) => (
   >
     {/* Core bright line — nearly full width */}
     <div
-      className="absolute left-0 right-0 top-0 h-[2px]"
+      className="absolute left-0 right-0 top-0 h-[1px]"
       style={{
         background: "hsl(var(--accent) / 0.85)",
         boxShadow: "0 0 8px 2px hsl(var(--accent) / 0.35), 0 0 20px 4px hsl(var(--accent) / 0.12)",
