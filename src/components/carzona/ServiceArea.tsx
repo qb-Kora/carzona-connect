@@ -17,10 +17,9 @@ interface Laser {
   y: number;
   angle: number;
   speed: number;
-  length: number;
   life: number;
   maxLife: number;
-  isGreen: boolean;
+  trail: { x: number; y: number }[];
 }
 
 const LaserScratchCanvas = () => {
@@ -32,16 +31,17 @@ const LaserScratchCanvas = () => {
 
   const createLaser = useCallback((w: number, h: number): Laser => {
     const angle = Math.random() * Math.PI * 2;
-    const isGreen = Math.random() < 0.15;
+    const speed = 4 + Math.random() * 3; // steady, uniform speed
+    const startX = Math.random() * w;
+    const startY = Math.random() * h;
     return {
-      x: Math.random() * w,
-      y: Math.random() * h,
+      x: startX,
+      y: startY,
       angle,
-      speed: 8 + Math.random() * 14,
-      length: 30 + Math.random() * 80,
+      speed,
       life: 0,
-      maxLife: 8 + Math.floor(Math.random() * 18),
-      isGreen,
+      maxLife: 60 + Math.floor(Math.random() * 80), // much longer life = longer trail
+      trail: [{ x: startX, y: startY }],
     };
   }, []);
 
