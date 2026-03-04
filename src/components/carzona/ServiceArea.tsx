@@ -43,7 +43,7 @@ const FlyingLights = () => {
     const h = () => canvas.offsetHeight;
 
     lightsRef.current = Array.from({ length: LIGHT_COUNT }, () => {
-      const speed = 1.5 + Math.random() * 4;
+      const speed = 3 + Math.random() * 6;
       const angle = Math.random() * Math.PI * 2;
       return {
         x: Math.random() * w(),
@@ -59,7 +59,7 @@ const FlyingLights = () => {
     const draw = () => {
       // Long-exposure trail effect — fade previous frame instead of clearing
       ctx.globalCompositeOperation = "destination-in";
-      ctx.fillStyle = "rgba(0, 0, 0, 0.88)";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.92)";
       ctx.fillRect(0, 0, w(), h());
       ctx.globalCompositeOperation = "lighter";
 
