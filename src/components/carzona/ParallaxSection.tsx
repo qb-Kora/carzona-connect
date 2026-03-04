@@ -16,14 +16,14 @@ const ParallaxSection = ({ children, imageUrl, className = "", overlayOpacity = 
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-30%", "30%"]);
 
   return (
     <div ref={ref} className={`relative overflow-hidden ${className}`}>
       {/* Parallax background image */}
       <motion.div
         style={{ y }}
-        className="absolute inset-0 -top-[15%] -bottom-[15%]"
+        className="absolute inset-0 -top-[30%] -bottom-[30%]"
       >
         <img
           src={imageUrl}
