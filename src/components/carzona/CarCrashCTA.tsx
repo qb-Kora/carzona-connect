@@ -34,7 +34,7 @@ const CarCrashCTA = () => {
             : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }
         }
         className="absolute bottom-3"
-        style={{ fontSize: "2.5rem", lineHeight: 1, transform: "scaleX(-1)" }}
+        style={{ fontSize: "2.5rem", lineHeight: 1 }}
       >
         🚗
       </motion.div>
