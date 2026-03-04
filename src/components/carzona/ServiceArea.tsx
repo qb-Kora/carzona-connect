@@ -57,35 +57,42 @@ const FlyingLights = () => {
 
     let raf: number;
     const draw = () => {
-      ctx.clearRect(0, 0, w(), h());
+      // Long-exposure trail effect — fade previous frame instead of clearing
+      ctx.globalCompositeOperation = "destination-in";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.88)";
+      ctx.fillRect(0, 0, w(), h());
+      ctx.globalCompositeOperation = "lighter";
+
       const lights = lightsRef.current;
 
       for (const l of lights) {
         l.x += l.vx;
         l.y += l.vy;
 
-        // Wrap around
-        if (l.x < -10) l.x = w() + 10;
-        if (l.x > w() + 10) l.x = -10;
-        if (l.y < -10) l.y = h() + 10;
-        if (l.y > h() + 10) l.y = -10;
+        // Wrap around (reset trail on wrap)
+        if (l.x < -10) { l.x = w() + 10; }
+        if (l.x > w() + 10) { l.x = -10; }
+        if (l.y < -10) { l.y = h() + 10; }
+        if (l.y > h() + 10) { l.y = -10; }
 
-        // Glow
-        const grad = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.size * 8);
-        grad.addColorStop(0, `hsla(217, 91%, 60%, ${l.opacity})`);
-        grad.addColorStop(0.3, `hsla(217, 91%, 55%, ${l.opacity * 0.4})`);
+        // Outer glow
+        const grad = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.size * 10);
+        grad.addColorStop(0, `hsla(217, 91%, 65%, ${l.opacity * 0.9})`);
+        grad.addColorStop(0.25, `hsla(217, 91%, 55%, ${l.opacity * 0.35})`);
         grad.addColorStop(1, `hsla(217, 91%, 50%, 0)`);
         ctx.beginPath();
-        ctx.arc(l.x, l.y, l.size * 8, 0, Math.PI * 2);
+        ctx.arc(l.x, l.y, l.size * 10, 0, Math.PI * 2);
         ctx.fillStyle = grad;
         ctx.fill();
 
-        // Core
+        // Bright core
         ctx.beginPath();
-        ctx.arc(l.x, l.y, l.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(217, 91%, 75%, ${l.opacity})`;
+        ctx.arc(l.x, l.y, l.size * 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(210, 100%, 85%, ${l.opacity})`;
         ctx.fill();
       }
+
+      ctx.globalCompositeOperation = "source-over";
 
       raf = requestAnimationFrame(draw);
     };
