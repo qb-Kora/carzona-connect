@@ -46,7 +46,7 @@ const LocalSEO = () => {
               Jako autoryzowany partner{" "}
               <strong className="text-foreground font-medium">Q&nbsp;Service Castrol</strong>{" "}
               gwarantujemy najwyższą jakość stosowanych olejów i&nbsp;płynów eksploatacyjnych. Obsługujemy
-              klientów z&nbsp;Rybnika oraz okolicznych miejscowości —{" "}
+              klientów z&nbsp;<span className="text-primary font-medium">Rybnika</span> oraz okolicznych miejscowości —{" "}
               <span className="text-foreground/70">
                 Czerwionki-Leszczyn, Żor, Wodzisławia Śląskiego, Jastrzębia-Zdroju i&nbsp;Raciborza
               </span>
