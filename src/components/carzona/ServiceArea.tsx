@@ -68,26 +68,31 @@ const LaserCanvas = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const getSize = () => {
+      const rect = canvas.getBoundingClientRect();
+      return { w: rect.width, h: rect.height };
+    };
+
     const resize = () => {
-      const dpr = window.devicePixelRatio;
-      canvas.width = canvas.offsetWidth * dpr;
-      canvas.height = canvas.offsetHeight * dpr;
+      const { w, h } = getSize();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
 
-    const w = () => canvas.offsetWidth;
-    const h = () => canvas.offsetHeight;
-
-    lasersRef.current = Array.from({ length: LASER_COUNT }, () => createLaser(w(), h()));
+    lasersRef.current = Array.from({ length: LASER_COUNT }, () => {
+      const { w, h } = getSize();
+      return createLaser(w, h);
+    });
 
     let raf: number;
     const TAIL_SPEED = 6; // how many trail points to remove per frame when exiting
 
     const draw = () => {
-      const cw = w();
-      const ch = h();
+      const { w: cw, h: ch } = getSize();
       ctx.clearRect(0, 0, cw, ch);
 
       const lasers = lasersRef.current;
