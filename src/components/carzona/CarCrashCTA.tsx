@@ -29,37 +29,50 @@ const CarCrashCTA = memo(() => {
 
   if (!visible) return null;
 
-  // Shared car positions - desktop: container 160px, cars 40px
-  // Left car: drives to center-left, right car drives to center-right
-  const desktopCenter = 60; // center point of 160px container minus half car width
-  const mobileCenter = 43; // center point of 110px container minus half car width
+  // Desktop: container 160px, car icon 40px
+  // Center = 80. Left car right edge at center: x = 80-40 = 40. Right car left edge at center: x = 80
+  // Driving: small gap. Crash: touching.
+  const dLeftDrive = 34;   // right edge at 74, gap of 12px
+  const dLeftCrash = 40;   // right edge at 80 = center (touching)
+  const dRightDrive = 86;  // left edge at 86, gap of 12px  
+  const dRightCrash = 80;  // left edge at 80 = center (touching)
+
+  // Mobile: container 110px, car icon 24px
+  // Center = 55. Left: x = 55-24 = 31. Right: x = 55
+  const mLeftDrive = 25;
+  const mLeftCrash = 31;
+  const mRightDrive = 61;
+  const mRightCrash = 55;
+
+  const driveTransition = { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] as const };
+  const crashTransition = { duration: 0.12, type: "spring" as const, stiffness: 600, damping: 12 };
 
   return (
     <>
       {/* Desktop */}
-      <div className="fixed bottom-8 z-50 pointer-events-none hidden md:flex flex-col items-center" style={{ left: "50%", transform: "translateX(-50%)", width: 160, height: 100 }}>
-        {/* Cars container */}
-        <div className="absolute bottom-0 w-full" style={{ height: 40 }}>
-          {/* Left car */}
-          <motion.div
-            initial={{ x: -80 }}
-            animate={phase === "driving" ? { x: desktopCenter - 18 } : { x: desktopCenter - 12, rotate: 10 }}
-            transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
-            className="absolute bottom-0"
-          >
-            <Car size={40} className="text-primary" strokeWidth={1.5} />
-          </motion.div>
+      <div
+        className="fixed bottom-8 z-50 pointer-events-none hidden md:block"
+        style={{ left: "50%", marginLeft: -80, width: 160, height: 100 }}
+      >
+        {/* Left car — faces right */}
+        <motion.div
+          initial={{ x: -80 }}
+          animate={phase === "driving" ? { x: dLeftDrive, rotate: 0 } : { x: dLeftCrash, rotate: 10 }}
+          transition={phase === "driving" ? driveTransition : crashTransition}
+          className="absolute bottom-0"
+        >
+          <Car size={40} className="text-primary" strokeWidth={1.5} />
+        </motion.div>
 
-          {/* Right car */}
-          <motion.div
-            initial={{ x: 240 }}
-            animate={phase === "driving" ? { x: desktopCenter + 18 } : { x: desktopCenter + 12, rotate: -10 }}
-            transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
-            className="absolute bottom-0"
-          >
-            <Car size={40} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
-          </motion.div>
-        </div>
+        {/* Right car — faces left (scaleX -1) */}
+        <motion.div
+          initial={{ x: 240 }}
+          animate={phase === "driving" ? { x: dRightDrive, rotate: 0 } : { x: dRightCrash, rotate: -10 }}
+          transition={phase === "driving" ? driveTransition : crashTransition}
+          className="absolute bottom-0"
+        >
+          <Car size={40} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
+        </motion.div>
 
         {/* Crash flash */}
         <AnimatePresence>
@@ -69,21 +82,21 @@ const CarCrashCTA = memo(() => {
               animate={{ scale: [0, 1.8, 0.8], opacity: [0, 1, 0] }}
               transition={{ duration: 0.4 }}
               className="absolute bottom-2 text-3xl"
-              style={{ left: "50%", transform: "translateX(-50%)" }}
+              style={{ left: 80, transform: "translateX(-50%)" }}
             >💥</motion.div>
           )}
         </AnimatePresence>
 
-        {/* Bubble - centered above cars */}
+        {/* Bubble — centered above cars */}
         <AnimatePresence>
           {phase === "bubble" && bubbleVisible && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.3, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.5, y: 10 }}
+              initial={{ opacity: 0, scale: 0.3 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
               transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              className="absolute pointer-events-auto cursor-pointer z-50"
-              style={{ top: -8, left: "50%", transform: "translateX(-50%)" }}
+              className="absolute pointer-events-auto cursor-pointer z-50 flex justify-center"
+              style={{ top: -8, left: 0, right: 0 }}
               onClick={handleClick}
             >
               <motion.div animate={{ y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
@@ -107,28 +120,28 @@ const CarCrashCTA = memo(() => {
       </div>
 
       {/* Mobile */}
-      <div className="fixed bottom-[70px] z-50 pointer-events-none md:hidden flex flex-col items-center" style={{ left: "50%", transform: "translateX(-50%)", width: 110, height: 75 }}>
-        <div className="absolute bottom-0 w-full" style={{ height: 24 }}>
-          <motion.div
-            initial={{ x: -60 }}
-            animate={phase === "driving" ? { x: mobileCenter - 10 } : { x: mobileCenter - 6, rotate: 10 }}
-            transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
-            className="absolute bottom-0"
-          >
-            <Car size={24} className="text-primary" strokeWidth={1.5} />
-          </motion.div>
+      <div
+        className="fixed bottom-[70px] z-50 pointer-events-none md:hidden"
+        style={{ left: "50%", marginLeft: -55, width: 110, height: 75 }}
+      >
+        <motion.div
+          initial={{ x: -60 }}
+          animate={phase === "driving" ? { x: mLeftDrive, rotate: 0 } : { x: mLeftCrash, rotate: 10 }}
+          transition={phase === "driving" ? driveTransition : crashTransition}
+          className="absolute bottom-0"
+        >
+          <Car size={24} className="text-primary" strokeWidth={1.5} />
+        </motion.div>
 
-          <motion.div
-            initial={{ x: 170 }}
-            animate={phase === "driving" ? { x: mobileCenter + 10 } : { x: mobileCenter + 6, rotate: -10 }}
-            transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
-            className="absolute bottom-0"
-          >
-            <Car size={24} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
-          </motion.div>
-        </div>
+        <motion.div
+          initial={{ x: 170 }}
+          animate={phase === "driving" ? { x: mRightDrive, rotate: 0 } : { x: mRightCrash, rotate: -10 }}
+          transition={phase === "driving" ? driveTransition : crashTransition}
+          className="absolute bottom-0"
+        >
+          <Car size={24} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
+        </motion.div>
 
-        {/* Crash flash */}
         <AnimatePresence>
           {phase !== "driving" && (
             <motion.div
@@ -136,21 +149,20 @@ const CarCrashCTA = memo(() => {
               animate={{ scale: [0, 1.4, 0.6], opacity: [0, 1, 0] }}
               transition={{ duration: 0.4 }}
               className="absolute bottom-1 text-xl"
-              style={{ left: "50%", transform: "translateX(-50%)" }}
+              style={{ left: 55, transform: "translateX(-50%)" }}
             >💥</motion.div>
           )}
         </AnimatePresence>
 
-        {/* Bubble */}
         <AnimatePresence>
           {phase === "bubble" && bubbleVisible && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.3, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.5, y: 5 }}
+              initial={{ opacity: 0, scale: 0.3 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
               transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              className="absolute pointer-events-auto cursor-pointer z-50"
-              style={{ top: -4, left: "50%", transform: "translateX(-50%)" }}
+              className="absolute pointer-events-auto cursor-pointer z-50 flex justify-center"
+              style={{ top: -4, left: 0, right: 0 }}
               onClick={handleClick}
             >
               <motion.div animate={{ y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
