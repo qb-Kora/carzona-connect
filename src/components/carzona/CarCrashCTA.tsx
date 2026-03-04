@@ -19,7 +19,7 @@ const CarCrashCTA = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-6 sm:bottom-8 left-0 right-0 z-50 pointer-events-none" style={{ height: 90 }}>
+    <div className="fixed bottom-6 sm:bottom-8 left-0 right-0 z-50 pointer-events-none" style={{ height: 120 }}>
       {/* Left car – heading right → (default emoji faces left, so flip it) */}
       <motion.div
         initial={{ x: "-80px" }}
@@ -102,7 +102,7 @@ const CarCrashCTA = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.5, y: 10 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            className="absolute bottom-[70px] left-1/2 -translate-x-1/2 pointer-events-auto cursor-pointer z-50"
+            className="absolute bottom-[85px] left-1/2 -translate-x-1/2 pointer-events-auto cursor-pointer z-50"
             onClick={handleClick}
           >
             <motion.div
