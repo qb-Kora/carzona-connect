@@ -4,12 +4,23 @@ import { motion, AnimatePresence } from "framer-motion";
 const CarCrashCTA = () => {
   const [phase, setPhase] = useState<"driving" | "crash" | "bubble">("driving");
   const [visible, setVisible] = useState(true);
+  const [bubbleVisible, setBubbleVisible] = useState(false);
 
   useEffect(() => {
     const t1 = setTimeout(() => setPhase("crash"), 2400);
     const t2 = setTimeout(() => setPhase("bubble"), 3200);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
+
+  // Blinking bubble: 3s visible, 1s hidden
+  useEffect(() => {
+    if (phase !== "bubble") return;
+    setBubbleVisible(true);
+    const interval = setInterval(() => {
+      setBubbleVisible(prev => !prev);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [phase]);
 
   const handleClick = useCallback(() => {
     document.getElementById("kontakt")?.scrollIntoView({ behavior: "smooth" });
@@ -96,7 +107,7 @@ const CarCrashCTA = () => {
 
       {/* Speech bubble */}
       <AnimatePresence>
-        {phase === "bubble" && (
+        {phase === "bubble" && bubbleVisible && (
           <motion.div
             initial={{ opacity: 0, scale: 0.3, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
