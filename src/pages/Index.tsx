@@ -13,21 +13,32 @@ import Contact from "@/components/carzona/Contact";
 import LocalSEO from "@/components/carzona/LocalSEO";
 import Footer from "@/components/carzona/Footer";
 import MobileCTA from "@/components/carzona/MobileCTA";
+import NeonDivider from "@/components/carzona/NeonDivider";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       <Hero />
+      <NeonDivider />
       <TrustBar />
+      <NeonDivider />
       <WhyUs />
+      <NeonDivider />
       <Services />
+      <NeonDivider />
       <Reviews />
+      <NeonDivider />
       <Realizations />
+      <NeonDivider />
       <Gallery />
+      <NeonDivider />
       <ServiceArea />
+      <NeonDivider />
       <FAQ />
+      <NeonDivider />
       <Contact />
+      <NeonDivider />
       <LocalSEO />
       <Footer />
       <MobileCTA />
