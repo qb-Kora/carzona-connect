@@ -17,8 +17,6 @@ interface Laser {
   y: number;
   angle: number;
   speed: number;
-  life: number;
-  maxLife: number;
   trail: { x: number; y: number }[];
 }
 
@@ -27,17 +25,40 @@ const LaserCanvas = () => {
   const lasersRef = useRef<Laser[]>([]);
 
   const createLaser = useCallback((w: number, h: number): Laser => {
-    const angle = Math.random() * Math.PI * 2;
+    // Start from a random edge (outside visible area)
+    const edge = Math.floor(Math.random() * 4); // 0=top,1=right,2=bottom,3=left
+    let startX: number, startY: number, angle: number;
+    const margin = 20;
+
+    switch (edge) {
+      case 0: // top
+        startX = Math.random() * w;
+        startY = -margin;
+        angle = Math.PI / 4 + Math.random() * Math.PI / 2; // downward
+        break;
+      case 1: // right
+        startX = w + margin;
+        startY = Math.random() * h;
+        angle = Math.PI * 0.6 + Math.random() * Math.PI * 0.8; // leftward
+        break;
+      case 2: // bottom
+        startX = Math.random() * w;
+        startY = h + margin;
+        angle = -Math.PI / 4 - Math.random() * Math.PI / 2; // upward
+        break;
+      default: // left
+        startX = -margin;
+        startY = Math.random() * h;
+        angle = -Math.PI * 0.4 + Math.random() * Math.PI * 0.8; // rightward
+        break;
+    }
+
     const speed = 4 + Math.random() * 3;
-    const startX = Math.random() * w;
-    const startY = Math.random() * h;
     return {
       x: startX,
       y: startY,
       angle,
       speed,
-      life: 0,
-      maxLife: 60 + Math.floor(Math.random() * 80),
       trail: [{ x: startX, y: startY }],
     };
   }, []);
@@ -71,7 +92,6 @@ const LaserCanvas = () => {
       const lasers = lasersRef.current;
       for (let i = 0; i < lasers.length; i++) {
         const l = lasers[i];
-        l.life++;
 
         l.x += Math.cos(l.angle) * l.speed;
         l.y += Math.sin(l.angle) * l.speed;
@@ -79,35 +99,34 @@ const LaserCanvas = () => {
         l.trail.push({ x: l.x, y: l.y });
         if (l.trail.length > 80) l.trail.shift();
 
-        const alive = 1 - l.life / l.maxLife;
-        if (alive > 0 && l.trail.length > 1) {
+        if (l.trail.length > 1) {
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
 
-          // Outer glow — single gradient path, no shadowBlur
+          // Outer glow
           ctx.lineWidth = 6;
           ctx.beginPath();
           ctx.moveTo(l.trail[0].x, l.trail[0].y);
           for (let t = 1; t < l.trail.length; t++) {
             ctx.lineTo(l.trail[t].x, l.trail[t].y);
           }
-          ctx.strokeStyle = `hsla(217, 91%, 60%, ${alive * 0.25})`;
+          ctx.strokeStyle = `hsla(217, 91%, 60%, 0.25)`;
           ctx.stroke();
 
-          // Core — single path
+          // Core
           ctx.lineWidth = 1.5;
           ctx.beginPath();
           ctx.moveTo(l.trail[0].x, l.trail[0].y);
           for (let t = 1; t < l.trail.length; t++) {
             ctx.lineTo(l.trail[t].x, l.trail[t].y);
           }
-          ctx.strokeStyle = `hsla(210, 100%, 85%, ${alive * 0.6})`;
+          ctx.strokeStyle = `hsla(210, 100%, 85%, 0.6)`;
           ctx.stroke();
 
-          // Bright head dot
-          ctx.fillStyle = `hsla(210, 100%, 90%, ${alive})`;
+          // Bright head
+          ctx.fillStyle = `hsla(210, 100%, 90%, 1)`;
           ctx.beginPath();
           ctx.arc(l.x, l.y, 2, 0, Math.PI * 2);
           ctx.fill();
@@ -115,8 +134,8 @@ const LaserCanvas = () => {
           ctx.restore();
         }
 
+        // Respawn only when fully off-screen
         if (
-          l.life >= l.maxLife ||
           l.x < -100 || l.x > cw + 100 ||
           l.y < -100 || l.y > ch + 100
         ) {
