@@ -7,11 +7,11 @@ const NeonDivider = forwardRef<HTMLDivElement>((_, ref) => (
     className="relative w-full z-20 isolate"
     style={{ height: 0, overflow: "visible", marginTop: -1, marginBottom: -1 }}
   >
-    {/* Core bright line — full width, slight fade only at very edges */}
+    {/* Core bright line — nearly full width */}
     <div
       className="absolute left-0 right-0 top-0 h-[2px]"
       style={{
-        background: "linear-gradient(90deg, hsl(var(--accent) / 0.05) 0%, hsl(var(--accent) / 0.7) 8%, hsl(var(--accent) / 0.9) 50%, hsl(var(--accent) / 0.7) 92%, hsl(var(--accent) / 0.05) 100%)",
+        background: "linear-gradient(90deg, transparent 0%, hsl(var(--accent) / 0.8) 3%, hsl(var(--accent) / 0.9) 50%, hsl(var(--accent) / 0.8) 97%, transparent 100%)",
         boxShadow: "0 0 8px 2px hsl(var(--accent) / 0.35), 0 0 20px 4px hsl(var(--accent) / 0.12)",
       }}
     />
