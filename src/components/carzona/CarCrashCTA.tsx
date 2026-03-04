@@ -122,7 +122,7 @@ const CarCrashCTA = () => {
               transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}
             >
               <div className="bg-accent text-accent-foreground font-bold text-sm sm:text-base px-5 py-2 rounded-xl shadow-lg shadow-accent/30 hover:scale-105 active:scale-95 transition-transform duration-150 whitespace-nowrap relative">
-                Pomocy! 🆘
+                Pomocy!
                 <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-accent rotate-45" />
               </div>
             </motion.div>
