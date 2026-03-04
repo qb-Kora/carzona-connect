@@ -38,7 +38,9 @@ const Services = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-            className="card-hover p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl cursor-default group"
+              className="card-hover p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl cursor-default group"
+              whileHover={{ rotateX: -2, rotateY: 2, scale: 1.02 }}
+              style={{ transformPerspective: 800 }}
           >
             {service.popular && (
               <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-accent/15 text-accent text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full">
