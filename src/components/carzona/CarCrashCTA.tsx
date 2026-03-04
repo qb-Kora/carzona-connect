@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Car, CarFront } from "lucide-react";
+import { Car } from "lucide-react";
 
 const CarCrashCTA = () => {
   const [phase, setPhase] = useState<"driving" | "crash" | "bubble">("driving");
@@ -43,14 +43,14 @@ const CarCrashCTA = () => {
           <Car size={40} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
         </motion.div>
 
-        {/* Right car — green, facing left */}
+        {/* Right car — blue, facing left */}
         <motion.div
           initial={{ x: "calc(100vw + 40px)" }}
           animate={phase === "driving" ? { x: "calc(50vw + 10px)", rotate: 0 } : { x: "calc(50vw - 5px)", rotate: -10 }}
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
           className="absolute bottom-3"
         >
-          <CarFront size={40} className="text-accent" strokeWidth={1.5} style={{ transform: "rotate(90deg)" }} />
+          <Car size={40} className="text-primary" strokeWidth={1.5} />
         </motion.div>
 
         {/* Crash flash */}
@@ -91,9 +91,9 @@ const CarCrashCTA = () => {
               onClick={handleClick}
             >
               <motion.div animate={{ y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
-                <div className="bg-accent text-accent-foreground font-bold text-base px-5 py-2 rounded-xl shadow-lg shadow-accent/30 hover:scale-105 active:scale-95 transition-transform duration-150 whitespace-nowrap relative">
+                <div className="bg-background/60 backdrop-blur-sm text-accent font-bold text-base px-5 py-2 rounded-xl border-2 border-accent shadow-lg shadow-accent/20 hover:scale-105 active:scale-95 transition-transform duration-150 whitespace-nowrap relative">
                   Pomocy!
-                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-accent rotate-45" />
+                  <div className="absolute -bottom-[7px] left-1/2 -translate-x-1/2 w-3 h-3 bg-background/60 border-b-2 border-r-2 border-accent rotate-45" />
                 </div>
               </motion.div>
             </motion.div>
@@ -113,14 +113,14 @@ const CarCrashCTA = () => {
           <Car size={24} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
         </motion.div>
 
-        {/* Right car — green */}
+        {/* Right car — blue */}
         <motion.div
           initial={{ x: "calc(100vw + 30px)" }}
           animate={phase === "driving" ? { x: "calc(50vw + 6px)", rotate: 0 } : { x: "calc(50vw - 2px)", rotate: -10 }}
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
           className="absolute bottom-1"
         >
-          <CarFront size={24} className="text-accent" strokeWidth={1.5} style={{ transform: "rotate(90deg)" }} />
+          <Car size={24} className="text-primary" strokeWidth={1.5} />
         </motion.div>
 
         {/* Crash flash */}
@@ -161,9 +161,9 @@ const CarCrashCTA = () => {
               onClick={handleClick}
             >
               <motion.div animate={{ y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
-                <div className="bg-accent text-accent-foreground font-bold text-xs px-3 py-1.5 rounded-lg shadow-lg shadow-accent/30 active:scale-95 transition-transform duration-150 whitespace-nowrap relative">
+                <div className="bg-background/60 backdrop-blur-sm text-accent font-bold text-xs px-3 py-1.5 rounded-lg border-2 border-accent shadow-lg shadow-accent/20 active:scale-95 transition-transform duration-150 whitespace-nowrap relative">
                   Pomocy!
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-accent rotate-45" />
+                  <div className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-2 h-2 bg-background/60 border-b-2 border-r-2 border-accent rotate-45" />
                 </div>
               </motion.div>
             </motion.div>
