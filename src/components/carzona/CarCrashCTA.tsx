@@ -32,13 +32,12 @@ const CarCrashCTA = () => {
   return (
     <>
       {/* Desktop */}
-      <div className="fixed bottom-8 z-50 pointer-events-none hidden md:flex items-end justify-center left-1/2 -translate-x-1/2" style={{ height: 120 }}>
-        {/* Container for centered cars */}
-        <div className="relative" style={{ width: 100, height: 60 }}>
+      <div className="fixed bottom-8 z-50 pointer-events-none hidden md:flex items-end justify-center left-1/2 -translate-x-1/2" style={{ height: 90 }}>
+        <div className="relative flex items-end justify-center" style={{ width: 100, height: 50 }}>
           {/* Left car — facing right */}
           <motion.div
             initial={{ x: -120 }}
-            animate={phase === "driving" ? { x: 10, rotate: 0 } : { x: 25, rotate: 10 }}
+            animate={phase === "driving" ? { x: 8, rotate: 0 } : { x: 18, rotate: 10 }}
             transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
             className="absolute bottom-0 left-0"
           >
@@ -48,7 +47,7 @@ const CarCrashCTA = () => {
           {/* Right car — facing left */}
           <motion.div
             initial={{ x: 220 }}
-            animate={phase === "driving" ? { x: 50, rotate: 0 } : { x: 35, rotate: -10 }}
+            animate={phase === "driving" ? { x: 42, rotate: 0 } : { x: 32, rotate: -10 }}
             transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
             className="absolute bottom-0 left-0"
           >
@@ -72,15 +71,15 @@ const CarCrashCTA = () => {
             {phase !== "driving" && ["⚡", "✨", "🔩"].map((e, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 1, scale: 0, x: 42, y: 20 }}
-                animate={{ opacity: 0, scale: 1.2, x: 42 + (i - 1) * 35, y: -10 - Math.random() * 30 }}
+                initial={{ opacity: 1, scale: 0, x: 42, y: 10 }}
+                animate={{ opacity: 0, scale: 1.2, x: 42 + (i - 1) * 35, y: -15 - Math.random() * 25 }}
                 transition={{ duration: 0.6, delay: i * 0.05 }}
                 className="absolute text-base"
               >{e}</motion.div>
             ))}
           </AnimatePresence>
 
-          {/* Bubble — above cars */}
+          {/* Bubble — directly above cars */}
           <AnimatePresence>
             {phase === "bubble" && bubbleVisible && (
               <motion.div
@@ -88,7 +87,7 @@ const CarCrashCTA = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.5, y: 10 }}
                 transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                className="absolute -top-[50px] left-1/2 -translate-x-1/2 pointer-events-auto cursor-pointer z-50"
+                className="absolute -top-[42px] left-1/2 -translate-x-1/2 pointer-events-auto cursor-pointer z-50"
                 onClick={handleClick}
               >
                 <motion.div animate={{ y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
@@ -114,12 +113,12 @@ const CarCrashCTA = () => {
       </div>
 
       {/* Mobile */}
-      <div className="fixed bottom-[70px] z-50 pointer-events-none md:hidden flex items-end justify-center left-1/2 -translate-x-1/2" style={{ height: 80 }}>
-        <div className="relative" style={{ width: 70, height: 40 }}>
+      <div className="fixed bottom-[70px] z-50 pointer-events-none md:hidden flex items-end justify-center left-1/2 -translate-x-1/2" style={{ height: 65 }}>
+        <div className="relative flex items-end justify-center" style={{ width: 70, height: 40 }}>
           {/* Left car */}
           <motion.div
             initial={{ x: -80 }}
-            animate={phase === "driving" ? { x: 0, rotate: 0 } : { x: 10, rotate: 10 }}
+            animate={phase === "driving" ? { x: 2, rotate: 0 } : { x: 8, rotate: 10 }}
             transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
             className="absolute bottom-0 left-0"
           >
@@ -129,7 +128,7 @@ const CarCrashCTA = () => {
           {/* Right car */}
           <motion.div
             initial={{ x: 150 }}
-            animate={phase === "driving" ? { x: 46, rotate: 0 } : { x: 36, rotate: -10 }}
+            animate={phase === "driving" ? { x: 34, rotate: 0 } : { x: 28, rotate: -10 }}
             transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
             className="absolute bottom-0 left-0"
           >
@@ -153,15 +152,15 @@ const CarCrashCTA = () => {
             {phase !== "driving" && ["⚡", "✨"].map((e, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 1, scale: 0, x: 30, y: 15 }}
-                animate={{ opacity: 0, scale: 1, x: 30 + (i === 0 ? -18 : 18), y: -10 - Math.random() * 15 }}
+                initial={{ opacity: 1, scale: 0, x: 28, y: 10 }}
+                animate={{ opacity: 0, scale: 1, x: 28 + (i === 0 ? -18 : 18), y: -10 - Math.random() * 15 }}
                 transition={{ duration: 0.5, delay: i * 0.05 }}
                 className="absolute text-xs"
               >{e}</motion.div>
             ))}
           </AnimatePresence>
 
-          {/* Bubble — above cars */}
+          {/* Bubble — directly above cars */}
           <AnimatePresence>
             {phase === "bubble" && bubbleVisible && (
               <motion.div
@@ -169,7 +168,7 @@ const CarCrashCTA = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.5, y: 5 }}
                 transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                className="absolute -top-[40px] left-1/2 -translate-x-1/2 pointer-events-auto cursor-pointer z-50"
+                className="absolute -top-[35px] left-1/2 -translate-x-1/2 pointer-events-auto cursor-pointer z-50"
                 onClick={handleClick}
               >
                 <motion.div animate={{ y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
