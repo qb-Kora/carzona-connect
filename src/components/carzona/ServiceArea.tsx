@@ -10,7 +10,7 @@ const cities = [
   "Gliwice", "Zabrze", "Tychy", "Mikołów", "Ornontowice",
 ];
 
-const LASER_COUNT = 12;
+const LASER_COUNT = 10;
 
 interface Laser {
   x: number;
@@ -77,7 +77,7 @@ const LaserCanvas = () => {
         l.y += Math.sin(l.angle) * l.speed;
 
         l.trail.push({ x: l.x, y: l.y });
-        if (l.trail.length > 120) l.trail.shift();
+        if (l.trail.length > 80) l.trail.shift();
 
         const alive = 1 - l.life / l.maxLife;
         if (alive > 0 && l.trail.length > 1) {
@@ -86,38 +86,30 @@ const LaserCanvas = () => {
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
 
-          // Outer glow trail
-          for (let t = 1; t < l.trail.length; t++) {
-            const segAlpha = (t / l.trail.length) * alive;
-            ctx.strokeStyle = `hsla(217, 91%, 60%, ${segAlpha * 0.35})`;
-            ctx.lineWidth = 8;
-            ctx.shadowColor = `hsla(217, 91%, 60%, 0.6)`;
-            ctx.shadowBlur = 20;
-            ctx.beginPath();
-            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
-            ctx.lineTo(l.trail[t].x, l.trail[t].y);
-            ctx.stroke();
-          }
-
-          // Core trail
-          for (let t = 1; t < l.trail.length; t++) {
-            const segAlpha = (t / l.trail.length) * alive;
-            ctx.strokeStyle = `hsla(210, 100%, 85%, ${segAlpha * 0.8})`;
-            ctx.lineWidth = 2;
-            ctx.shadowColor = `hsla(210, 100%, 85%, 0.5)`;
-            ctx.shadowBlur = 6;
-            ctx.beginPath();
-            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
-            ctx.lineTo(l.trail[t].x, l.trail[t].y);
-            ctx.stroke();
-          }
-
-          // Bright head
-          ctx.fillStyle = `hsla(210, 100%, 90%, ${alive})`;
-          ctx.shadowColor = `hsla(217, 91%, 65%, 0.9)`;
-          ctx.shadowBlur = 15;
+          // Outer glow — single gradient path, no shadowBlur
+          ctx.lineWidth = 6;
           ctx.beginPath();
-          ctx.arc(l.x, l.y, 2.5, 0, Math.PI * 2);
+          ctx.moveTo(l.trail[0].x, l.trail[0].y);
+          for (let t = 1; t < l.trail.length; t++) {
+            ctx.lineTo(l.trail[t].x, l.trail[t].y);
+          }
+          ctx.strokeStyle = `hsla(217, 91%, 60%, ${alive * 0.25})`;
+          ctx.stroke();
+
+          // Core — single path
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(l.trail[0].x, l.trail[0].y);
+          for (let t = 1; t < l.trail.length; t++) {
+            ctx.lineTo(l.trail[t].x, l.trail[t].y);
+          }
+          ctx.strokeStyle = `hsla(210, 100%, 85%, ${alive * 0.6})`;
+          ctx.stroke();
+
+          // Bright head dot
+          ctx.fillStyle = `hsla(210, 100%, 90%, ${alive})`;
+          ctx.beginPath();
+          ctx.arc(l.x, l.y, 2, 0, Math.PI * 2);
           ctx.fill();
 
           ctx.restore();
@@ -159,7 +151,7 @@ const ServiceArea = () => (
         alt=""
         aria-hidden="true"
         className="w-full h-full object-cover"
-        style={{ filter: "blur(3px) brightness(0.15) saturate(0.4)" }}
+        style={{ filter: "blur(2px) brightness(0.15) saturate(0.3)" }}
       />
     </div>
 
