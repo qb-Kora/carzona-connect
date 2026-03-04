@@ -8,6 +8,7 @@ import Realizations from "@/components/carzona/Realizations";
 import Gallery from "@/components/carzona/Gallery";
 import ServiceArea from "@/components/carzona/ServiceArea";
 import FAQ from "@/components/carzona/FAQ";
+import CarCrashCTA from "@/components/carzona/CarCrashCTA";
 import Contact from "@/components/carzona/Contact";
 import LocalSEO from "@/components/carzona/LocalSEO";
 import Footer from "@/components/carzona/Footer";
@@ -26,6 +27,7 @@ const Index = () => {
       <Gallery />
       <ServiceArea />
       <FAQ />
+      <CarCrashCTA />
       <Contact />
       <LocalSEO />
       <Footer />
