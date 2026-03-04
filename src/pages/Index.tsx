@@ -27,11 +27,11 @@ const Index = () => {
       <Gallery />
       <ServiceArea />
       <FAQ />
-      <CarCrashCTA />
       <Contact />
       <LocalSEO />
       <Footer />
       <MobileCTA />
+      <CarCrashCTA />
     </div>
   );
 };

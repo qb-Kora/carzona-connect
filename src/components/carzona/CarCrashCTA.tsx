@@ -1,137 +1,121 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const CarCrashCTA = () => {
-  const [crashed, setCrashed] = useState(false);
-  const [showBubble, setShowBubble] = useState(false);
+  const [phase, setPhase] = useState<"driving" | "crash" | "bubble">("driving");
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setPhase("crash"), 2800);
+    const t2 = setTimeout(() => setPhase("bubble"), 3500);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
 
   const handleClick = () => {
-    if (showBubble) {
+    if (phase === "bubble") {
       document.getElementById("kontakt")?.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
-    if (!crashed) {
-      setCrashed(true);
-      setTimeout(() => setShowBubble(true), 600);
     }
   };
 
   return (
-    <section
-      className="py-16 sm:py-24 overflow-hidden cursor-pointer select-none"
-      onClick={handleClick}
+    <div
+      className="fixed bottom-4 sm:bottom-6 left-0 right-0 z-50 pointer-events-none"
+      style={{ height: 80 }}
     >
-      <div className="max-w-3xl mx-auto px-4 relative flex flex-col items-center">
-        {/* Cars container */}
-        <div className="relative w-full h-32 sm:h-40 flex items-center justify-center">
-          {/* Left car */}
+      {/* Left car */}
+      <motion.div
+        initial={{ x: "-100px" }}
+        animate={
+          phase === "driving"
+            ? { x: "calc(50vw - 60px)", rotate: 0 }
+            : { x: "calc(50vw - 35px)", rotate: 12 }
+        }
+        transition={
+          phase === "driving"
+            ? { duration: 2.8, ease: [0.25, 0.1, 0.25, 1] }
+            : { duration: 0.15, ease: "easeOut" }
+        }
+        className="absolute bottom-2 text-4xl sm:text-5xl"
+      >
+        🚗
+      </motion.div>
+
+      {/* Right car */}
+      <motion.div
+        initial={{ x: "calc(100vw + 50px)" }}
+        animate={
+          phase === "driving"
+            ? { x: "calc(50vw + 10px)", rotate: 0, scaleX: -1 }
+            : { x: "calc(50vw - 15px)", rotate: -12, scaleX: -1 }
+        }
+        transition={
+          phase === "driving"
+            ? { duration: 2.8, ease: [0.25, 0.1, 0.25, 1] }
+            : { duration: 0.15, ease: "easeOut" }
+        }
+        className="absolute bottom-2 text-4xl sm:text-5xl"
+      >
+        🚗
+      </motion.div>
+
+      {/* Crash effect */}
+      <AnimatePresence>
+        {(phase === "crash" || phase === "bubble") && (
           <motion.div
-            initial={{ x: "-45vw", rotate: 0 }}
-            animate={
-              crashed
-                ? { x: -10, rotate: 8, transition: { duration: 0.5, ease: "easeIn" } }
-                : { x: -10, rotate: 0, transition: { duration: 2, ease: "easeInOut" } }
-            }
-            className="absolute text-5xl sm:text-7xl"
-            style={{ filter: crashed ? "none" : "none" }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: [0, 2, 1.2], opacity: [0, 1, 0] }}
+            transition={{ duration: 0.5 }}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 text-4xl sm:text-5xl"
           >
-            🚗
+            💥
           </motion.div>
-
-          {/* Right car */}
-          <motion.div
-            initial={{ x: "45vw", rotate: 0, scaleX: -1 }}
-            animate={
-              crashed
-                ? { x: 10, rotate: -8, scaleX: -1, transition: { duration: 0.5, ease: "easeIn" } }
-                : { x: 10, rotate: 0, scaleX: -1, transition: { duration: 2, ease: "easeInOut" } }
-            }
-            className="absolute text-5xl sm:text-7xl"
-          >
-            🚗
-          </motion.div>
-
-          {/* Crash particles */}
-          <AnimatePresence>
-            {crashed && (
-              <>
-                {[...Array(6)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 1, scale: 0, x: 0, y: 0 }}
-                    animate={{
-                      opacity: 0,
-                      scale: 1,
-                      x: (Math.random() - 0.5) * 120,
-                      y: (Math.random() - 0.5) * 80 - 20,
-                    }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 + i * 0.05 }}
-                    className="absolute text-xl sm:text-2xl"
-                  >
-                    {["💥", "⚡", "✨", "🔧", "💫", "🔩"][i]}
-                  </motion.div>
-                ))}
-
-                {/* Shake effect via a centered 💥 */}
-                <motion.div
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: [0, 1.8, 1.2], opacity: [0, 1, 0] }}
-                  transition={{ duration: 0.6, delay: 0.45 }}
-                  className="absolute text-4xl sm:text-6xl"
-                >
-                  💥
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
-
-          {/* Speech bubble */}
-          <AnimatePresence>
-            {showBubble && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: -50 }}
-                transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                className="absolute -top-4 sm:-top-6 z-10"
-              >
-                <div className="relative bg-accent text-accent-foreground font-bold text-base sm:text-xl px-6 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-lg shadow-accent/25 hover:scale-110 transition-transform duration-200">
-                  Pomocy! 🆘
-                  {/* Bubble tail */}
-                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-accent rotate-45 rounded-sm" />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Hint text */}
-        <AnimatePresence>
-          {!crashed && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 2.5 }}
-              className="text-muted-foreground text-xs sm:text-sm mt-4 text-center"
-            >
-              Kliknij, aby zobaczyć co się stanie…
-            </motion.p>
-          )}
-        </AnimatePresence>
-
-        {showBubble && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            transition={{ delay: 0.5 }}
-            className="text-muted-foreground text-xs sm:text-sm mt-8 text-center"
-          >
-            Kliknij „Pomocy!" aby umówić wizytę
-          </motion.p>
         )}
-      </div>
-    </section>
+      </AnimatePresence>
+
+      {/* Particles */}
+      <AnimatePresence>
+        {(phase === "crash" || phase === "bubble") &&
+          ["⚡", "✨", "🔧", "💫", "🔩"].map((e, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 1, scale: 0, x: "50vw", y: 40 }}
+              animate={{
+                opacity: 0,
+                scale: 1,
+                x: `calc(50vw + ${(i - 2) * 40}px)`,
+                y: 40 - 30 - Math.random() * 40,
+              }}
+              transition={{ duration: 0.7, delay: i * 0.04 }}
+              className="absolute text-lg sm:text-xl"
+            >
+              {e}
+            </motion.div>
+          ))}
+      </AnimatePresence>
+
+      {/* Speech bubble */}
+      <AnimatePresence>
+        {phase === "bubble" && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0, y: 0 }}
+            animate={{ opacity: 1, scale: 1, y: -30 }}
+            transition={{ type: "spring", stiffness: 500, damping: 18 }}
+            className="absolute bottom-16 left-1/2 -translate-x-1/2 pointer-events-auto cursor-pointer z-50"
+            onClick={handleClick}
+          >
+            <motion.div
+              animate={{ y: [0, -4, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+              className="relative"
+            >
+              <div className="bg-accent text-accent-foreground font-bold text-sm sm:text-lg px-5 sm:px-7 py-2.5 sm:py-3 rounded-2xl shadow-lg shadow-accent/30 hover:scale-110 active:scale-95 transition-transform duration-150 whitespace-nowrap">
+                Pomocy! 🆘
+                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-accent rotate-45 rounded-sm" />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 
