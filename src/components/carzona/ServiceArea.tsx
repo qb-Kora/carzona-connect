@@ -22,16 +22,13 @@ interface Laser {
   trail: { x: number; y: number }[];
 }
 
-const LaserScratchCanvas = () => {
+const LaserCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const maskRef = useRef<HTMLCanvasElement | null>(null);
   const lasersRef = useRef<Laser[]>([]);
-  const imgRef = useRef<HTMLImageElement | null>(null);
-  const imgLoaded = useRef(false);
 
   const createLaser = useCallback((w: number, h: number): Laser => {
     const angle = Math.random() * Math.PI * 2;
-    const speed = 4 + Math.random() * 3; // steady, uniform speed
+    const speed = 4 + Math.random() * 3;
     const startX = Math.random() * w;
     const startY = Math.random() * h;
     return {
@@ -40,7 +37,7 @@ const LaserScratchCanvas = () => {
       angle,
       speed,
       life: 0,
-      maxLife: 60 + Math.floor(Math.random() * 80), // much longer life = longer trail
+      maxLife: 60 + Math.floor(Math.random() * 80),
       trail: [{ x: startX, y: startY }],
     };
   }, []);
@@ -51,85 +48,37 @@ const LaserScratchCanvas = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Create off-screen mask canvas for scratch reveal
-    const mask = document.createElement("canvas");
-    maskRef.current = mask;
-
     const resize = () => {
       const dpr = window.devicePixelRatio;
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+      canvas.width = canvas.offsetWidth * dpr;
+      canvas.height = canvas.offsetHeight * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      mask.width = w * dpr;
-      mask.height = h * dpr;
-      const mctx = mask.getContext("2d");
-      if (mctx) mctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
 
-    // Load image
-    const img = new Image();
-    img.src = carzonaStreet;
-    img.onload = () => {
-      imgRef.current = img;
-      imgLoaded.current = true;
-    };
-
     const w = () => canvas.offsetWidth;
     const h = () => canvas.offsetHeight;
 
-    // Init lasers
     lasersRef.current = Array.from({ length: LASER_COUNT }, () => createLaser(w(), h()));
-
-    // Temporary canvas for compositing the photo reveal
-    const revealCanvas = document.createElement("canvas");
 
     let raf: number;
     const draw = () => {
       const cw = w();
       const ch = h();
-      const mctx = mask.getContext("2d");
-
-      // Clear main canvas
       ctx.clearRect(0, 0, cw, ch);
 
-      // Update & draw lasers
       const lasers = lasersRef.current;
       for (let i = 0; i < lasers.length; i++) {
         const l = lasers[i];
         l.life++;
 
-        // Move at constant speed
         l.x += Math.cos(l.angle) * l.speed;
         l.y += Math.sin(l.angle) * l.speed;
 
-        // Store trail point
         l.trail.push({ x: l.x, y: l.y });
-        // Keep trail max ~120 points for long tail
         if (l.trail.length > 120) l.trail.shift();
 
-        // Scratch the mask where laser travels
-        if (mctx) {
-          mctx.globalCompositeOperation = "source-over";
-          mctx.strokeStyle = "white";
-          mctx.lineWidth = 2 + Math.random() * 3;
-          mctx.lineCap = "round";
-          mctx.globalAlpha = 0.1;
-          mctx.beginPath();
-          mctx.moveTo(
-            l.x - Math.cos(l.angle) * l.speed,
-            l.y - Math.sin(l.angle) * l.speed
-          );
-          mctx.lineTo(l.x, l.y);
-          mctx.stroke();
-          mctx.globalAlpha = 1;
-        }
-
-        // Draw long blue trail
         const alive = 1 - l.life / l.maxLife;
         if (alive > 0 && l.trail.length > 1) {
           ctx.save();
@@ -174,54 +123,12 @@ const LaserScratchCanvas = () => {
           ctx.restore();
         }
 
-        // Respawn when dead or off-screen
         if (
           l.life >= l.maxLife ||
           l.x < -100 || l.x > cw + 100 ||
           l.y < -100 || l.y > ch + 100
         ) {
           lasers[i] = createLaser(cw, ch);
-        }
-      }
-
-      // Draw the photo revealed through the scratch mask behind lasers
-      if (imgLoaded.current && imgRef.current) {
-        const dpr = window.devicePixelRatio;
-        revealCanvas.width = cw * dpr;
-        revealCanvas.height = ch * dpr;
-        const rctx = revealCanvas.getContext("2d");
-        if (rctx) {
-          rctx.clearRect(0, 0, revealCanvas.width, revealCanvas.height);
-          rctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-          // Draw the image with slight blur
-          rctx.filter = "blur(2px)";
-          const imgAspect = imgRef.current.width / imgRef.current.height;
-          const canvasAspect = cw / ch;
-          let sx = 0, sy = 0, sw = imgRef.current.width, sh = imgRef.current.height;
-          if (imgAspect > canvasAspect) {
-            sw = imgRef.current.height * canvasAspect;
-            sx = (imgRef.current.width - sw) / 2;
-          } else {
-            sh = imgRef.current.width / canvasAspect;
-            sy = (imgRef.current.height - sh) / 2;
-          }
-          rctx.drawImage(imgRef.current, sx, sy, sw, sh, 0, 0, cw, ch);
-          rctx.filter = "none";
-
-          // Darken it
-          rctx.fillStyle = "rgba(0, 0, 0, 0.45)";
-          rctx.fillRect(0, 0, cw, ch);
-
-          // Use mask to clip — only show where scratched
-          rctx.globalCompositeOperation = "destination-in";
-          rctx.drawImage(mask, 0, 0, cw, ch);
-
-          // Draw behind lasers on main canvas
-          ctx.save();
-          ctx.globalCompositeOperation = "destination-over";
-          ctx.drawImage(revealCanvas, 0, 0, cw, ch);
-          ctx.restore();
         }
       }
 
@@ -238,14 +145,26 @@ const LaserScratchCanvas = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-0"
+      className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
     />
   );
 };
 
 const ServiceArea = () => (
   <section className="py-16 sm:py-20 md:py-32 relative overflow-hidden">
-    <LaserScratchCanvas />
+    {/* Photo background with heavy darkening and blur */}
+    <div className="absolute inset-0 z-0">
+      <img
+        src={carzonaStreet}
+        alt=""
+        aria-hidden="true"
+        className="w-full h-full object-cover"
+        style={{ filter: "blur(3px) brightness(0.15) saturate(0.4)" }}
+      />
+    </div>
+
+    <LaserCanvas />
+
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
         <AnimatedSection>
