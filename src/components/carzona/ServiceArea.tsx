@@ -196,9 +196,13 @@ const ServiceArea = () => (
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: i * 0.03 }}
-                className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-card border border-border text-xs sm:text-sm text-muted-foreground hover:border-primary/30 hover:text-foreground transition-all duration-300 cursor-default"
+                className={`inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 cursor-default ${
+                  city === "Rybnik"
+                    ? "bg-accent/10 border-2 border-accent text-accent font-semibold"
+                    : "bg-card border border-border text-muted-foreground hover:border-primary/30 hover:text-foreground"
+                }`}
               >
-                <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary" />
+                <MapPin className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${city === "Rybnik" ? "text-accent" : "text-primary"}`} />
                 {city}
               </motion.span>
             ))}
