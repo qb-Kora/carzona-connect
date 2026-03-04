@@ -9,45 +9,91 @@ interface Screw {
   rotation: number;
   vr: number;
   size: number;
-  type: "bolt" | "nut" | "screw";
+  type: "flathead" | "phillips" | "hex-bolt" | "nut" | "washer";
   opacity: number;
 }
 
-const SCREW_COUNT = 18;
-const PUSH_RADIUS = 80;
+const SCREW_COUNT = 45;
+const PUSH_RADIUS = 90;
 const PUSH_FORCE = 2.5;
 const FRICTION = 0.96;
 const ROTATION_FRICTION = 0.97;
 
 const ScrewSVG = ({ type, size }: { type: string; size: number }) => {
-  if (type === "bolt") {
+  const color = "hsl(220, 10%, 45%)";
+  const colorLight = "hsl(220, 10%, 55%)";
+
+  if (type === "flathead") {
+    // Flathead screw - circle with single slot
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="10" stroke="hsl(var(--muted-foreground))" strokeWidth="1.2" fill="none" opacity="0.5" />
-        <circle cx="12" cy="12" r="6" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.4" />
-        <line x1="12" y1="2" x2="12" y2="22" stroke="hsl(var(--muted-foreground))" strokeWidth="0.7" opacity="0.35" />
-        <line x1="2" y1="12" x2="22" y2="12" stroke="hsl(var(--muted-foreground))" strokeWidth="0.7" opacity="0.35" />
+        <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="1.5" fill="none" opacity="0.5" />
+        <circle cx="12" cy="12" r="9.5" stroke={colorLight} strokeWidth="0.3" fill="none" opacity="0.2" />
+        <line x1="5" y1="12" x2="19" y2="12" stroke={color} strokeWidth="2" opacity="0.6" strokeLinecap="round" />
       </svg>
     );
   }
+
+  if (type === "phillips") {
+    // Phillips screw - circle with cross
+    return (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="1.5" fill="none" opacity="0.5" />
+        <circle cx="12" cy="12" r="9.5" stroke={colorLight} strokeWidth="0.3" fill="none" opacity="0.2" />
+        <line x1="7" y1="12" x2="17" y2="12" stroke={color} strokeWidth="1.8" opacity="0.55" strokeLinecap="round" />
+        <line x1="12" y1="7" x2="12" y2="17" stroke={color} strokeWidth="1.8" opacity="0.55" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (type === "hex-bolt") {
+    // Hex bolt - hexagonal head with circle in center
+    return (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon
+          points="12,2.5 20.5,7.25 20.5,16.75 12,21.5 3.5,16.75 3.5,7.25"
+          stroke={color}
+          strokeWidth="1.5"
+          fill="none"
+          opacity="0.5"
+        />
+        {/* Inner hex detail */}
+        <polygon
+          points="12,5 17.5,8.5 17.5,15.5 12,19 6.5,15.5 6.5,8.5"
+          stroke={colorLight}
+          strokeWidth="0.4"
+          fill="none"
+          opacity="0.2"
+        />
+        <circle cx="12" cy="12" r="3" stroke={color} strokeWidth="1" fill="none" opacity="0.4" />
+      </svg>
+    );
+  }
+
   if (type === "nut") {
+    // Hex nut - hexagon with large center hole
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <polygon
           points="12,2 21,7 21,17 12,22 3,17 3,7"
-          stroke="hsl(var(--muted-foreground))"
-          strokeWidth="1.2"
+          stroke={color}
+          strokeWidth="1.5"
           fill="none"
           opacity="0.5"
         />
-        <circle cx="12" cy="12" r="5" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.35" />
+        <circle cx="12" cy="12" r="5.5" stroke={color} strokeWidth="1.2" fill="none" opacity="0.45" />
+        {/* Thread lines inside */}
+        <circle cx="12" cy="12" r="4.5" stroke={colorLight} strokeWidth="0.3" fill="none" opacity="0.2" strokeDasharray="2 1.5" />
       </svg>
     );
   }
+
+  // washer - simple ring
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="12" cy="12" r="9" stroke="hsl(var(--muted-foreground))" strokeWidth="1.2" fill="none" opacity="0.5" />
-      <line x1="8" y1="12" x2="16" y2="12" stroke="hsl(var(--muted-foreground))" strokeWidth="2" opacity="0.45" strokeLinecap="round" />
+      <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="1.5" fill="none" opacity="0.45" />
+      <circle cx="12" cy="12" r="9" stroke={colorLight} strokeWidth="0.4" fill="none" opacity="0.2" />
+      <circle cx="12" cy="12" r="4" stroke={color} strokeWidth="1.2" fill="none" opacity="0.4" />
     </svg>
   );
 };
@@ -65,30 +111,26 @@ const InteractiveScrews = () => {
     if (!container) return;
     const { width, height } = container.getBoundingClientRect();
     if (width === 0 || height === 0) return;
-    
-    const types: Screw["type"][] = ["bolt", "nut", "screw"];
+
+    const types: Screw["type"][] = ["flathead", "phillips", "hex-bolt", "nut", "washer"];
     screwsRef.current = Array.from({ length: SCREW_COUNT }, (_, i) => ({
       id: i,
-      x: Math.random() * (width - 60) + 30,
-      y: Math.random() * (height - 60) + 30,
+      x: Math.random() * (width - 40) + 20,
+      y: Math.random() * (height - 40) + 20,
       vx: 0,
       vy: 0,
       rotation: Math.random() * 360,
       vr: 0,
-      size: 20 + Math.random() * 16,
-      type: types[i % 3],
-      opacity: 0.35 + Math.random() * 0.3,
+      size: 10 + Math.random() * 28, // wide range: 10px to 38px
+      type: types[Math.floor(Math.random() * types.length)],
+      opacity: 0.2 + Math.random() * 0.35,
     }));
     initializedRef.current = true;
     setRenderKey(k => k + 1);
   }, []);
 
   useEffect(() => {
-    // Delay init slightly to ensure container has dimensions
-    const timeout = setTimeout(() => {
-      initScrews();
-    }, 100);
-    
+    const timeout = setTimeout(() => initScrews(), 100);
     window.addEventListener("resize", initScrews);
     return () => {
       clearTimeout(timeout);
@@ -102,19 +144,14 @@ const InteractiveScrews = () => {
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
+      mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
-
     const handleMouseLeave = () => {
       mouseRef.current = { x: -1000, y: -1000 };
     };
 
     container.addEventListener("mousemove", handleMouseMove);
     container.addEventListener("mouseleave", handleMouseLeave);
-
     return () => {
       container.removeEventListener("mousemove", handleMouseMove);
       container.removeEventListener("mouseleave", handleMouseLeave);
