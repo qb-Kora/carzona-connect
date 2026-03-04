@@ -102,7 +102,7 @@ const CarCrashCTA = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.5, y: 10 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            className="absolute bottom-[55px] left-1/2 -translate-x-1/2 pointer-events-auto cursor-pointer z-50"
+            className="absolute bottom-[55px] left-1/2 -translate-x-[60%] pointer-events-auto cursor-pointer z-50"
             onClick={handleClick}
           >
             <motion.div
