@@ -17,9 +17,7 @@ interface Laser {
   angle: number;
   speed: number;
   trail: { x: number; y: number }[];
-  // phase: "entering" = head on-screen, trail growing
-  //        "exiting"  = head off-screen, trail shrinking from tail
-  //        "done"     = fully gone, ready to respawn
+  hasBeenOnScreen: boolean;
   phase: "entering" | "exiting" | "done";
 }
 
@@ -58,6 +56,7 @@ const LaserCanvas = () => {
       angle,
       speed: 3 + Math.random() * 2.5,
       trail: [{ x: startX, y: startY }],
+      hasBeenOnScreen: false,
       phase: "entering",
     };
   }, []);
@@ -106,8 +105,12 @@ const LaserCanvas = () => {
           const ny = head.y + Math.sin(l.angle) * l.speed;
           l.trail.push({ x: nx, y: ny });
 
-          // Check if head left the screen
-          if (!isOnScreen(nx, ny, cw, ch)) {
+          const onScreen = isOnScreen(nx, ny, cw, ch);
+          if (onScreen) {
+            l.hasBeenOnScreen = true;
+          }
+          // Only switch to exiting after it has entered and then left
+          if (l.hasBeenOnScreen && !onScreen) {
             l.phase = "exiting";
           }
         } else if (l.phase === "exiting") {
