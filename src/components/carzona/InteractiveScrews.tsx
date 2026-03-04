@@ -23,10 +23,10 @@ const ScrewSVG = ({ type, size }: { type: string; size: number }) => {
   if (type === "bolt") {
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="10" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.3" />
-        <circle cx="12" cy="12" r="6" stroke="hsl(var(--muted-foreground))" strokeWidth="0.8" fill="none" opacity="0.25" />
-        <line x1="12" y1="2" x2="12" y2="22" stroke="hsl(var(--muted-foreground))" strokeWidth="0.5" opacity="0.2" />
-        <line x1="2" y1="12" x2="22" y2="12" stroke="hsl(var(--muted-foreground))" strokeWidth="0.5" opacity="0.2" />
+        <circle cx="12" cy="12" r="10" stroke="hsl(var(--muted-foreground))" strokeWidth="1.2" fill="none" opacity="0.5" />
+        <circle cx="12" cy="12" r="6" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.4" />
+        <line x1="12" y1="2" x2="12" y2="22" stroke="hsl(var(--muted-foreground))" strokeWidth="0.7" opacity="0.35" />
+        <line x1="2" y1="12" x2="22" y2="12" stroke="hsl(var(--muted-foreground))" strokeWidth="0.7" opacity="0.35" />
       </svg>
     );
   }
@@ -36,19 +36,18 @@ const ScrewSVG = ({ type, size }: { type: string; size: number }) => {
         <polygon
           points="12,2 21,7 21,17 12,22 3,17 3,7"
           stroke="hsl(var(--muted-foreground))"
-          strokeWidth="1"
+          strokeWidth="1.2"
           fill="none"
-          opacity="0.3"
+          opacity="0.5"
         />
-        <circle cx="12" cy="12" r="5" stroke="hsl(var(--muted-foreground))" strokeWidth="0.8" fill="none" opacity="0.2" />
+        <circle cx="12" cy="12" r="5" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.35" />
       </svg>
     );
   }
-  // screw
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="12" cy="12" r="9" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.3" />
-      <line x1="8" y1="12" x2="16" y2="12" stroke="hsl(var(--muted-foreground))" strokeWidth="1.5" opacity="0.3" strokeLinecap="round" />
+      <circle cx="12" cy="12" r="9" stroke="hsl(var(--muted-foreground))" strokeWidth="1.2" fill="none" opacity="0.5" />
+      <line x1="8" y1="12" x2="16" y2="12" stroke="hsl(var(--muted-foreground))" strokeWidth="2" opacity="0.45" strokeLinecap="round" />
     </svg>
   );
 };
@@ -58,31 +57,43 @@ const InteractiveScrews = () => {
   const screwsRef = useRef<Screw[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animFrameRef = useRef<number>(0);
-  const [, forceRender] = useState(0);
+  const [renderKey, setRenderKey] = useState(0);
+  const initializedRef = useRef(false);
 
   const initScrews = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
     const { width, height } = container.getBoundingClientRect();
+    if (width === 0 || height === 0) return;
+    
     const types: Screw["type"][] = ["bolt", "nut", "screw"];
     screwsRef.current = Array.from({ length: SCREW_COUNT }, (_, i) => ({
       id: i,
-      x: Math.random() * (width - 40) + 20,
-      y: Math.random() * (height - 40) + 20,
+      x: Math.random() * (width - 60) + 30,
+      y: Math.random() * (height - 60) + 30,
       vx: 0,
       vy: 0,
       rotation: Math.random() * 360,
       vr: 0,
-      size: 16 + Math.random() * 14,
+      size: 20 + Math.random() * 16,
       type: types[i % 3],
-      opacity: 0.25 + Math.random() * 0.25,
+      opacity: 0.35 + Math.random() * 0.3,
     }));
+    initializedRef.current = true;
+    setRenderKey(k => k + 1);
   }, []);
 
   useEffect(() => {
-    initScrews();
+    // Delay init slightly to ensure container has dimensions
+    const timeout = setTimeout(() => {
+      initScrews();
+    }, 100);
+    
     window.addEventListener("resize", initScrews);
-    return () => window.removeEventListener("resize", initScrews);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("resize", initScrews);
+    };
   }, [initScrews]);
 
   useEffect(() => {
@@ -114,11 +125,11 @@ const InteractiveScrews = () => {
     let lastTime = performance.now();
 
     const animate = (time: number) => {
-      const dt = Math.min((time - lastTime) / 16, 3); // normalize to ~60fps
+      const dt = Math.min((time - lastTime) / 16, 3);
       lastTime = time;
 
       const container = containerRef.current;
-      if (!container) {
+      if (!container || !initializedRef.current) {
         animFrameRef.current = requestAnimationFrame(animate);
         return;
       }
@@ -127,7 +138,6 @@ const InteractiveScrews = () => {
       let needsRender = false;
 
       screwsRef.current.forEach((screw) => {
-        // Calculate distance to cursor
         const dx = screw.x - mouse.x;
         const dy = screw.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -140,17 +150,14 @@ const InteractiveScrews = () => {
           needsRender = true;
         }
 
-        // Apply velocity
         screw.x += screw.vx * dt;
         screw.y += screw.vy * dt;
         screw.rotation += screw.vr * dt;
 
-        // Friction
         screw.vx *= FRICTION;
         screw.vy *= FRICTION;
         screw.vr *= ROTATION_FRICTION;
 
-        // Bounce off walls
         if (screw.x < 10) { screw.x = 10; screw.vx *= -0.5; }
         if (screw.x > width - 10) { screw.x = width - 10; screw.vx *= -0.5; }
         if (screw.y < 10) { screw.y = 10; screw.vy *= -0.5; }
@@ -162,7 +169,7 @@ const InteractiveScrews = () => {
       });
 
       if (needsRender) {
-        forceRender((c) => c + 1);
+        setRenderKey(k => k + 1);
       }
 
       animFrameRef.current = requestAnimationFrame(animate);
@@ -177,6 +184,7 @@ const InteractiveScrews = () => {
       ref={containerRef}
       className="absolute inset-0 overflow-hidden pointer-events-auto"
       style={{ zIndex: 0 }}
+      data-render={renderKey}
     >
       {screwsRef.current.map((screw) => (
         <div
@@ -188,7 +196,6 @@ const InteractiveScrews = () => {
             transform: `rotate(${screw.rotation}deg)`,
             opacity: screw.opacity,
             willChange: "transform",
-            transition: "none",
           }}
         >
           <ScrewSVG type={screw.type} size={screw.size} />

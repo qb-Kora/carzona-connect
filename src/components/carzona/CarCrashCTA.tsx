@@ -33,24 +33,24 @@ const CarCrashCTA = () => {
     <>
       {/* Desktop */}
       <div className="fixed bottom-8 left-0 right-0 z-50 pointer-events-none hidden md:block" style={{ height: 100 }}>
-        {/* Left car — blue, facing right */}
+        {/* Left car — facing right (front toward center) */}
         <motion.div
           initial={{ x: "-80px" }}
           animate={phase === "driving" ? { x: "calc(50vw - 50px)", rotate: 0 } : { x: "calc(50vw - 35px)", rotate: 10 }}
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
           className="absolute bottom-3"
         >
-          <Car size={40} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
+          <Car size={40} className="text-primary" strokeWidth={1.5} />
         </motion.div>
 
-        {/* Right car — blue, facing left */}
+        {/* Right car — facing left (front toward center) */}
         <motion.div
           initial={{ x: "calc(100vw + 40px)" }}
           animate={phase === "driving" ? { x: "calc(50vw + 10px)", rotate: 0 } : { x: "calc(50vw - 5px)", rotate: -10 }}
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
           className="absolute bottom-3"
         >
-          <Car size={40} className="text-primary" strokeWidth={1.5} />
+          <Car size={40} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
         </motion.div>
 
         {/* Crash flash */}
@@ -91,9 +91,19 @@ const CarCrashCTA = () => {
               onClick={handleClick}
             >
               <motion.div animate={{ y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
-                <div className="bg-background/60 backdrop-blur-sm text-accent font-bold text-base px-5 py-2 rounded-xl border-2 border-accent shadow-lg shadow-accent/20 hover:scale-105 active:scale-95 transition-transform duration-150 whitespace-nowrap relative">
+                <div
+                  className="backdrop-blur-md text-accent font-bold text-base px-5 py-2 rounded-xl border-2 border-accent hover:scale-105 active:scale-95 transition-transform duration-150 whitespace-nowrap relative"
+                  style={{
+                    background: "hsl(var(--background) / 0.5)",
+                    boxShadow: "0 0 20px hsl(var(--accent) / 0.4), 0 0 40px hsl(var(--accent) / 0.15), inset 0 0 15px hsl(var(--accent) / 0.05)",
+                    textShadow: "0 0 10px hsl(var(--accent) / 0.5)",
+                  }}
+                >
                   Pomocy!
-                  <div className="absolute -bottom-[7px] left-1/2 -translate-x-1/2 w-3 h-3 bg-background/60 border-b-2 border-r-2 border-accent rotate-45" />
+                  <div
+                    className="absolute -bottom-[7px] left-1/2 -translate-x-1/2 w-3 h-3 border-b-2 border-r-2 border-accent rotate-45"
+                    style={{ background: "hsl(var(--background) / 0.5)" }}
+                  />
                 </div>
               </motion.div>
             </motion.div>
@@ -103,24 +113,24 @@ const CarCrashCTA = () => {
 
       {/* Mobile */}
       <div className="fixed bottom-[70px] left-0 right-0 z-50 pointer-events-none md:hidden" style={{ height: 60 }}>
-        {/* Left car — blue */}
+        {/* Left car */}
         <motion.div
           initial={{ x: "-40px" }}
           animate={phase === "driving" ? { x: "calc(50vw - 30px)", rotate: 0 } : { x: "calc(50vw - 20px)", rotate: 10 }}
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
           className="absolute bottom-1"
         >
-          <Car size={24} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
+          <Car size={24} className="text-primary" strokeWidth={1.5} />
         </motion.div>
 
-        {/* Right car — blue */}
+        {/* Right car */}
         <motion.div
           initial={{ x: "calc(100vw + 30px)" }}
           animate={phase === "driving" ? { x: "calc(50vw + 6px)", rotate: 0 } : { x: "calc(50vw - 2px)", rotate: -10 }}
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
           className="absolute bottom-1"
         >
-          <Car size={24} className="text-primary" strokeWidth={1.5} />
+          <Car size={24} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
         </motion.div>
 
         {/* Crash flash */}
@@ -161,9 +171,19 @@ const CarCrashCTA = () => {
               onClick={handleClick}
             >
               <motion.div animate={{ y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
-                <div className="bg-background/60 backdrop-blur-sm text-accent font-bold text-xs px-3 py-1.5 rounded-lg border-2 border-accent shadow-lg shadow-accent/20 active:scale-95 transition-transform duration-150 whitespace-nowrap relative">
+                <div
+                  className="backdrop-blur-md text-accent font-bold text-xs px-3 py-1.5 rounded-lg border-2 border-accent active:scale-95 transition-transform duration-150 whitespace-nowrap relative"
+                  style={{
+                    background: "hsl(var(--background) / 0.5)",
+                    boxShadow: "0 0 15px hsl(var(--accent) / 0.4), 0 0 30px hsl(var(--accent) / 0.15), inset 0 0 10px hsl(var(--accent) / 0.05)",
+                    textShadow: "0 0 8px hsl(var(--accent) / 0.5)",
+                  }}
+                >
                   Pomocy!
-                  <div className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-2 h-2 bg-background/60 border-b-2 border-r-2 border-accent rotate-45" />
+                  <div
+                    className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-2 h-2 border-b-2 border-r-2 border-accent rotate-45"
+                    style={{ background: "hsl(var(--background) / 0.5)" }}
+                  />
                 </div>
               </motion.div>
             </motion.div>
