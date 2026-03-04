@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import InteractiveScrews from "./InteractiveScrews";
@@ -35,10 +36,12 @@ const realizations = [
 ];
 
 const Realizations = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
   return (
-    <section id="realizacje" className="py-16 sm:py-20 md:py-32 relative">
-      <InteractiveScrews />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section ref={sectionRef} id="realizacje" className="py-16 sm:py-20 md:py-32 relative">
+      <InteractiveScrews sectionRef={sectionRef} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pointer-events-none">
         <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
           <span className="text-accent text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
             Realizacje
@@ -59,7 +62,7 @@ const Realizations = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="card-hover p-4 sm:p-5 md:p-7 rounded-2xl sm:rounded-3xl group backdrop-blur-sm"
+              className="card-hover p-4 sm:p-5 md:p-7 rounded-2xl sm:rounded-3xl group backdrop-blur-sm pointer-events-auto"
             >
               <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
                 <h3 className="font-bold text-foreground text-sm sm:text-base md:text-lg leading-tight">{r.title}</h3>
