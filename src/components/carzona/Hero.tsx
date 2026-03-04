@@ -117,6 +117,8 @@ const Hero = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 1.2 + i * 0.1 }}
                 className="glass rounded-2xl p-3.5 sm:p-5 flex flex-row sm:flex-col items-center gap-3 hover:border-accent/30 transition-all duration-300"
+                whileHover={{ y: -4, scale: 1.03 }}
+                style={{ transformPerspective: 600 }}
               >
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-accent/15 flex items-center justify-center shrink-0">
                   <usp.icon className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
