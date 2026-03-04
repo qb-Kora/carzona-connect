@@ -180,7 +180,8 @@ const LaserScratchCanvas = () => {
           rctx.clearRect(0, 0, revealCanvas.width, revealCanvas.height);
           rctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-          // Draw the image first
+          // Draw the image with slight blur
+          rctx.filter = "blur(2px)";
           const imgAspect = imgRef.current.width / imgRef.current.height;
           const canvasAspect = cw / ch;
           let sx = 0, sy = 0, sw = imgRef.current.width, sh = imgRef.current.height;
@@ -192,9 +193,10 @@ const LaserScratchCanvas = () => {
             sy = (imgRef.current.height - sh) / 2;
           }
           rctx.drawImage(imgRef.current, sx, sy, sw, sh, 0, 0, cw, ch);
+          rctx.filter = "none";
 
           // Darken it
-          rctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+          rctx.fillStyle = "rgba(0, 0, 0, 0.45)";
           rctx.fillRect(0, 0, cw, ch);
 
           // Use mask to clip — only show where scratched
