@@ -17,8 +17,6 @@ interface Laser {
   y: number;
   angle: number;
   speed: number;
-  life: number;
-  maxLife: number;
   trail: { x: number; y: number }[];
 }
 
@@ -27,17 +25,40 @@ const LaserCanvas = () => {
   const lasersRef = useRef<Laser[]>([]);
 
   const createLaser = useCallback((w: number, h: number): Laser => {
-    const angle = Math.random() * Math.PI * 2;
+    // Start from a random edge (outside visible area)
+    const edge = Math.floor(Math.random() * 4); // 0=top,1=right,2=bottom,3=left
+    let startX: number, startY: number, angle: number;
+    const margin = 20;
+
+    switch (edge) {
+      case 0: // top
+        startX = Math.random() * w;
+        startY = -margin;
+        angle = Math.PI / 4 + Math.random() * Math.PI / 2; // downward
+        break;
+      case 1: // right
+        startX = w + margin;
+        startY = Math.random() * h;
+        angle = Math.PI * 0.6 + Math.random() * Math.PI * 0.8; // leftward
+        break;
+      case 2: // bottom
+        startX = Math.random() * w;
+        startY = h + margin;
+        angle = -Math.PI / 4 - Math.random() * Math.PI / 2; // upward
+        break;
+      default: // left
+        startX = -margin;
+        startY = Math.random() * h;
+        angle = -Math.PI * 0.4 + Math.random() * Math.PI * 0.8; // rightward
+        break;
+    }
+
     const speed = 4 + Math.random() * 3;
-    const startX = Math.random() * w;
-    const startY = Math.random() * h;
     return {
       x: startX,
       y: startY,
       angle,
       speed,
-      life: 0,
-      maxLife: 60 + Math.floor(Math.random() * 80),
       trail: [{ x: startX, y: startY }],
     };
   }, []);
