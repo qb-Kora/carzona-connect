@@ -177,7 +177,7 @@ const ServiceArea = () => (
         alt=""
         aria-hidden="true"
         className="w-full h-full object-cover"
-        style={{ filter: "blur(2px) brightness(0.08) saturate(0.2)" }}
+        style={{ filter: "blur(2px) brightness(0.04) saturate(0.15)" }}
       />
     </div>
 
