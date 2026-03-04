@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import { MapPin } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 const cities = [
   "Rybnik", "Żory", "Jastrzębie-Zdrój", "Wodzisław Śląski", "Racibórz",
@@ -8,9 +9,106 @@ const cities = [
   "Gliwice", "Zabrze", "Tychy", "Mikołów", "Ornontowice",
 ];
 
+const LIGHT_COUNT = 18;
+
+interface FlyingLight {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  opacity: number;
+}
+
+const FlyingLights = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const lightsRef = useRef<FlyingLight[]>([]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    // Init lights
+    const w = () => canvas.offsetWidth;
+    const h = () => canvas.offsetHeight;
+
+    lightsRef.current = Array.from({ length: LIGHT_COUNT }, () => {
+      const speed = 1.5 + Math.random() * 4;
+      const angle = Math.random() * Math.PI * 2;
+      return {
+        x: Math.random() * w(),
+        y: Math.random() * h(),
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: 1.5 + Math.random() * 3,
+        opacity: 0.4 + Math.random() * 0.6,
+      };
+    });
+
+    let raf: number;
+    const draw = () => {
+      ctx.clearRect(0, 0, w(), h());
+      const lights = lightsRef.current;
+
+      for (const l of lights) {
+        l.x += l.vx;
+        l.y += l.vy;
+
+        // Wrap around
+        if (l.x < -10) l.x = w() + 10;
+        if (l.x > w() + 10) l.x = -10;
+        if (l.y < -10) l.y = h() + 10;
+        if (l.y > h() + 10) l.y = -10;
+
+        // Glow
+        const grad = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.size * 8);
+        grad.addColorStop(0, `hsla(217, 91%, 60%, ${l.opacity})`);
+        grad.addColorStop(0.3, `hsla(217, 91%, 55%, ${l.opacity * 0.4})`);
+        grad.addColorStop(1, `hsla(217, 91%, 50%, 0)`);
+        ctx.beginPath();
+        ctx.arc(l.x, l.y, l.size * 8, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Core
+        ctx.beginPath();
+        ctx.arc(l.x, l.y, l.size, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(217, 91%, 75%, ${l.opacity})`;
+        ctx.fill();
+      }
+
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none z-0"
+    />
+  );
+};
+
 const ServiceArea = () => (
-  <section className="py-16 sm:py-20 md:py-32 relative">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section className="py-16 sm:py-20 md:py-32 relative overflow-hidden">
+    <FlyingLights />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
         <AnimatedSection>
           <span className="text-accent text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
