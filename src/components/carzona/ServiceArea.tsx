@@ -177,8 +177,10 @@ const ServiceArea = () => (
         alt=""
         aria-hidden="true"
         className="w-full h-full object-cover"
-        style={{ filter: "blur(2px) brightness(0.04) saturate(0.15)" }}
+        style={{ filter: "blur(2px) brightness(0.07) saturate(0.2)" }}
       />
+      {/* Blue blur overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.08] via-transparent to-accent/[0.08]" />
     </div>
 
     <LaserCanvas />
