@@ -14,8 +14,8 @@ const Hero = () => {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
 
   return (
     <section ref={ref} className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
