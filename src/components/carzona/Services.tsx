@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
+import MetalParticles from "./MetalParticles";
 import {
   Wrench, Cpu, Gauge, Droplets, Disc, CarFront, Thermometer, Shield
 } from "lucide-react";
@@ -17,6 +18,7 @@ const services = [
 
 const Services = () => (
   <section id="uslugi" className="py-16 sm:py-20 md:py-32 relative">
+    <MetalParticles />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
         <span className="text-accent text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">

@@ -75,7 +75,7 @@ const InteractiveScrews = () => {
       vr: 0,
       size: 16 + Math.random() * 14,
       type: types[i % 3],
-      opacity: 0.15 + Math.random() * 0.2,
+      opacity: 0.25 + Math.random() * 0.25,
     }));
   }, []);
 
