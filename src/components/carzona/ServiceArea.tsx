@@ -198,7 +198,7 @@ const ServiceArea = () => (
                 transition={{ duration: 0.3, delay: i * 0.03 }}
                 className={`inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 cursor-default ${
                   city === "Rybnik"
-                    ? "bg-accent/10 border-2 border-accent text-accent font-semibold"
+                    ? "bg-accent/10 border border-accent/60 text-accent font-medium"
                     : "bg-card border border-border text-muted-foreground hover:border-primary/30 hover:text-foreground"
                 }`}
               >
