@@ -17,10 +17,9 @@ interface Laser {
   y: number;
   angle: number;
   speed: number;
-  length: number;
   life: number;
   maxLife: number;
-  isGreen: boolean;
+  trail: { x: number; y: number }[];
 }
 
 const LaserScratchCanvas = () => {
@@ -32,16 +31,17 @@ const LaserScratchCanvas = () => {
 
   const createLaser = useCallback((w: number, h: number): Laser => {
     const angle = Math.random() * Math.PI * 2;
-    const isGreen = Math.random() < 0.15;
+    const speed = 4 + Math.random() * 3; // steady, uniform speed
+    const startX = Math.random() * w;
+    const startY = Math.random() * h;
     return {
-      x: Math.random() * w,
-      y: Math.random() * h,
+      x: startX,
+      y: startY,
       angle,
-      speed: 8 + Math.random() * 14,
-      length: 30 + Math.random() * 80,
+      speed,
       life: 0,
-      maxLife: 8 + Math.floor(Math.random() * 18),
-      isGreen,
+      maxLife: 60 + Math.floor(Math.random() * 80), // much longer life = longer trail
+      trail: [{ x: startX, y: startY }],
     };
   }, []);
 
@@ -103,9 +103,14 @@ const LaserScratchCanvas = () => {
         const l = lasers[i];
         l.life++;
 
-        // Move
+        // Move at constant speed
         l.x += Math.cos(l.angle) * l.speed;
         l.y += Math.sin(l.angle) * l.speed;
+
+        // Store trail point
+        l.trail.push({ x: l.x, y: l.y });
+        // Keep trail max ~120 points for long tail
+        if (l.trail.length > 120) l.trail.shift();
 
         // Scratch the mask where laser travels
         if (mctx) {
@@ -113,7 +118,7 @@ const LaserScratchCanvas = () => {
           mctx.strokeStyle = "white";
           mctx.lineWidth = 2 + Math.random() * 3;
           mctx.lineCap = "round";
-          mctx.globalAlpha = 0.12 + Math.random() * 0.08;
+          mctx.globalAlpha = 0.1;
           mctx.beginPath();
           mctx.moveTo(
             l.x - Math.cos(l.angle) * l.speed,
@@ -124,39 +129,48 @@ const LaserScratchCanvas = () => {
           mctx.globalAlpha = 1;
         }
 
-        // Draw laser line on main canvas
-        const alpha = 1 - l.life / l.maxLife;
-        if (alpha > 0) {
-          const hue = l.isGreen ? "142, 71%, 45%" : "217, 91%, 60%";
-          const hueCore = l.isGreen ? "142, 80%, 75%" : "210, 100%, 85%";
-
+        // Draw long blue trail
+        const alive = 1 - l.life / l.maxLife;
+        if (alive > 0 && l.trail.length > 1) {
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
-          ctx.strokeStyle = `hsla(${hue}, ${alpha * 0.5})`;
-          ctx.lineWidth = 6;
           ctx.lineCap = "round";
-          ctx.shadowColor = `hsla(${hue}, 0.8)`;
-          ctx.shadowBlur = 18;
-          ctx.beginPath();
-          const tailX = l.x - Math.cos(l.angle) * l.length;
-          const tailY = l.y - Math.sin(l.angle) * l.length;
-          ctx.moveTo(tailX, tailY);
-          ctx.lineTo(l.x, l.y);
-          ctx.stroke();
+          ctx.lineJoin = "round";
 
-          ctx.strokeStyle = `hsla(${hueCore}, ${alpha * 0.9})`;
-          ctx.lineWidth = 1.5;
-          ctx.shadowBlur = 8;
-          ctx.beginPath();
-          ctx.moveTo(tailX, tailY);
-          ctx.lineTo(l.x, l.y);
-          ctx.stroke();
+          // Outer glow trail
+          for (let t = 1; t < l.trail.length; t++) {
+            const segAlpha = (t / l.trail.length) * alive;
+            ctx.strokeStyle = `hsla(217, 91%, 60%, ${segAlpha * 0.35})`;
+            ctx.lineWidth = 8;
+            ctx.shadowColor = `hsla(217, 91%, 60%, 0.6)`;
+            ctx.shadowBlur = 20;
+            ctx.beginPath();
+            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
+            ctx.lineTo(l.trail[t].x, l.trail[t].y);
+            ctx.stroke();
+          }
 
-          ctx.fillStyle = `hsla(${hueCore}, ${alpha})`;
-          ctx.shadowBlur = 12;
+          // Core trail
+          for (let t = 1; t < l.trail.length; t++) {
+            const segAlpha = (t / l.trail.length) * alive;
+            ctx.strokeStyle = `hsla(210, 100%, 85%, ${segAlpha * 0.8})`;
+            ctx.lineWidth = 2;
+            ctx.shadowColor = `hsla(210, 100%, 85%, 0.5)`;
+            ctx.shadowBlur = 6;
+            ctx.beginPath();
+            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
+            ctx.lineTo(l.trail[t].x, l.trail[t].y);
+            ctx.stroke();
+          }
+
+          // Bright head
+          ctx.fillStyle = `hsla(210, 100%, 90%, ${alive})`;
+          ctx.shadowColor = `hsla(217, 91%, 65%, 0.9)`;
+          ctx.shadowBlur = 15;
           ctx.beginPath();
-          ctx.arc(l.x, l.y, 2, 0, Math.PI * 2);
+          ctx.arc(l.x, l.y, 2.5, 0, Math.PI * 2);
           ctx.fill();
+
           ctx.restore();
         }
 
