@@ -141,7 +141,6 @@ const LaserCanvas = () => {
         ) {
           lasers[i] = createLaser(cw, ch);
         }
-        }
       }
 
       raf = requestAnimationFrame(draw);
