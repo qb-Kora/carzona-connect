@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import carBlue from "@/assets/car-blue.png";
+import carGreen from "@/assets/car-green.png";
 
 const CarCrashCTA = () => {
   const [phase, setPhase] = useState<"driving" | "crash" | "bubble">("driving");
@@ -12,7 +14,6 @@ const CarCrashCTA = () => {
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
-  // Blinking bubble: 3s visible, 3s hidden
   useEffect(() => {
     if (phase !== "bubble") return;
     setBubbleVisible(true);
@@ -29,28 +30,31 @@ const CarCrashCTA = () => {
 
   if (!visible) return null;
 
+  // Shared car image styles
+  const carImgClass = "h-full w-auto object-contain";
+
   return (
     <>
       {/* Desktop version */}
       <div className="fixed bottom-8 left-0 right-0 z-50 pointer-events-none hidden md:block" style={{ height: 120 }}>
+        {/* Left car (blue) — facing right */}
         <motion.div
           initial={{ x: "-80px" }}
-          animate={phase === "driving" ? { x: "calc(50vw - 55px)", rotate: 0 } : { x: "calc(50vw - 40px)", rotate: 12 }}
+          animate={phase === "driving" ? { x: "calc(50vw - 70px)", rotate: 0 } : { x: "calc(50vw - 50px)", rotate: 8 }}
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
-          className="absolute bottom-3"
-          style={{ fontSize: "2.5rem", lineHeight: 1 }}
+          className="absolute bottom-2 h-[50px]"
         >
-          <span style={{ display: "inline-block", transform: "scaleX(-1)" }}>🚙</span>
+          <img src={carBlue} alt="" className={carImgClass} style={{ transform: "scaleX(-1)" }} />
         </motion.div>
 
+        {/* Right car (green) — facing left */}
         <motion.div
           initial={{ x: "calc(100vw + 40px)" }}
-          animate={phase === "driving" ? { x: "calc(50vw + 5px)", rotate: 0 } : { x: "calc(50vw - 10px)", rotate: -12 }}
+          animate={phase === "driving" ? { x: "calc(50vw + 5px)", rotate: 0 } : { x: "calc(50vw - 15px)", rotate: -8 }}
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
-          className="absolute bottom-3"
-          style={{ fontSize: "2.5rem", lineHeight: 1 }}
+          className="absolute bottom-2 h-[50px]"
         >
-          <span style={{ display: "inline-block", transform: "scaleX(-1)" }}>🚕</span>
+          <img src={carGreen} alt="" className={carImgClass} />
         </motion.div>
 
         <AnimatePresence>
@@ -84,7 +88,7 @@ const CarCrashCTA = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.5, y: 10 }}
               transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              className="absolute bottom-[55px] pointer-events-auto cursor-pointer z-50"
+              className="absolute bottom-[60px] pointer-events-auto cursor-pointer z-50"
               style={{ left: "calc(50vw - 55px)" }}
               onClick={handleClick}
             >
@@ -99,26 +103,26 @@ const CarCrashCTA = () => {
         </AnimatePresence>
       </div>
 
-      {/* Mobile version — smaller, positioned above MobileCTA bar */}
+      {/* Mobile version — smaller, above MobileCTA bar */}
       <div className="fixed bottom-[70px] left-0 right-0 z-50 pointer-events-none md:hidden" style={{ height: 70 }}>
+        {/* Left car (blue) */}
         <motion.div
           initial={{ x: "-50px" }}
-          animate={phase === "driving" ? { x: "calc(50vw - 35px)", rotate: 0 } : { x: "calc(50vw - 25px)", rotate: 12 }}
+          animate={phase === "driving" ? { x: "calc(50vw - 45px)", rotate: 0 } : { x: "calc(50vw - 30px)", rotate: 8 }}
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
-          className="absolute bottom-1"
-          style={{ fontSize: "1.5rem", lineHeight: 1 }}
+          className="absolute bottom-1 h-[30px]"
         >
-          <span style={{ display: "inline-block", transform: "scaleX(-1)" }}>🚙</span>
+          <img src={carBlue} alt="" className={carImgClass} style={{ transform: "scaleX(-1)" }} />
         </motion.div>
 
+        {/* Right car (green) */}
         <motion.div
           initial={{ x: "calc(100vw + 30px)" }}
-          animate={phase === "driving" ? { x: "calc(50vw + 3px)", rotate: 0 } : { x: "calc(50vw - 6px)", rotate: -12 }}
+          animate={phase === "driving" ? { x: "calc(50vw + 3px)", rotate: 0 } : { x: "calc(50vw - 8px)", rotate: -8 }}
           transition={phase === "driving" ? { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] } : { duration: 0.12, type: "spring", stiffness: 600, damping: 12 }}
-          className="absolute bottom-1"
-          style={{ fontSize: "1.5rem", lineHeight: 1 }}
+          className="absolute bottom-1 h-[30px]"
         >
-          <span style={{ display: "inline-block", transform: "scaleX(-1)" }}>🚕</span>
+          <img src={carGreen} alt="" className={carImgClass} />
         </motion.div>
 
         <AnimatePresence>
@@ -152,7 +156,7 @@ const CarCrashCTA = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.5, y: 5 }}
               transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              className="absolute bottom-[35px] pointer-events-auto cursor-pointer z-50"
+              className="absolute bottom-[38px] pointer-events-auto cursor-pointer z-50"
               style={{ left: "calc(50vw - 40px)" }}
               onClick={handleClick}
             >
