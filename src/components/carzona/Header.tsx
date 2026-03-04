@@ -59,12 +59,7 @@ const Header = () => {
             </a>
             <a
               href="#kontakt"
-              className="hidden md:inline-flex items-center gap-2 backdrop-blur-md text-accent font-bold px-5 py-2.5 rounded-xl border-2 border-accent hover:scale-105 active:scale-95 transition-transform duration-150 text-sm whitespace-nowrap relative"
-              style={{
-                background: "hsl(var(--background) / 0.5)",
-                boxShadow: "0 0 20px hsl(var(--accent) / 0.4), 0 0 40px hsl(var(--accent) / 0.15), inset 0 0 15px hsl(var(--accent) / 0.05)",
-                textShadow: "0 0 10px hsl(var(--accent) / 0.5)",
-              }}
+              className="hidden md:inline-flex items-center gap-2 backdrop-blur-md text-accent font-bold px-5 py-2.5 rounded-xl border border-accent/60 hover:border-accent hover:scale-105 active:scale-95 transition-all duration-200 text-sm whitespace-nowrap bg-transparent"
             >
               Umów wizytę
             </a>
