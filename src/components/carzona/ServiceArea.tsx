@@ -55,7 +55,7 @@ const LaserCanvas = () => {
 
     return {
       angle,
-      speed: 3 + Math.random() * 2.5,
+      speed: 3.6 + Math.random() * 3,
       trail: [{ x: startX, y: startY, alpha: 1 }],
       hasBeenOnScreen: false,
       phase: "entering",
