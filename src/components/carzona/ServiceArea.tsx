@@ -9,9 +9,9 @@ const cities = [
   "Gliwice", "Zabrze", "Tychy", "Mikołów", "Ornontowice",
 ];
 
-const LASER_COUNT = 10;
+const LASER_COUNT = 20;
 const MARGIN = 60;
-const GREEN_SLOTS = new Set([0, 5]); // indices that are always green
+const GREEN_SLOTS = new Set([0, 5, 10, 15]); // indices that are always green
 
 interface Laser {
   angle: number;
@@ -55,7 +55,7 @@ const LaserCanvas = () => {
 
     return {
       angle,
-      speed: 3.6 + Math.random() * 3,
+      speed: 4.3 + Math.random() * 3.6,
       trail: [{ x: startX, y: startY, alpha: 1 }],
       hasBeenOnScreen: false,
       phase: "entering",
