@@ -3,7 +3,6 @@ import AnimatedSection from "./AnimatedSection";
 import { MapPin } from "lucide-react";
 import { useEffect, useRef, useCallback } from "react";
 
-
 const cities = [
   "Rybnik", "Żory", "Jastrzębie-Zdrój", "Wodzisław Śląski", "Racibórz",
   "Rydułtowy", "Pszów", "Radlin", "Czerwionka-Leszczyny", "Knurów",
@@ -12,13 +11,15 @@ const cities = [
 
 const LASER_COUNT = 10;
 const MARGIN = 60;
+const GREEN_SLOTS = new Set([0, 5]); // indices that are always green
 
 interface Laser {
   angle: number;
   speed: number;
-  trail: { x: number; y: number }[];
+  trail: { x: number; y: number; alpha: number }[];
   hasBeenOnScreen: boolean;
   phase: "entering" | "exiting" | "done";
+  green: boolean;
 }
 
 const isOnScreen = (x: number, y: number, w: number, h: number) =>
@@ -28,7 +29,7 @@ const LaserCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lasersRef = useRef<Laser[]>([]);
 
-  const createLaser = useCallback((w: number, h: number): Laser => {
+  const createLaser = useCallback((w: number, h: number, green: boolean): Laser => {
     const edge = Math.floor(Math.random() * 4);
     let startX: number, startY: number, angle: number;
     const off = MARGIN + 30;
@@ -55,9 +56,10 @@ const LaserCanvas = () => {
     return {
       angle,
       speed: 3 + Math.random() * 2.5,
-      trail: [{ x: startX, y: startY }],
+      trail: [{ x: startX, y: startY, alpha: 1 }],
       hasBeenOnScreen: false,
       phase: "entering",
+      green,
     };
   }, []);
 
@@ -82,13 +84,13 @@ const LaserCanvas = () => {
     resize();
     window.addEventListener("resize", resize);
 
-    lasersRef.current = Array.from({ length: LASER_COUNT }, () => {
+    lasersRef.current = Array.from({ length: LASER_COUNT }, (_, i) => {
       const { w, h } = getSize();
-      return createLaser(w, h);
+      return createLaser(w, h, GREEN_SLOTS.has(i));
     });
 
     let raf: number;
-    const TAIL_SPEED = 6; // how many trail points to remove per frame when exiting
+    const FADE_SPEED = 0.012; // alpha decrease per frame for fading trail
 
     const draw = () => {
       const { w: cw, h: ch } = getSize();
@@ -99,70 +101,81 @@ const LaserCanvas = () => {
         const l = lasers[i];
 
         if (l.phase === "entering") {
-          // Move head forward
           const head = l.trail[l.trail.length - 1];
           const nx = head.x + Math.cos(l.angle) * l.speed;
           const ny = head.y + Math.sin(l.angle) * l.speed;
-          l.trail.push({ x: nx, y: ny });
+          l.trail.push({ x: nx, y: ny, alpha: 1 });
 
-          const onScreen = isOnScreen(nx, ny, cw, ch);
-          if (onScreen) {
-            l.hasBeenOnScreen = true;
+          // Fade older points gradually while entering
+          for (let p = 0; p < l.trail.length - 1; p++) {
+            l.trail[p].alpha = Math.max(0, l.trail[p].alpha - FADE_SPEED * 0.5);
           }
-          // Only switch to exiting after it has entered and then left
-          if (l.hasBeenOnScreen && !onScreen) {
-            l.phase = "exiting";
-          }
-        } else if (l.phase === "exiting") {
-          // Remove points from tail
-          for (let r = 0; r < TAIL_SPEED && l.trail.length > 0; r++) {
+          // Remove fully faded points from tail
+          while (l.trail.length > 2 && l.trail[0].alpha <= 0) {
             l.trail.shift();
           }
-          if (l.trail.length === 0) {
-            l.phase = "done";
+
+          const onScreen = isOnScreen(nx, ny, cw, ch);
+          if (onScreen) l.hasBeenOnScreen = true;
+          if (l.hasBeenOnScreen && !onScreen) l.phase = "exiting";
+        } else if (l.phase === "exiting") {
+          // Fade all points
+          for (let p = 0; p < l.trail.length; p++) {
+            l.trail[p].alpha = Math.max(0, l.trail[p].alpha - FADE_SPEED * 2.5);
           }
+          // Remove fully faded
+          while (l.trail.length > 0 && l.trail[0].alpha <= 0) {
+            l.trail.shift();
+          }
+          if (l.trail.length === 0) l.phase = "done";
         }
 
         if (l.phase === "done") {
-          lasers[i] = createLaser(cw, ch);
+          lasers[i] = createLaser(cw, ch, GREEN_SLOTS.has(i));
           continue;
         }
 
-        // Draw the trail
+        // Draw segments with per-point alpha
         if (l.trail.length > 1) {
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
           ctx.lineCap = "round";
-          ctx.lineJoin = "round";
 
           const len = l.trail.length;
+          const glowH = l.green ? "84, 70%, 50%" : "217, 91%, 60%";
+          const coreH = l.green ? "84, 70%, 80%" : "210, 100%, 85%";
+          const headH = l.green ? "84, 70%, 85%" : "210, 100%, 92%";
+          const headGlow = l.green ? "84, 70%, 50%" : "217, 91%, 60%";
 
-          // Outer glow — single path for performance
-          ctx.lineWidth = 4;
-          ctx.strokeStyle = "hsla(217, 91%, 60%, 0.15)";
-          ctx.beginPath();
-          ctx.moveTo(l.trail[0].x, l.trail[0].y);
           for (let t = 1; t < len; t++) {
-            ctx.lineTo(l.trail[t].x, l.trail[t].y);
-          }
-          ctx.stroke();
+            const a0 = l.trail[t - 1].alpha;
+            const a1 = l.trail[t].alpha;
+            const avg = (a0 + a1) / 2;
+            if (avg < 0.01) continue;
 
-          // Core line
-          ctx.lineWidth = 1.2;
-          ctx.strokeStyle = "hsla(210, 100%, 85%, 0.3)";
-          ctx.beginPath();
-          ctx.moveTo(l.trail[0].x, l.trail[0].y);
-          for (let t = 1; t < len; t++) {
+            // Outer glow
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = `hsla(${glowH}, ${avg * 0.15})`;
+            ctx.beginPath();
+            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
             ctx.lineTo(l.trail[t].x, l.trail[t].y);
-          }
-          ctx.stroke();
+            ctx.stroke();
 
-          // Bright head dot (only while entering)
+            // Core
+            ctx.lineWidth = 1.2;
+            ctx.strokeStyle = `hsla(${coreH}, ${avg * 0.3})`;
+            ctx.beginPath();
+            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
+            ctx.lineTo(l.trail[t].x, l.trail[t].y);
+            ctx.stroke();
+          }
+
+          // Head dot
           if (l.phase === "entering") {
             const head = l.trail[len - 1];
-            ctx.shadowColor = "hsla(217, 91%, 60%, 0.7)";
+            ctx.shadowColor = `hsla(${headGlow}, 0.7)`;
             ctx.shadowBlur = 10;
-            ctx.fillStyle = "hsla(210, 100%, 92%, 0.7)";
+            ctx.fillStyle = `hsla(${headH}, 0.7)`;
             ctx.beginPath();
             ctx.arc(head.x, head.y, 2, 0, Math.PI * 2);
             ctx.fill();
@@ -193,9 +206,8 @@ const LaserCanvas = () => {
 
 const ServiceArea = () => (
   <section className="py-16 sm:py-20 md:py-32 relative overflow-hidden">
-    {/* Background */}
     <div className="absolute inset-0 z-0 bg-background" />
-    <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/[0.08] via-transparent to-accent/[0.08]" />
+    <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/[0.04] via-transparent to-transparent" />
 
     <LaserCanvas />
 

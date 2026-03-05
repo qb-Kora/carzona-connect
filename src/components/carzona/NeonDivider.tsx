@@ -9,22 +9,22 @@ const NeonDivider = forwardRef<HTMLDivElement>((_, ref) => (
   >
     {/* Core bright line */}
     <motion.div
-      animate={{ opacity: [0.75, 1, 0.75] }}
+      animate={{ opacity: [0.6, 0.85, 0.6] }}
       transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
       className="absolute left-0 right-0 top-0 h-[1px]"
       style={{
-        background: "hsl(var(--accent) / 0.85)",
-        boxShadow: "0 0 8px 2px hsl(var(--accent) / 0.35), 0 0 20px 4px hsl(var(--accent) / 0.12)",
+        background: "hsl(var(--accent) / 0.7)",
+        boxShadow: "0 0 4px 1px hsl(var(--accent) / 0.2), 0 0 10px 2px hsl(var(--accent) / 0.06)",
       }}
     />
-    {/* Pulsing glow overlay — stronger pulse */}
+    {/* Pulsing glow overlay — tighter spread */}
     <motion.div
-      animate={{ opacity: [0.3, 0.65, 0.3] }}
+      animate={{ opacity: [0.15, 0.35, 0.15] }}
       transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute left-[3%] right-[3%] -top-[12px] h-[26px]"
+      className="absolute left-[10%] right-[10%] -top-[6px] h-[13px]"
       style={{
-        background: "radial-gradient(ellipse at center, hsl(var(--accent) / 0.35) 0%, transparent 70%)",
-        filter: "blur(8px)",
+        background: "radial-gradient(ellipse at center, hsl(var(--accent) / 0.2) 0%, transparent 70%)",
+        filter: "blur(4px)",
         pointerEvents: "none",
       }}
     />
