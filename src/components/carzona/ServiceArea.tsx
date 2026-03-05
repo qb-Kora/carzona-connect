@@ -143,8 +143,9 @@ const LaserCanvas = () => {
           ctx.lineCap = "round";
 
           const len = l.trail.length;
-          const glowH = l.green ? "84, 70%, 50%" : "217, 91%, 60%";
-          const coreH = l.green ? "84, 70%, 75%" : "210, 100%, 80%";
+          const brightness = l.green ? 1.6 : 1;
+          const glowH = l.green ? "84, 70%, 55%" : "217, 91%, 60%";
+          const coreH = l.green ? "84, 70%, 85%" : "210, 100%, 80%";
 
           // Flicker factor (neon-like pulsing without going dark)
           const time = performance.now() / 1000;
