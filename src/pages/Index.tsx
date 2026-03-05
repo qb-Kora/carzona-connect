@@ -22,23 +22,23 @@ const Index = () => {
       <Hero />
       <NeonDivider />
       <TrustBar />
-      <NeonDivider />
+      <NeonDivider direction="bottom" />
       <WhyUs />
-      <NeonDivider />
+      <NeonDivider direction="bottom" />
       <Services />
-      <NeonDivider />
+      <NeonDivider direction="bottom" />
       <Reviews />
-      <NeonDivider />
+      <NeonDivider direction="bottom" />
       <Realizations />
-      <NeonDivider />
+      <NeonDivider direction="bottom" />
       <Gallery />
-      <NeonDivider />
+      <NeonDivider direction="bottom" />
       <ServiceArea />
-      <NeonDivider />
+      <NeonDivider direction="bottom" />
       <FAQ />
-      <NeonDivider />
+      <NeonDivider direction="bottom" />
       <Contact />
-      <NeonDivider />
+      <NeonDivider direction="bottom" />
       <LocalSEO />
       <Footer />
       <MobileCTA />
