@@ -122,7 +122,8 @@ const LaserCanvas = () => {
             l.trail.shift();
           }
 
-          const onScreen = isOnScreen(nx, ny, cw, ch);
+          const last = l.trail[l.trail.length - 1];
+          const onScreen = isOnScreen(last.x, last.y, cw, ch);
           if (onScreen) l.hasBeenOnScreen = true;
           if (l.hasBeenOnScreen && !onScreen) l.phase = "exiting";
         } else if (l.phase === "exiting") {
