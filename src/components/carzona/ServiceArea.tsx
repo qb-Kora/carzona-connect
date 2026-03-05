@@ -56,7 +56,7 @@ const LaserCanvas = () => {
     const baseSpeed = 4.3 + Math.random() * 3.6;
     return {
       angle,
-      speed: green ? baseSpeed * 1.5 : baseSpeed,
+      speed: green ? baseSpeed * 2.1 : baseSpeed,
       trail: [{ x: startX, y: startY, alpha: 1 }],
       hasBeenOnScreen: false,
       phase: "entering",
@@ -103,9 +103,15 @@ const LaserCanvas = () => {
 
         if (l.phase === "entering") {
           const head = l.trail[l.trail.length - 1];
-          const nx = head.x + Math.cos(l.angle) * l.speed;
-          const ny = head.y + Math.sin(l.angle) * l.speed;
-          l.trail.push({ x: nx, y: ny, alpha: 1 });
+          // Subdivide movement into small steps for smooth trails
+          const steps = Math.max(1, Math.ceil(l.speed / 2));
+          const stepSize = l.speed / steps;
+          for (let s = 0; s < steps; s++) {
+            const prev = l.trail[l.trail.length - 1];
+            const nx = prev.x + Math.cos(l.angle) * stepSize;
+            const ny = prev.y + Math.sin(l.angle) * stepSize;
+            l.trail.push({ x: nx, y: ny, alpha: 1 });
+          }
 
           // Fade older points gradually while entering
           for (let p = 0; p < l.trail.length - 1; p++) {
