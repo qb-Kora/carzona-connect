@@ -135,7 +135,7 @@ const LaserCanvas = () => {
           continue;
         }
 
-        // Draw segments with per-point alpha
+        // Draw neon-divider-style segments with glow on both sides
         if (l.trail.length > 1) {
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
@@ -143,43 +143,44 @@ const LaserCanvas = () => {
 
           const len = l.trail.length;
           const glowH = l.green ? "84, 70%, 50%" : "217, 91%, 60%";
-          const coreH = l.green ? "84, 70%, 80%" : "210, 100%, 85%";
-          const headH = l.green ? "84, 70%, 85%" : "210, 100%, 92%";
-          const headGlow = l.green ? "84, 70%, 50%" : "217, 91%, 60%";
+          const coreH = l.green ? "84, 70%, 75%" : "210, 100%, 80%";
+
+          // Flicker factor (neon-like pulsing without going dark)
+          const time = performance.now() / 1000;
+          const flicker = 0.6 + 0.4 * Math.sin(time * 2.5 + i * 1.7) * Math.sin(time * 1.3 + i * 0.9);
 
           for (let t = 1; t < len; t++) {
             const a0 = l.trail[t - 1].alpha;
             const a1 = l.trail[t].alpha;
-            const avg = (a0 + a1) / 2;
+            const avg = (a0 + a1) / 2 * flicker;
             if (avg < 0.01) continue;
 
-            // Outer glow
+            const x0 = l.trail[t - 1].x, y0 = l.trail[t - 1].y;
+            const x1 = l.trail[t].x, y1 = l.trail[t].y;
+
+            // Wide outer glow (both sides of the line)
+            ctx.lineWidth = 8;
+            ctx.strokeStyle = `hsla(${glowH}, ${avg * 0.06})`;
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y1);
+            ctx.stroke();
+
+            // Medium glow
             ctx.lineWidth = 4;
-            ctx.strokeStyle = `hsla(${glowH}, ${avg * 0.15})`;
+            ctx.strokeStyle = `hsla(${glowH}, ${avg * 0.12})`;
             ctx.beginPath();
-            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
-            ctx.lineTo(l.trail[t].x, l.trail[t].y);
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y1);
             ctx.stroke();
 
-            // Core
-            ctx.lineWidth = 1.2;
-            ctx.strokeStyle = `hsla(${coreH}, ${avg * 0.3})`;
+            // Bright core (1px neon line)
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = `hsla(${coreH}, ${avg * 0.5})`;
             ctx.beginPath();
-            ctx.moveTo(l.trail[t - 1].x, l.trail[t - 1].y);
-            ctx.lineTo(l.trail[t].x, l.trail[t].y);
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y1);
             ctx.stroke();
-          }
-
-          // Head dot
-          if (l.phase === "entering") {
-            const head = l.trail[len - 1];
-            ctx.shadowColor = `hsla(${headGlow}, 0.7)`;
-            ctx.shadowBlur = 10;
-            ctx.fillStyle = `hsla(${headH}, 0.7)`;
-            ctx.beginPath();
-            ctx.arc(head.x, head.y, 2, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 0;
           }
 
           ctx.restore();
