@@ -154,7 +154,7 @@ const LaserCanvas = () => {
           for (let t = 1; t < len; t++) {
             const a0 = l.trail[t - 1].alpha;
             const a1 = l.trail[t].alpha;
-            const avg = (a0 + a1) / 2 * flicker;
+            const avg = (a0 + a1) / 2 * flicker * brightness;
             if (avg < 0.01) continue;
 
             const x0 = l.trail[t - 1].x, y0 = l.trail[t - 1].y;
