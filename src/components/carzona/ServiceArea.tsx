@@ -11,7 +11,7 @@ const cities = [
 
 const LASER_COUNT = 20;
 const MARGIN = 60;
-const GREEN_SLOTS = new Set([0, 5, 10, 15]); // indices that are always green
+const GREEN_SLOTS = new Set([0]); // only one green laser
 
 interface Laser {
   angle: number;
@@ -53,9 +53,10 @@ const LaserCanvas = () => {
         break;
     }
 
+    const baseSpeed = 4.3 + Math.random() * 3.6;
     return {
       angle,
-      speed: 4.3 + Math.random() * 3.6,
+      speed: green ? baseSpeed * 1.5 : baseSpeed,
       trail: [{ x: startX, y: startY, alpha: 1 }],
       hasBeenOnScreen: false,
       phase: "entering",
