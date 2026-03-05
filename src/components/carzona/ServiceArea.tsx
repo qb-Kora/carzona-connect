@@ -11,15 +11,19 @@ const cities = [
 
 const LASER_COUNT = 20;
 const MARGIN = 60;
-const GREEN_SLOTS = new Set([0]); // only one green laser
+const MAX_TRAIL = 200;
+const GREEN_SLOTS = new Set([0]);
 
 interface Laser {
   angle: number;
   speed: number;
-  trail: { x: number; y: number; alpha: number }[];
+  trail: Float32Array; // [x, y, alpha, x, y, alpha, ...]
+  trailLen: number;
   hasBeenOnScreen: boolean;
   phase: "entering" | "exiting" | "done";
   green: boolean;
+  cosA: number;
+  sinA: number;
 }
 
 const isOnScreen = (x: number, y: number, w: number, h: number) =>
@@ -35,32 +39,21 @@ const LaserCanvas = () => {
     const off = MARGIN + 30;
 
     switch (edge) {
-      case 0:
-        startX = Math.random() * w; startY = -off;
-        angle = Math.PI / 4 + Math.random() * Math.PI / 2;
-        break;
-      case 1:
-        startX = w + off; startY = Math.random() * h;
-        angle = Math.PI * 0.6 + Math.random() * Math.PI * 0.8;
-        break;
-      case 2:
-        startX = Math.random() * w; startY = h + off;
-        angle = -Math.PI / 4 - Math.random() * Math.PI / 2;
-        break;
-      default:
-        startX = -off; startY = Math.random() * h;
-        angle = -Math.PI * 0.4 + Math.random() * Math.PI * 0.8;
-        break;
+      case 0: startX = Math.random() * w; startY = -off; angle = Math.PI / 4 + Math.random() * Math.PI / 2; break;
+      case 1: startX = w + off; startY = Math.random() * h; angle = Math.PI * 0.6 + Math.random() * Math.PI * 0.8; break;
+      case 2: startX = Math.random() * w; startY = h + off; angle = -Math.PI / 4 - Math.random() * Math.PI / 2; break;
+      default: startX = -off; startY = Math.random() * h; angle = -Math.PI * 0.4 + Math.random() * Math.PI * 0.8; break;
     }
 
     const baseSpeed = 4.3 + Math.random() * 3.6;
+    const trail = new Float32Array(MAX_TRAIL * 3);
+    trail[0] = startX; trail[1] = startY; trail[2] = 1;
+
     return {
-      angle,
-      speed: green ? baseSpeed * 2.1 : baseSpeed,
-      trail: [{ x: startX, y: startY, alpha: 1 }],
-      hasBeenOnScreen: false,
-      phase: "entering",
-      green,
+      angle, speed: green ? baseSpeed * 2.1 : baseSpeed,
+      trail, trailLen: 1,
+      hasBeenOnScreen: false, phase: "entering", green,
+      cosA: Math.cos(angle), sinA: Math.sin(angle),
     };
   }, []);
 
@@ -70,72 +63,63 @@ const LaserCanvas = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const getSize = () => {
-      const rect = canvas.getBoundingClientRect();
-      return { w: rect.width, h: rect.height };
-    };
-
+    let cw = 0, ch = 0;
     const resize = () => {
-      const { w, h } = getSize();
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+      const rect = canvas.getBoundingClientRect();
+      cw = rect.width; ch = rect.height;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = cw * dpr;
+      canvas.height = ch * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
 
-    lasersRef.current = Array.from({ length: LASER_COUNT }, (_, i) => {
-      const { w, h } = getSize();
-      return createLaser(w, h, GREEN_SLOTS.has(i));
-    });
+    lasersRef.current = Array.from({ length: LASER_COUNT }, (_, i) =>
+      createLaser(cw, ch, GREEN_SLOTS.has(i))
+    );
 
     let raf: number;
-    const FADE_SPEED = 0.012; // alpha decrease per frame for fading trail
+    const FADE_SPEED = 0.012;
 
     const draw = () => {
-      const { w: cw, h: ch } = getSize();
       ctx.clearRect(0, 0, cw, ch);
-
       const lasers = lasersRef.current;
+      const time = performance.now() / 1000;
+
       for (let i = 0; i < lasers.length; i++) {
         const l = lasers[i];
+        const t = l.trail;
 
         if (l.phase === "entering") {
-          const head = l.trail[l.trail.length - 1];
-          // Subdivide movement into small steps for smooth trails
-          const steps = Math.max(1, Math.ceil(l.speed / 2));
+          // Add new points with sub-stepping
+          const steps = Math.max(1, Math.ceil(l.speed / 3));
           const stepSize = l.speed / steps;
-          for (let s = 0; s < steps; s++) {
-            const prev = l.trail[l.trail.length - 1];
-            const nx = prev.x + Math.cos(l.angle) * stepSize;
-            const ny = prev.y + Math.sin(l.angle) * stepSize;
-            l.trail.push({ x: nx, y: ny, alpha: 1 });
+          for (let s = 0; s < steps && l.trailLen < MAX_TRAIL; s++) {
+            const prev = (l.trailLen - 1) * 3;
+            const idx = l.trailLen * 3;
+            t[idx] = t[prev] + l.cosA * stepSize;
+            t[idx + 1] = t[prev + 1] + l.sinA * stepSize;
+            t[idx + 2] = 1;
+            l.trailLen++;
           }
 
-          // Fade older points gradually while entering
-          for (let p = 0; p < l.trail.length - 1; p++) {
-            l.trail[p].alpha = Math.max(0, l.trail[p].alpha - FADE_SPEED * 0.5);
-          }
-          // Remove fully faded points from tail
-          while (l.trail.length > 2 && l.trail[0].alpha <= 0) {
-            l.trail.shift();
+          // Fade older points
+          for (let p = 0; p < (l.trailLen - 1) * 3; p += 3) {
+            t[p + 2] = Math.max(0, t[p + 2] - FADE_SPEED * 0.5);
           }
 
-          const last = l.trail[l.trail.length - 1];
-          const onScreen = isOnScreen(last.x, last.y, cw, ch);
+          const last = (l.trailLen - 1) * 3;
+          const onScreen = isOnScreen(t[last], t[last + 1], cw, ch);
           if (onScreen) l.hasBeenOnScreen = true;
           if (l.hasBeenOnScreen && !onScreen) l.phase = "exiting";
         } else if (l.phase === "exiting") {
-          // Fade all points
-          for (let p = 0; p < l.trail.length; p++) {
-            l.trail[p].alpha = Math.max(0, l.trail[p].alpha - FADE_SPEED * 2.5);
+          let allDead = true;
+          for (let p = 0; p < l.trailLen * 3; p += 3) {
+            t[p + 2] = Math.max(0, t[p + 2] - FADE_SPEED * 2.5);
+            if (t[p + 2] > 0) allDead = false;
           }
-          // Remove fully faded
-          while (l.trail.length > 0 && l.trail[0].alpha <= 0) {
-            l.trail.shift();
-          }
-          if (l.trail.length === 0) l.phase = "done";
+          if (allDead) l.phase = "done";
         }
 
         if (l.phase === "done") {
@@ -143,53 +127,36 @@ const LaserCanvas = () => {
           continue;
         }
 
-        // Draw neon-divider-style segments with glow on both sides
-        if (l.trail.length > 1) {
+        // Draw — batch all segments into single paths per layer
+        if (l.trailLen > 1) {
+          const brightness = l.green ? 1.6 : 1;
+          const glowH = l.green ? "84,70%,55%" : "217,91%,60%";
+          const coreH = l.green ? "84,70%,85%" : "210,100%,80%";
+          const flicker = 0.6 + 0.4 * Math.sin(time * 2.5 + i * 1.7) * Math.sin(time * 1.3 + i * 0.9);
+
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
           ctx.lineCap = "round";
 
-          const len = l.trail.length;
-          const brightness = l.green ? 1.6 : 1;
-          const glowH = l.green ? "84, 70%, 55%" : "217, 91%, 60%";
-          const coreH = l.green ? "84, 70%, 85%" : "210, 100%, 80%";
+          // Draw in 3 passes but skip every other segment for outer glow
+          for (let layer = 0; layer < 3; layer++) {
+            const skip = layer === 0 ? 3 : 1; // outer glow: skip segments for perf
+            ctx.lineWidth = layer === 0 ? 8 : layer === 1 ? 4 : 1;
+            const alphaFactor = (layer === 0 ? 0.06 : layer === 1 ? 0.12 : 0.5) * brightness;
+            const hsl = layer < 2 ? glowH : coreH;
 
-          // Flicker factor (neon-like pulsing without going dark)
-          const time = performance.now() / 1000;
-          const flicker = 0.6 + 0.4 * Math.sin(time * 2.5 + i * 1.7) * Math.sin(time * 1.3 + i * 0.9);
+            for (let p = skip; p < l.trailLen; p += skip) {
+              const p0 = (p - skip) * 3;
+              const p1 = p * 3;
+              const avg = (t[p0 + 2] + t[p1 + 2]) / 2 * flicker;
+              if (avg < 0.01) continue;
 
-          for (let t = 1; t < len; t++) {
-            const a0 = l.trail[t - 1].alpha;
-            const a1 = l.trail[t].alpha;
-            const avg = (a0 + a1) / 2 * flicker * brightness;
-            if (avg < 0.01) continue;
-
-            const x0 = l.trail[t - 1].x, y0 = l.trail[t - 1].y;
-            const x1 = l.trail[t].x, y1 = l.trail[t].y;
-
-            // Wide outer glow (both sides of the line)
-            ctx.lineWidth = 8;
-            ctx.strokeStyle = `hsla(${glowH}, ${avg * 0.06})`;
-            ctx.beginPath();
-            ctx.moveTo(x0, y0);
-            ctx.lineTo(x1, y1);
-            ctx.stroke();
-
-            // Medium glow
-            ctx.lineWidth = 4;
-            ctx.strokeStyle = `hsla(${glowH}, ${avg * 0.12})`;
-            ctx.beginPath();
-            ctx.moveTo(x0, y0);
-            ctx.lineTo(x1, y1);
-            ctx.stroke();
-
-            // Bright core (1px neon line)
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = `hsla(${coreH}, ${avg * 0.5})`;
-            ctx.beginPath();
-            ctx.moveTo(x0, y0);
-            ctx.lineTo(x1, y1);
-            ctx.stroke();
+              ctx.strokeStyle = `hsla(${hsl},${avg * alphaFactor})`;
+              ctx.beginPath();
+              ctx.moveTo(t[p0], t[p0 + 1]);
+              ctx.lineTo(t[p1], t[p1 + 1]);
+              ctx.stroke();
+            }
           }
 
           ctx.restore();
@@ -217,7 +184,6 @@ const LaserCanvas = () => {
 const ServiceArea = () => (
   <section className="py-16 sm:py-20 md:py-32 relative overflow-hidden">
     <div className="absolute inset-0 z-0 bg-background" />
-    <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/[0.04] via-transparent to-transparent" />
 
     <LaserCanvas />
 
