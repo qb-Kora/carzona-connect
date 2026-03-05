@@ -20,25 +20,25 @@ const Index = () => {
     <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       <Hero />
-      <NeonDivider />
+      <NeonDivider direction="top" />
       <TrustBar />
-      <NeonDivider direction="bottom" />
+      <NeonDivider />
       <WhyUs />
-      <NeonDivider direction="bottom" />
+      <NeonDivider />
       <Services />
-      <NeonDivider direction="bottom" />
+      <NeonDivider />
       <Reviews />
-      <NeonDivider direction="bottom" />
+      <NeonDivider />
       <Realizations />
-      <NeonDivider direction="bottom" />
+      <NeonDivider />
       <Gallery />
-      <NeonDivider direction="bottom" />
+      <NeonDivider />
       <ServiceArea />
-      <NeonDivider direction="bottom" />
+      <NeonDivider />
       <FAQ />
-      <NeonDivider direction="bottom" />
+      <NeonDivider />
       <Contact />
-      <NeonDivider direction="bottom" />
+      <NeonDivider />
       <LocalSEO />
       <Footer />
       <MobileCTA />
