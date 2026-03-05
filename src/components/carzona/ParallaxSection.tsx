@@ -41,7 +41,7 @@ const ParallaxSection = ({ children, imageUrl, className = "", overlayOpacity = 
       />
 
       {/* Subtle accent glow on parallax sections */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] via-transparent to-accent/[0.03]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] via-transparent to-transparent" />
 
       {/* Content */}
       <div className="relative z-10">
