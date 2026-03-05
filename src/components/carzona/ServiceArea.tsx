@@ -11,7 +11,7 @@ const cities = [
 
 const LASER_COUNT = 20;
 const MARGIN = 60;
-const GREEN_SLOTS = new Set([0, 5, 10, 15]); // indices that are always green
+const GREEN_SLOTS = new Set([0]); // only one green laser
 
 interface Laser {
   angle: number;
@@ -53,9 +53,10 @@ const LaserCanvas = () => {
         break;
     }
 
+    const baseSpeed = 4.3 + Math.random() * 3.6;
     return {
       angle,
-      speed: 4.3 + Math.random() * 3.6,
+      speed: green ? baseSpeed * 1.5 : baseSpeed,
       trail: [{ x: startX, y: startY, alpha: 1 }],
       hasBeenOnScreen: false,
       phase: "entering",
@@ -142,8 +143,9 @@ const LaserCanvas = () => {
           ctx.lineCap = "round";
 
           const len = l.trail.length;
-          const glowH = l.green ? "84, 70%, 50%" : "217, 91%, 60%";
-          const coreH = l.green ? "84, 70%, 75%" : "210, 100%, 80%";
+          const brightness = l.green ? 1.6 : 1;
+          const glowH = l.green ? "84, 70%, 55%" : "217, 91%, 60%";
+          const coreH = l.green ? "84, 70%, 85%" : "210, 100%, 80%";
 
           // Flicker factor (neon-like pulsing without going dark)
           const time = performance.now() / 1000;
@@ -152,7 +154,7 @@ const LaserCanvas = () => {
           for (let t = 1; t < len; t++) {
             const a0 = l.trail[t - 1].alpha;
             const a1 = l.trail[t].alpha;
-            const avg = (a0 + a1) / 2 * flicker;
+            const avg = (a0 + a1) / 2 * flicker * brightness;
             if (avg < 0.01) continue;
 
             const x0 = l.trail[t - 1].x, y0 = l.trail[t - 1].y;
