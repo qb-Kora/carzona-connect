@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 interface Nut {
-  id: number;
   x: number;
   y: number;
   vx: number;
@@ -12,109 +11,113 @@ interface Nut {
   opacity: number;
 }
 
-const NUT_COUNT = 200;
+const NUT_COUNT = 120;
 const PUSH_RADIUS = 90;
 const PUSH_FORCE = 2.5;
 const FRICTION = 0.96;
 const ROTATION_FRICTION = 0.97;
-
-const HexNutSVG = ({ size }: { size: number }) => {
-  const color = "hsl(220, 10%, 45%)";
-  const colorLight = "hsl(220, 10%, 55%)";
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon
-        points="12,2 21,7 21,17 12,22 3,17 3,7"
-        stroke={color}
-        strokeWidth="1.5"
-        fill="none"
-        opacity="0.55"
-      />
-      <circle cx="12" cy="12" r="5.5" stroke={color} strokeWidth="1.2" fill="none" opacity="0.45" />
-      <circle cx="12" cy="12" r="4.5" stroke={colorLight} strokeWidth="0.3" fill="none" opacity="0.2" strokeDasharray="2 1.5" />
-    </svg>
-  );
-};
 
 interface InteractiveScrewsProps {
   sectionRef?: React.RefObject<HTMLElement>;
 }
 
 const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const nutsRef = useRef<Nut[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animFrameRef = useRef<number>(0);
-  const [renderKey, setRenderKey] = useState(0);
-  const initializedRef = useRef(false);
 
-  const initNuts = useCallback(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const { width, height } = container.getBoundingClientRect();
-    if (width === 0 || height === 0) return;
-
-    nutsRef.current = Array.from({ length: NUT_COUNT }, (_, i) => ({
-      id: i,
-      x: Math.random() * (width - 30) + 15,
-      y: Math.random() * (height - 30) + 15,
-      vx: 0,
-      vy: 0,
+  const initNuts = useCallback((w: number, h: number) => {
+    nutsRef.current = Array.from({ length: NUT_COUNT }, () => ({
+      x: Math.random() * (w - 30) + 15,
+      y: Math.random() * (h - 30) + 15,
+      vx: 0, vy: 0,
       rotation: Math.random() * 360,
       vr: 0,
-      size: 6 + Math.random() * 32, // 6px to 38px
-      opacity: 0.12 + Math.random() * 0.38,
+      size: 6 + Math.random() * 28,
+      opacity: 0.08 + Math.random() * 0.25,
     }));
-    initializedRef.current = true;
-    setRenderKey(k => k + 1);
   }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(() => initNuts(), 100);
-    window.addEventListener("resize", initNuts);
-    return () => {
-      clearTimeout(timeout);
-      window.removeEventListener("resize", initNuts);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const resize = () => {
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      const w = parent.offsetWidth;
+      const h = parent.offsetHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (nutsRef.current.length === 0) initNuts(w, h);
     };
-  }, [initNuts]);
+    resize();
+    window.addEventListener("resize", resize);
 
-  useEffect(() => {
-    const target = sectionRef?.current || containerRef.current;
-    if (!target) return;
-
+    const target = sectionRef?.current || canvas.parentElement;
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = (containerRef.current || target).getBoundingClientRect();
+      const rect = canvas.getBoundingClientRect();
       mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
-    const handleMouseLeave = () => {
-      mouseRef.current = { x: -1000, y: -1000 };
-    };
+    const handleMouseLeave = () => { mouseRef.current = { x: -1000, y: -1000 }; };
+    target?.addEventListener("mousemove", handleMouseMove);
+    target?.addEventListener("mouseleave", handleMouseLeave);
 
-    target.addEventListener("mousemove", handleMouseMove);
-    target.addEventListener("mouseleave", handleMouseLeave);
-    return () => {
-      target.removeEventListener("mousemove", handleMouseMove);
-      target.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [sectionRef]);
-
-  useEffect(() => {
     let lastTime = performance.now();
+    const color1 = "hsla(220, 10%, 45%,";
+    const color2 = "hsla(220, 10%, 55%,";
+
+    const drawHexNut = (nut: Nut) => {
+      const { x, y, size, rotation, opacity } = nut;
+      const s = size / 24; // scale factor relative to 24x24 viewBox
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate((rotation * Math.PI) / 180);
+      ctx.scale(s, s);
+
+      // Outer hexagon
+      ctx.beginPath();
+      for (let j = 0; j < 6; j++) {
+        const angle = (Math.PI / 3) * j - Math.PI / 6;
+        const px = Math.cos(angle) * 10;
+        const py = Math.sin(angle) * 10;
+        j === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = `${color1}${opacity * 0.55})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Inner circle
+      ctx.beginPath();
+      ctx.arc(0, 0, 5.5, 0, Math.PI * 2);
+      ctx.strokeStyle = `${color1}${opacity * 0.45})`;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      ctx.restore();
+    };
 
     const animate = (time: number) => {
       const dt = Math.min((time - lastTime) / 16, 3);
       lastTime = time;
 
-      const container = containerRef.current;
-      if (!container || !initializedRef.current) {
-        animFrameRef.current = requestAnimationFrame(animate);
-        return;
-      }
-      const { width, height } = container.getBoundingClientRect();
-      const mouse = mouseRef.current;
-      let needsRender = false;
+      const w = canvas.width / (Math.min(window.devicePixelRatio || 1, 2));
+      const h = canvas.height / (Math.min(window.devicePixelRatio || 1, 2));
+      ctx.clearRect(0, 0, w, h);
 
-      nutsRef.current.forEach((nut) => {
+      const mouse = mouseRef.current;
+      const nuts = nutsRef.current;
+
+      for (let i = 0; i < nuts.length; i++) {
+        const nut = nuts[i];
         const dx = nut.x - mouse.x;
         const dy = nut.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -124,61 +127,42 @@ const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
           nut.vx += (dx / dist) * force;
           nut.vy += (dy / dist) * force;
           nut.vr += (dx > 0 ? 1 : -1) * force * 3;
-          needsRender = true;
         }
 
         nut.x += nut.vx * dt;
         nut.y += nut.vy * dt;
         nut.rotation += nut.vr * dt;
-
         nut.vx *= FRICTION;
         nut.vy *= FRICTION;
         nut.vr *= ROTATION_FRICTION;
 
         if (nut.x < 5) { nut.x = 5; nut.vx *= -0.5; }
-        if (nut.x > width - 5) { nut.x = width - 5; nut.vx *= -0.5; }
+        if (nut.x > w - 5) { nut.x = w - 5; nut.vx *= -0.5; }
         if (nut.y < 5) { nut.y = 5; nut.vy *= -0.5; }
-        if (nut.y > height - 5) { nut.y = height - 5; nut.vy *= -0.5; }
+        if (nut.y > h - 5) { nut.y = h - 5; nut.vy *= -0.5; }
 
-        if (Math.abs(nut.vx) > 0.01 || Math.abs(nut.vy) > 0.01) {
-          needsRender = true;
-        }
-      });
-
-      if (needsRender) {
-        setRenderKey(k => k + 1);
+        drawHexNut(nut);
       }
 
       animFrameRef.current = requestAnimationFrame(animate);
     };
 
     animFrameRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animFrameRef.current);
-  }, []);
+
+    return () => {
+      cancelAnimationFrame(animFrameRef.current);
+      window.removeEventListener("resize", resize);
+      target?.removeEventListener("mousemove", handleMouseMove);
+      target?.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [initNuts, sectionRef]);
 
   return (
-    <div
-      ref={containerRef}
-      className="absolute inset-0 overflow-hidden pointer-events-none"
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none"
       style={{ zIndex: 5 }}
-      data-render={renderKey}
-    >
-      {nutsRef.current.map((nut) => (
-        <div
-          key={nut.id}
-          className="absolute"
-          style={{
-            left: nut.x - nut.size / 2,
-            top: nut.y - nut.size / 2,
-            transform: `rotate(${nut.rotation}deg)`,
-            opacity: nut.opacity,
-            willChange: "transform",
-          }}
-        >
-          <HexNutSVG size={nut.size} />
-        </div>
-      ))}
-    </div>
+    />
   );
 };
 
