@@ -1,8 +1,8 @@
 import { Phone, CalendarCheck } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 
-const MobileCTA = () => {
+const MobileCTA = memo(() => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -21,18 +21,20 @@ const MobileCTA = () => {
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="fixed bottom-0 left-0 right-0 z-40 md:hidden p-3 glass-strong safe-bottom"
       style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
+      role="navigation"
+      aria-label="Szybkie akcje"
     >
       <div className="flex gap-2">
         <a
           href="tel:663881585"
-          className="flex items-center justify-center gap-2 bg-card border border-border text-foreground flex-1 py-3.5 rounded-2xl font-semibold text-sm touch-target"
+          className="flex items-center justify-center gap-2 bg-card border border-border text-foreground flex-1 py-3.5 rounded-2xl font-semibold text-sm min-h-[48px] active:scale-95 transition-transform touch-manipulation"
         >
           <Phone className="w-4 h-4 text-primary" />
           Zadzwoń
         </a>
         <a
           href="#kontakt"
-          className="flex items-center justify-center gap-2 bg-accent text-accent-foreground flex-1 py-3.5 rounded-2xl font-bold text-sm btn-shine touch-target"
+          className="flex items-center justify-center gap-2 bg-accent text-accent-foreground flex-1 py-3.5 rounded-2xl font-bold text-sm btn-shine min-h-[48px] active:scale-95 transition-transform touch-manipulation"
         >
           <CalendarCheck className="w-4 h-4" />
           Umów wizytę
@@ -40,6 +42,8 @@ const MobileCTA = () => {
       </div>
     </motion.div>
   );
-};
+});
+
+MobileCTA.displayName = "MobileCTA";
 
 export default MobileCTA;

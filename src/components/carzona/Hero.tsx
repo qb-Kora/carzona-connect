@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, memo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Phone, CalendarCheck, ChevronDown, Cpu, Clock, ShieldCheck } from "lucide-react";
 
@@ -8,7 +8,7 @@ const usps = [
   { icon: ShieldCheck, title: "Gwarancja na usługi", desc: "Pewność i spokój po naprawie" },
 ];
 
-const Hero = () => {
+const Hero = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -26,16 +26,18 @@ const Hero = () => {
           muted
           loop
           playsInline
+          preload="auto"
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Crect fill='%230f1117'/%3E%3C/svg%3E"
           className="w-full h-[130%] object-cover will-change-transform"
+          style={{ contentVisibility: "auto" }}
         >
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
       </motion.div>
 
-      {/* Dark overlay */}
+      {/* Overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/85 to-background/95" />
       <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.05] via-transparent to-accent/[0.05]" />
-      {/* Bottom neon glow bleed */}
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-accent/[0.15] via-accent/[0.05] to-transparent blur-sm pointer-events-none" />
 
       {/* Content */}
@@ -89,14 +91,14 @@ const Hero = () => {
           >
             <a
               href="#kontakt"
-              className="flex items-center justify-center gap-2.5 bg-accent text-accent-foreground px-6 sm:px-10 py-3.5 sm:py-4 rounded-2xl text-sm sm:text-base font-bold btn-shine transition-all duration-500 hover:scale-[1.03] hover:shadow-[0_8px_40px_-8px_hsl(var(--accent)/0.5)] min-h-[44px]"
+              className="flex items-center justify-center gap-2.5 bg-accent text-accent-foreground px-6 sm:px-10 py-3.5 sm:py-4 rounded-2xl text-sm sm:text-base font-bold btn-shine transition-all duration-500 hover:scale-[1.03] active:scale-[0.97] hover:shadow-[0_8px_40px_-8px_hsl(var(--accent)/0.5)] min-h-[48px] touch-manipulation"
             >
               <CalendarCheck className="w-5 h-5" />
               Umów wizytę online
             </a>
             <a
               href="tel:663881585"
-              className="flex items-center justify-center gap-2.5 text-foreground px-6 py-3.5 sm:py-4 rounded-2xl border border-border hover:border-primary/40 transition-all duration-300 hover:bg-card/60 font-semibold text-sm sm:text-base min-h-[44px]"
+              className="flex items-center justify-center gap-2.5 text-foreground px-6 py-3.5 sm:py-4 rounded-2xl border border-border hover:border-primary/40 active:bg-card/80 transition-all duration-300 hover:bg-card/60 font-semibold text-sm sm:text-base min-h-[48px] touch-manipulation"
             >
               <Phone className="w-5 h-5 text-primary" />
               Zadzwoń teraz
@@ -133,13 +135,14 @@ const Hero = () => {
         </div>
       </motion.div>
 
-      {/* Scroll indicator — hidden on small screens */}
+      {/* Scroll indicator */}
       <motion.a
         href="#zaufanie"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground text-xs hidden sm:flex"
+        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground text-xs hidden sm:flex min-h-[44px] min-w-[44px] justify-center"
+        aria-label="Przewiń do następnej sekcji"
       >
         <span>Przewiń</span>
         <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity }}>
@@ -148,6 +151,8 @@ const Hero = () => {
       </motion.a>
     </section>
   );
-};
+});
+
+Hero.displayName = "Hero";
 
 export default Hero;
