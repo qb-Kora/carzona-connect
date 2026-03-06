@@ -2,6 +2,7 @@ import { memo, forwardRef } from "react";
 
 interface NeonDividerProps {
   direction?: "top" | "bottom" | "both";
+  color?: "accent" | "primary";
 }
 
 /**
