@@ -101,11 +101,12 @@ const Contact = () => {
         <div className="grid lg:grid-cols-5 gap-5 sm:gap-6 md:gap-8">
           {/* Info cards */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -30, rotateY: 5 }}
+            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="lg:col-span-2 space-y-2.5 sm:space-y-3 md:space-y-4"
+            className="lg:col-span-2 space-y-2.5 sm:space-y-3 md:space-y-4 perspective-grid"
+            style={{ transformPerspective: 1000 }}
           >
             <a
               href="tel:663881585"
@@ -158,13 +159,14 @@ const Contact = () => {
 
           {/* Form */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: 30, rotateY: -5 }}
+            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-3"
+            style={{ transformPerspective: 1000 }}
           >
-            <div className="p-4 sm:p-6 md:p-10 rounded-2xl sm:rounded-3xl bg-card border border-border">
+            <div className="p-4 sm:p-6 md:p-10 rounded-2xl sm:rounded-3xl bg-card border border-border raised-surface">
               <h3 className="font-bold text-foreground text-lg sm:text-xl mb-1.5 sm:mb-2">Zarezerwuj termin</h3>
               <p className="text-muted-foreground text-xs sm:text-sm mb-5 sm:mb-8">Wszystkie pola oznaczone * są wymagane.</p>
               <form className="space-y-3 sm:space-y-4 md:space-y-5" onSubmit={handleSubmit}>

@@ -32,16 +32,18 @@ const Gallery = () => {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4 perspective-grid">
             {images.map((img, i) => (
               <motion.button
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20, rotateX: 5 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 onClick={() => setLightbox(i)}
                 className="group relative aspect-[3/2] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer"
+                whileHover={{ rotateX: -4, rotateY: (i % 3 - 1) * 4, scale: 1.05, z: 30 }}
+                style={{ transformPerspective: 700, transformStyle: "preserve-3d" }}
               >
                 <img
                   src={img.src}
