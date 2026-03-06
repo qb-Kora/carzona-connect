@@ -8,7 +8,7 @@ interface NeonDividerProps {
  * Pure CSS neon divider — no JS animation runtime cost.
  * Uses CSS @keyframes for the flicker effect.
  */
-const NeonDivider = memo(({ direction = "both" }: NeonDividerProps) => {
+const NeonDivider = memo(forwardRef<HTMLDivElement, NeonDividerProps>(({ direction = "both" }, ref) => {
   const showTop = direction === "top" || direction === "both";
   const showBottom = direction === "bottom" || direction === "both";
 
