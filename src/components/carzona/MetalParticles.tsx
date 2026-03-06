@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 
 const PARTICLE_COUNT = 45;
 
@@ -8,7 +8,7 @@ interface Particle {
   opacity: number; flickerSpeed: number; flickerPhase: number;
 }
 
-const MetalParticles = () => {
+const MetalParticles = memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -18,6 +18,9 @@ const MetalParticles = () => {
     if (!ctx) return;
 
     let w = 0, h = 0;
+    let raf: number;
+    let isVisible = true;
+
     const resize = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
@@ -30,6 +33,16 @@ const MetalParticles = () => {
     resize();
     window.addEventListener("resize", resize);
 
+    // Pause when off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !raf) raf = requestAnimationFrame(animate);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     const particles: Particle[] = Array.from({ length: PARTICLE_COUNT }, () => ({
       x: Math.random() * (w || 500),
       y: Math.random() * (h || 500),
@@ -41,8 +54,8 @@ const MetalParticles = () => {
       flickerPhase: Math.random() * Math.PI * 2,
     }));
 
-    let raf: number;
     const animate = (time: number) => {
+      if (!isVisible) { raf = 0; return; }
       ctx.clearRect(0, 0, w, h);
       for (const p of particles) {
         p.x += p.speedX;
@@ -63,10 +76,16 @@ const MetalParticles = () => {
     };
     raf = requestAnimationFrame(animate);
 
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+      observer.disconnect();
+    };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }} />;
-};
+  return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true" />;
+});
+
+MetalParticles.displayName = "MetalParticles";
 
 export default MetalParticles;

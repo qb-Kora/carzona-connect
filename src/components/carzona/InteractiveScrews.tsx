@@ -1,14 +1,8 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, memo } from "react";
 
 interface Nut {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  rotation: number;
-  vr: number;
-  size: number;
-  opacity: number;
+  x: number; y: number; vx: number; vy: number;
+  rotation: number; vr: number; size: number; opacity: number;
 }
 
 const NUT_COUNT = 120;
@@ -21,7 +15,7 @@ interface InteractiveScrewsProps {
   sectionRef?: React.RefObject<HTMLElement>;
 }
 
-const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
+const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nutsRef = useRef<Nut[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
@@ -45,6 +39,8 @@ const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    let isVisible = true;
+
     const resize = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
@@ -61,6 +57,19 @@ const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
     resize();
     window.addEventListener("resize", resize);
 
+    // Pause when off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animFrameRef.current) {
+          lastTime = performance.now();
+          animFrameRef.current = requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     const target = sectionRef?.current || canvas.parentElement;
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -72,17 +81,15 @@ const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
 
     let lastTime = performance.now();
     const color1 = "hsla(220, 10%, 45%,";
-    const color2 = "hsla(220, 10%, 55%,";
 
     const drawHexNut = (nut: Nut) => {
       const { x, y, size, rotation, opacity } = nut;
-      const s = size / 24; // scale factor relative to 24x24 viewBox
+      const s = size / 24;
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate((rotation * Math.PI) / 180);
       ctx.scale(s, s);
 
-      // Outer hexagon
       ctx.beginPath();
       for (let j = 0; j < 6; j++) {
         const angle = (Math.PI / 3) * j - Math.PI / 6;
@@ -95,7 +102,6 @@ const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Inner circle
       ctx.beginPath();
       ctx.arc(0, 0, 5.5, 0, Math.PI * 2);
       ctx.strokeStyle = `${color1}${opacity * 0.45})`;
@@ -106,6 +112,8 @@ const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
     };
 
     const animate = (time: number) => {
+      if (!isVisible) { animFrameRef.current = 0; return; }
+
       const dt = Math.min((time - lastTime) / 16, 3);
       lastTime = time;
 
@@ -152,6 +160,7 @@ const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
     return () => {
       cancelAnimationFrame(animFrameRef.current);
       window.removeEventListener("resize", resize);
+      observer.disconnect();
       target?.removeEventListener("mousemove", handleMouseMove);
       target?.removeEventListener("mouseleave", handleMouseLeave);
     };
@@ -162,8 +171,11 @@ const InteractiveScrews = ({ sectionRef }: InteractiveScrewsProps) => {
       ref={canvasRef}
       className="absolute inset-0 pointer-events-none"
       style={{ zIndex: 5 }}
+      aria-hidden="true"
     />
   );
-};
+});
+
+InteractiveScrews.displayName = "InteractiveScrews";
 
 export default InteractiveScrews;

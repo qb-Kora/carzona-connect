@@ -1,23 +1,24 @@
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import ParallaxSection from "./ParallaxSection";
 import { X, ZoomIn } from "lucide-react";
 
 const images = [
-  { src: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=600&h=400&fit=crop", alt: "Stanowisko diagnostyczne CARZONA" },
-  { src: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&h=400&fit=crop", alt: "Naprawa silnika w warsztacie" },
-  { src: "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=600&h=400&fit=crop", alt: "Profesjonalne narzędzia warsztatowe" },
-  { src: "https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=600&h=400&fit=crop", alt: "Serwis układu hamulcowego" },
-  { src: "https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=600&h=400&fit=crop", alt: "Diagnostyka komputerowa pojazdu" },
-  { src: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&h=400&fit=crop", alt: "Pojazd po serwisie CARZONA" },
+  { src: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=600&h=400&fit=crop&auto=format", alt: "Stanowisko diagnostyczne CARZONA" },
+  { src: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&h=400&fit=crop&auto=format", alt: "Naprawa silnika w warsztacie" },
+  { src: "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=600&h=400&fit=crop&auto=format", alt: "Profesjonalne narzędzia warsztatowe" },
+  { src: "https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=600&h=400&fit=crop&auto=format", alt: "Serwis układu hamulcowego" },
+  { src: "https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=600&h=400&fit=crop&auto=format", alt: "Diagnostyka komputerowa pojazdu" },
+  { src: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&h=400&fit=crop&auto=format", alt: "Pojazd po serwisie CARZONA" },
 ];
 
-const Gallery = () => {
+const Gallery = memo(() => {
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const closeLightbox = useCallback(() => setLightbox(null), []);
 
   return (
-    <ParallaxSection imageUrl="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=1920&q=80&fit=crop" overlayOpacity={0.85}>
+    <ParallaxSection imageUrl="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=1920&q=80&fit=crop&auto=format" overlayOpacity={0.85}>
       <section id="galeria" className="py-16 sm:py-20 md:py-32 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
@@ -34,7 +35,6 @@ const Gallery = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4 perspective-grid">
             {images.map((img, i) => {
-              // Gaming monitor inward curve: left→rotateY positive, center→0, right→negative
               const col3 = i % 3;
               const baseRotateY = col3 === 0 ? 6 : col3 === 2 ? -6 : 0;
               const baseRotateX = -2;
@@ -46,15 +46,19 @@ const Gallery = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 onClick={() => setLightbox(i)}
-                className="group relative aspect-[3/2] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer touch-manipulation"
+                className="group relative aspect-[3/2] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer touch-manipulation min-h-[44px]"
                 whileHover={{ rotateX: baseRotateX - 2, rotateY: baseRotateY * 1.4, scale: 1.06, z: 40 }}
                 whileTap={{ scale: 0.98 }}
                 style={{ transformPerspective: 700, transformStyle: "preserve-3d" }}
+                aria-label={`Powiększ: ${img.alt}`}
               >
                 <img
                   src={img.src}
                   alt={img.alt}
                   loading="lazy"
+                  decoding="async"
+                  width={600}
+                  height={400}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 will-change-transform"
                 />
                 <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
@@ -74,12 +78,15 @@ const Gallery = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-xl flex items-center justify-center p-4"
-              onClick={() => setLightbox(null)}
+              onClick={closeLightbox}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Podgląd zdjęcia"
             >
               <button
-                className="absolute top-4 right-4 sm:top-6 sm:right-6 text-foreground hover:text-primary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-                onClick={() => setLightbox(null)}
-                aria-label="Zamknij"
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 text-foreground hover:text-primary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center touch-manipulation"
+                onClick={closeLightbox}
+                aria-label="Zamknij podgląd"
               >
                 <X className="w-7 h-7 sm:w-8 sm:h-8" />
               </button>
@@ -91,6 +98,8 @@ const Gallery = () => {
                 transition={{ duration: 0.3 }}
                 src={images[lightbox].src.replace("w=600&h=400", "w=1200&h=800")}
                 alt={images[lightbox].alt}
+                width={1200}
+                height={800}
                 className="max-w-full max-h-[85vh] rounded-xl sm:rounded-2xl object-contain"
                 onClick={(e) => e.stopPropagation()}
               />
@@ -100,6 +109,8 @@ const Gallery = () => {
       </section>
     </ParallaxSection>
   );
-};
+});
+
+Gallery.displayName = "Gallery";
 
 export default Gallery;
