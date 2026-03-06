@@ -122,7 +122,6 @@ const Footer = memo(() => (
             Polityka prywatności
           </a>
           <a href="#" className="neon-hover-text transition-colors min-h-[36px] inline-flex items-center">
-          </a>
             Regulamin
           </a>
         </div>
