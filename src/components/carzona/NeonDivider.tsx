@@ -75,7 +75,7 @@ const NeonDivider = memo(forwardRef<HTMLDivElement, NeonDividerProps>(({ directi
       `}</style>
     </div>
   );
-});
+}));
 
 NeonDivider.displayName = "NeonDivider";
 
