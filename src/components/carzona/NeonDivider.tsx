@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, forwardRef } from "react";
 
 interface NeonDividerProps {
   direction?: "top" | "bottom" | "both";
@@ -8,12 +8,13 @@ interface NeonDividerProps {
  * Pure CSS neon divider — no JS animation runtime cost.
  * Uses CSS @keyframes for the flicker effect.
  */
-const NeonDivider = memo(({ direction = "both" }: NeonDividerProps) => {
+const NeonDivider = memo(forwardRef<HTMLDivElement, NeonDividerProps>(({ direction = "both" }, ref) => {
   const showTop = direction === "top" || direction === "both";
   const showBottom = direction === "bottom" || direction === "both";
 
   return (
     <div
+      ref={ref}
       className="relative w-full z-20 isolate"
       style={{ height: 0, overflow: "visible", marginTop: -1, marginBottom: -1 }}
       aria-hidden="true"
@@ -74,7 +75,7 @@ const NeonDivider = memo(({ direction = "both" }: NeonDividerProps) => {
       `}</style>
     </div>
   );
-});
+}));
 
 NeonDivider.displayName = "NeonDivider";
 
