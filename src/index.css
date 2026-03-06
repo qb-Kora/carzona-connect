@@ -143,8 +143,6 @@
   /* Neon section description */
   .neon-desc {
     color: hsl(var(--muted-foreground));
-    text-shadow: 0 0 8px hsl(var(--accent) / 0.15), 0 0 20px hsl(var(--accent) / 0.06);
-    animation: neon-flicker-green 5s ease-in-out infinite;
   }
 
   @keyframes neon-flicker-green {

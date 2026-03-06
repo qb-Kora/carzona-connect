@@ -27,7 +27,7 @@ const Services = () => (
         <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
           Pełen zakres usług serwisowych
         </h2>
-        <p className="neon-desc max-w-xl mx-auto text-sm sm:text-base md:text-lg">
+        <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
           Od prostych przeglądów po zaawansowane naprawy — zajmiemy się Twoim autem kompleksowo.
         </p>
       </AnimatedSection>

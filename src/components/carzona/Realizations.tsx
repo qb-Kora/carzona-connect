@@ -49,7 +49,7 @@ const Realizations = () => {
           <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
             Nasze ostatnie naprawy
           </h2>
-          <p className="neon-desc max-w-xl mx-auto text-sm sm:text-base md:text-lg">
+          <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
             Każda naprawa to dla nas wyzwanie, które podejmujemy z pasją.
           </p>
         </AnimatedSection>
