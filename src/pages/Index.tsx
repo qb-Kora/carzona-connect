@@ -44,7 +44,7 @@ const Index = () => {
         <Contact />
         <NeonDivider />
         <LocalSEO />
-        <NeonDivider />
+        <NeonDivider color="primary" />
         <Footer />
         <MobileCTA />
         <CarCrashCTA />
