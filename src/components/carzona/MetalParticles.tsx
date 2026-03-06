@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const PARTICLE_COUNT = 20;
+const PARTICLE_COUNT = 28;
 
 interface Particle {
   x: number; y: number; size: number;
@@ -33,11 +33,11 @@ const MetalParticles = () => {
     const particles: Particle[] = Array.from({ length: PARTICLE_COUNT }, () => ({
       x: Math.random() * (w || 500),
       y: Math.random() * (h || 500),
-      size: 1 + Math.random() * 2,
+      size: 1.5 + Math.random() * 3,
       speedX: (Math.random() - 0.5) * 0.3,
       speedY: -0.15 - Math.random() * 0.4,
-      opacity: 0.1 + Math.random() * 0.3,
-      flickerSpeed: 0.5 + Math.random() * 2,
+      opacity: 0.25 + Math.random() * 0.5,
+      flickerSpeed: 1 + Math.random() * 3,
       flickerPhase: Math.random() * Math.PI * 2,
     }));
 
