@@ -54,15 +54,17 @@ const Realizations = () => {
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 perspective-grid">
           {realizations.map((r, i) => (
             <motion.div
               key={r.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30, rotateX: 6 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="card-hover p-4 sm:p-5 md:p-7 rounded-2xl sm:rounded-3xl group backdrop-blur-sm pointer-events-auto"
+              whileHover={{ rotateX: -3, rotateY: i % 2 === 0 ? 3 : -3, scale: 1.03, z: 20 }}
+              style={{ transformPerspective: 800, transformStyle: "preserve-3d" }}
             >
               <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
                 <h3 className="font-bold text-foreground text-sm sm:text-base md:text-lg leading-tight">{r.title}</h3>

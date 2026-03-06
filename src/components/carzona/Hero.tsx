@@ -108,17 +108,17 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1 }}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 max-w-3xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 max-w-3xl mx-auto perspective-grid"
           >
             {usps.map((usp, i) => (
               <motion.div
                 key={usp.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20, rotateX: 10 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
                 transition={{ duration: 0.5, delay: 1.2 + i * 0.1 }}
                 className="glass rounded-2xl p-3.5 sm:p-5 flex flex-row sm:flex-col items-center gap-3 hover:border-accent/30 transition-all duration-300"
-                whileHover={{ y: -4, scale: 1.03 }}
-                style={{ transformPerspective: 600 }}
+                whileHover={{ y: -6, scale: 1.05, rotateX: -4, rotateY: (i - 1) * 5 }}
+                style={{ transformPerspective: 600, transformStyle: "preserve-3d" }}
               >
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-accent/15 flex items-center justify-center shrink-0">
                   <usp.icon className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />

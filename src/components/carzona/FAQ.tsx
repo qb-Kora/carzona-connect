@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import ParallaxSection from "./ParallaxSection";
 import {
@@ -32,10 +33,18 @@ const FAQ = () => (
           </p>
         </AnimatedSection>
 
-        <Accordion type="single" collapsible className="space-y-2 sm:space-y-3">
+        <Accordion type="single" collapsible className="space-y-2 sm:space-y-3 perspective-grid">
           {faqs.map((faq, i) => (
-            <AccordionItem
+            <motion.div
               key={i}
+              initial={{ opacity: 0, y: 15, rotateX: 4 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+              whileHover={{ rotateX: -2, scale: 1.01, z: 10 }}
+              style={{ transformPerspective: 800, transformStyle: "preserve-3d" }}
+            >
+            <AccordionItem
               value={`faq-${i}`}
               className="bg-card/80 backdrop-blur-sm border border-border rounded-xl sm:rounded-2xl px-4 sm:px-6 data-[state=open]:border-primary/20 transition-colors duration-300"
             >
@@ -46,6 +55,7 @@ const FAQ = () => (
                 {faq.a}
               </AccordionContent>
             </AccordionItem>
+            </motion.div>
           ))}
         </Accordion>
       </div>

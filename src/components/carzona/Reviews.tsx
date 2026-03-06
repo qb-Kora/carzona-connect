@@ -35,16 +35,18 @@ const Reviews = () => {
           </AnimatedSection>
 
           {/* Desktop grid */}
-          <div className="hidden md:grid md:grid-cols-3 gap-5">
+          <div className="hidden md:grid md:grid-cols-3 gap-5 perspective-grid">
             <AnimatePresence mode="popLayout">
-              {reviews.slice(current * perPage, current * perPage + perPage).map((review) => (
+              {reviews.slice(current * perPage, current * perPage + perPage).map((review, idx) => (
                 <motion.div
                   key={review.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 20, rotateX: 8 }}
+                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.4 }}
                   className="card-hover p-6 sm:p-7 rounded-2xl sm:rounded-3xl backdrop-blur-sm"
+                  whileHover={{ rotateX: -3, rotateY: idx === 0 ? 4 : idx === 2 ? -4 : 0, scale: 1.03, z: 30 }}
+                  style={{ transformPerspective: 800, transformStyle: "preserve-3d" }}
                   itemScope
                   itemType="https://schema.org/Review"
                 >
