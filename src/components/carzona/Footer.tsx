@@ -3,39 +3,7 @@ import { Phone, Mail, MapPin, Clock, Wrench, ChevronRight } from "lucide-react";
 import Logo from "./Logo";
 
 const Footer = memo(() => (
-  <footer className="relative border-t border-border/50 pt-12 sm:pt-16 md:pt-20 pb-24 md:pb-12 overflow-visible" style={{ zIndex: 25 }}>
-    {/* Neon glow line at top */}
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-primary/60 to-transparent" aria-hidden="true" />
-    
-    {/* Strong blue glow with flicker */}
-    <div 
-      className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[120px] rounded-full pointer-events-none"
-      style={{
-        background: "radial-gradient(ellipse, hsl(var(--primary) / 0.25) 0%, hsl(var(--primary) / 0.08) 40%, transparent 70%)",
-        animation: "footerGlowFlicker 3s ease-in-out infinite",
-      }}
-      aria-hidden="true"
-    />
-    <div 
-      className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[200px] rounded-full pointer-events-none"
-      style={{
-        background: "radial-gradient(ellipse, hsl(var(--primary) / 0.15) 0%, transparent 60%)",
-        animation: "footerGlowFlicker 2.2s ease-in-out infinite 0.5s",
-      }}
-      aria-hidden="true"
-    />
-
-    <style>{`
-      @keyframes footerGlowFlicker {
-        0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
-        15% { opacity: 1; transform: translateX(-50%) scale(1.05); }
-        30% { opacity: 0.4; transform: translateX(-50%) scale(0.98); }
-        50% { opacity: 0.9; transform: translateX(-50%) scale(1.02); }
-        70% { opacity: 0.5; transform: translateX(-50%) scale(1); }
-        85% { opacity: 1; transform: translateX(-50%) scale(1.03); }
-      }
-    `}</style>
-
+  <footer className="relative border-t border-border/50 pt-12 sm:pt-16 md:pt-20 pb-24 md:pb-12 overflow-hidden">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Top — brand + CTA */}
       <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10 sm:mb-14">
