@@ -37,40 +37,48 @@ const CarCrashCTA = memo(() => {
   // After crash they touch at center. Merged: overlap so front wheels share.
   // Left car: crash at x=40 (right edge at 80), merged at x=52 (overlap 12px)
   // Right car: crash at x=80 (left edge at 80), merged at x=68 (overlap 12px)
+  // Desktop: container 160px, car icon 40px wide. Center = 80.
+  // Merged: front wheels touch. Left car right edge at ~80, right car left edge at ~80
+  // Car icon: wheels at ~25% and ~75% of width. Front wheel = right side for left car.
+  // Left car front wheel at x + 30 (75% of 40). Right car front wheel at x + 10 (25% of 40).
+  // Touch: leftX + 30 = rightX + 10 → rightX = leftX + 20
+  // Center them: leftX + 30 = 80 → leftX = 50, rightX = 70
   const dLeftDrive = 34;
-  const dLeftCrash = 40;
-  const dLeftMerge = 52;
+  const dLeftCrash = 42;
+  const dLeftMerge = 50;
   const dRightDrive = 86;
-  const dRightCrash = 80;
-  const dRightMerge = 68;
+  const dRightCrash = 78;
+  const dRightMerge = 70;
 
   // Mobile: container 110px, car 24px, center=55
+  // Left front wheel at x+18, right front wheel at x+6. Touch: leftX+18 = rightX+6 → rightX=leftX+12
+  // Center: leftX+18=55 → leftX=37, rightX=49
   const mLeftDrive = 25;
-  const mLeftCrash = 31;
-  const mLeftMerge = 39;
+  const mLeftCrash = 33;
+  const mLeftMerge = 37;
   const mRightDrive = 61;
-  const mRightCrash = 55;
-  const mRightMerge = 47;
+  const mRightCrash = 53;
+  const mRightMerge = 49;
 
   const getDesktopLeftAnim = () => {
     if (phase === "driving") return { x: dLeftDrive, rotate: 0 };
-    if (phase === "crash") return { x: dLeftCrash, rotate: 10 };
-    return { x: dLeftMerge, rotate: 15 };
+    if (phase === "crash") return { x: dLeftCrash, rotate: 6 };
+    return { x: dLeftMerge, rotate: 8 };
   };
   const getDesktopRightAnim = () => {
     if (phase === "driving") return { x: dRightDrive, rotate: 0 };
-    if (phase === "crash") return { x: dRightCrash, rotate: -10 };
-    return { x: dRightMerge, rotate: -15 };
+    if (phase === "crash") return { x: dRightCrash, rotate: -6 };
+    return { x: dRightMerge, rotate: -8 };
   };
   const getMobileLeftAnim = () => {
     if (phase === "driving") return { x: mLeftDrive, rotate: 0 };
-    if (phase === "crash") return { x: mLeftCrash, rotate: 10 };
-    return { x: mLeftMerge, rotate: 15 };
+    if (phase === "crash") return { x: mLeftCrash, rotate: 6 };
+    return { x: mLeftMerge, rotate: 8 };
   };
   const getMobileRightAnim = () => {
     if (phase === "driving") return { x: mRightDrive, rotate: 0 };
-    if (phase === "crash") return { x: mRightCrash, rotate: -10 };
-    return { x: mRightMerge, rotate: -15 };
+    if (phase === "crash") return { x: mRightCrash, rotate: -6 };
+    return { x: mRightMerge, rotate: -8 };
   };
 
   const getTransition = () => {
