@@ -77,7 +77,7 @@ const Gallery = memo(() => {
               aria-label="Podgląd zdjęcia"
             >
               <button
-                className="absolute top-4 right-4 sm:top-6 sm:right-6 text-foreground hover:text-primary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center touch-manipulation"
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 text-foreground neon-hover-text transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center touch-manipulation"
                 onClick={closeLightbox}
                 aria-label="Zamknij podgląd"
               >

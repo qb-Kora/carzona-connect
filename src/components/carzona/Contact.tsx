@@ -120,7 +120,7 @@ const Contact = memo(() => {
 
             <a
               href="mailto:sebastian@carzona.pl"
-              className="group flex items-center gap-3 sm:gap-4 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-card border border-border hover:border-primary/30 transition-all duration-300 min-h-[44px]"
+              className="group flex items-center gap-3 sm:gap-4 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-card border border-border neon-hover-border transition-all duration-300 min-h-[44px]"
             >
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
                 <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />

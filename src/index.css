@@ -225,13 +225,44 @@
 
   @media (hover: hover) {
     .card-hover:hover {
-      border-color: hsl(var(--primary) / 0.3);
+      border-color: hsl(var(--primary) / 0.5);
       box-shadow: 
-        0 25px 60px -15px hsl(var(--primary) / 0.2), 
-        0 12px 25px -8px hsl(var(--background) / 0.7), 
-        0 0 0 1px hsl(var(--primary) / 0.1),
+        0 0 12px 2px hsl(var(--primary) / 0.15),
+        0 0 30px 4px hsl(var(--primary) / 0.08),
+        0 25px 60px -15px hsl(var(--primary) / 0.25), 
+        0 0 0 1px hsl(var(--primary) / 0.15),
         0 1px 0 0 hsl(var(--foreground) / 0.05) inset;
       transform: translateY(-8px) scale(1.02);
+    }
+  }
+
+  .neon-hover-text {
+    transition: color 0.3s, text-shadow 0.3s;
+  }
+  @media (hover: hover) {
+    .neon-hover-text:hover {
+      color: hsl(var(--primary));
+      text-shadow: 0 0 8px hsl(var(--primary) / 0.6), 0 0 20px hsl(var(--primary) / 0.25), 0 0 40px hsl(var(--primary) / 0.1);
+    }
+  }
+
+  .neon-hover-border {
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  @media (hover: hover) {
+    .neon-hover-border:hover {
+      border-color: hsl(var(--primary) / 0.5);
+      box-shadow: 0 0 8px 1px hsl(var(--primary) / 0.12), 0 0 20px 2px hsl(var(--primary) / 0.06);
+    }
+  }
+
+  .neon-hover-icon {
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  @media (hover: hover) {
+    .group:hover .neon-hover-icon {
+      background-color: hsl(var(--primary) / 0.2);
+      box-shadow: 0 0 10px 2px hsl(var(--primary) / 0.15), 0 0 20px 4px hsl(var(--primary) / 0.06);
     }
   }
 

@@ -37,7 +37,7 @@ const WhyUs = memo(() => (
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
               className="card-hover p-5 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl cursor-default group backdrop-blur-sm"
             >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-5 group-hover:bg-primary/20 transition-all duration-300">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-5 neon-hover-icon transition-all duration-300">
                 <reason.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
               </div>
               <h3 className="font-bold text-foreground text-base sm:text-lg mb-1.5 sm:mb-2">{reason.title}</h3>

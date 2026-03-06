@@ -47,7 +47,7 @@ const FAQ = memo(() => (
                 value={`faq-${i}`}
                 className="bg-card/80 backdrop-blur-sm border border-border rounded-xl sm:rounded-2xl px-4 sm:px-6 data-[state=open]:border-primary/20 transition-colors duration-300"
               >
-                <AccordionTrigger className="text-left font-semibold text-foreground hover:text-primary transition-colors py-3.5 sm:py-5 text-sm sm:text-base min-h-[44px]">
+                <AccordionTrigger className="text-left font-semibold text-foreground neon-hover-text transition-colors py-3.5 sm:py-5 text-sm sm:text-base min-h-[44px]">
                   {faq.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground leading-relaxed pb-3.5 sm:pb-5 text-xs sm:text-sm">
