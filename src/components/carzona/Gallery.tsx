@@ -27,7 +27,7 @@ const Gallery = () => {
             <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
               Nasz warsztat w akcji
             </h2>
-            <p className="neon-desc max-w-xl mx-auto text-sm sm:text-base md:text-lg">
+            <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
               Zobacz jak wygląda nasza codzienna praca i standardy, które utrzymujemy.
             </p>
           </AnimatedSection>

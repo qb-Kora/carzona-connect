@@ -28,7 +28,7 @@ const FAQ = () => (
           <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
             Często zadawane pytania
           </h2>
-          <p className="neon-desc max-w-xl mx-auto text-sm sm:text-base md:text-lg">
+          <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
             Odpowiedzi na najczęściej zadawane pytania naszych klientów.
           </p>
         </AnimatedSection>

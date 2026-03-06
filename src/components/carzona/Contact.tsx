@@ -93,7 +93,7 @@ const Contact = () => {
           <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
             Umów wizytę online
           </h2>
-          <p className="neon-desc max-w-xl mx-auto text-sm sm:text-base md:text-lg">
+          <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
             Wypełnij formularz — oddzwonimy w ciągu godziny i potwierdzimy termin.
           </p>
         </AnimatedSection>
