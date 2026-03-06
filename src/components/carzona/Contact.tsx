@@ -87,13 +87,13 @@ const Contact = () => {
     <section id="kontakt" className="py-16 sm:py-20 md:py-32 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
-          <span className="text-accent text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
+          <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
             Kontakt
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
+          <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
             Umów wizytę online
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
+          <p className="neon-desc max-w-xl mx-auto text-sm sm:text-base md:text-lg">
             Wypełnij formularz — oddzwonimy w ciągu godziny i potwierdzimy termin.
           </p>
         </AnimatedSection>
