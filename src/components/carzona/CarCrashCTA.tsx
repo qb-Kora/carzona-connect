@@ -45,20 +45,18 @@ const CarCrashCTA = memo(() => {
   // Center them: leftX + 30 = 80 → leftX = 50, rightX = 70
   const dLeftDrive = 34;
   const dLeftCrash = 42;
-  const dLeftMerge = 50;
+  const dLeftMerge = 45;
   const dRightDrive = 86;
   const dRightCrash = 78;
-  const dRightMerge = 70;
+  const dRightMerge = 75;
 
-  // Mobile: container 110px, car 24px, center=55
-  // Left front wheel at x+18, right front wheel at x+6. Touch: leftX+18 = rightX+6 → rightX=leftX+12
-  // Center: leftX+18=55 → leftX=37, rightX=49
+  // Mobile
   const mLeftDrive = 25;
   const mLeftCrash = 33;
-  const mLeftMerge = 37;
+  const mLeftMerge = 35;
   const mRightDrive = 61;
   const mRightCrash = 53;
-  const mRightMerge = 49;
+  const mRightMerge = 51;
 
   const getDesktopLeftAnim = () => {
     if (phase === "driving") return { x: dLeftDrive, rotate: 0 };

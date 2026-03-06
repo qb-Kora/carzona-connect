@@ -46,8 +46,9 @@ const Gallery = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 onClick={() => setLightbox(i)}
-                className="group relative aspect-[3/2] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer"
+                className="group relative aspect-[3/2] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer touch-manipulation"
                 whileHover={{ rotateX: baseRotateX - 2, rotateY: baseRotateY * 1.4, scale: 1.06, z: 40 }}
+                whileTap={{ scale: 0.98 }}
                 style={{ transformPerspective: 700, transformStyle: "preserve-3d" }}
               >
                 <img
@@ -56,7 +57,7 @@ const Gallery = () => {
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 will-change-transform"
                 />
-                <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
                   <ZoomIn className="w-6 h-6 sm:w-8 sm:h-8 text-foreground" />
                 </div>
               </motion.button>
