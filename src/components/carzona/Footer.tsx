@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin, Clock, Wrench, ChevronRight } from "lucide-react";
 import Logo from "./Logo";
 
 const Footer = memo(() => (
-  <footer className="relative border-t border-border/50 pt-12 sm:pt-16 md:pt-20 pb-24 md:pb-12 overflow-hidden">
+  <footer className="relative border-t border-border/50 pt-12 sm:pt-16 md:pt-20 pb-24 md:pb-12 overflow-hidden z-30">
     {/* Neon glow line at top */}
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-primary/60 to-transparent" aria-hidden="true" />
     
