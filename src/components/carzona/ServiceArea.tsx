@@ -11,7 +11,7 @@ const cities = [
 
 const LASER_COUNT = 20;
 const MARGIN = 60;
-const MAX_TRAIL = 200;
+const MAX_TRAIL = 800;
 const GREEN_SLOTS = new Set([0]);
 
 interface Laser {
