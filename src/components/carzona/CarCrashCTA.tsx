@@ -33,16 +33,6 @@ const CarCrashCTA = memo(() => {
   const crashTransition = { duration: 0.12, type: "spring" as const, stiffness: 600, damping: 12 };
   const mergeTransition = { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
 
-  // Desktop: container 160px, car 40px, center=80
-  // After crash they touch at center. Merged: overlap so front wheels share.
-  // Left car: crash at x=40 (right edge at 80), merged at x=52 (overlap 12px)
-  // Right car: crash at x=80 (left edge at 80), merged at x=68 (overlap 12px)
-  // Desktop: container 160px, car icon 40px wide. Center = 80.
-  // Merged: front wheels touch. Left car right edge at ~80, right car left edge at ~80
-  // Car icon: wheels at ~25% and ~75% of width. Front wheel = right side for left car.
-  // Left car front wheel at x + 30 (75% of 40). Right car front wheel at x + 10 (25% of 40).
-  // Touch: leftX + 30 = rightX + 10 → rightX = leftX + 20
-  // Center them: leftX + 30 = 80 → leftX = 50, rightX = 70
   const dLeftDrive = 34;
   const dLeftCrash = 42;
   const dLeftMerge = 45;
@@ -50,7 +40,6 @@ const CarCrashCTA = memo(() => {
   const dRightCrash = 78;
   const dRightMerge = 75;
 
-  // Mobile
   const mLeftDrive = 25;
   const mLeftCrash = 33;
   const mLeftMerge = 35;
@@ -85,6 +74,34 @@ const CarCrashCTA = memo(() => {
     return mergeTransition;
   };
 
+  const BubbleContent = ({ size = "base" }: { size?: "base" | "sm" }) => (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.3 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.5 }}
+      transition={{ type: "spring", stiffness: 400, damping: 15 }}
+      className="absolute pointer-events-auto cursor-pointer z-50 flex justify-center"
+      style={{ top: size === "sm" ? -4 : -8, left: 0, right: 0 }}
+      onClick={handleClick}
+    >
+      <motion.div animate={{ y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
+        <div
+          className={`backdrop-blur-md text-accent font-bold ${size === "sm" ? "text-xs px-3 py-1.5 rounded-lg" : "text-base px-5 py-2 rounded-xl"} border-2 border-accent active:scale-95 transition-transform duration-150 whitespace-nowrap relative touch-manipulation`}
+          style={{
+            background: "hsl(var(--background) / 0.5)",
+            boxShadow: `0 0 ${size === "sm" ? "15" : "20"}px hsl(var(--accent) / 0.4), 0 0 ${size === "sm" ? "30" : "40"}px hsl(var(--accent) / 0.15)`,
+          }}
+        >
+          Pomocy!
+          <div
+            className={`absolute -bottom-[${size === "sm" ? "6" : "7"}px] left-1/2 -translate-x-1/2 ${size === "sm" ? "w-2 h-2" : "w-3 h-3"} border-b-2 border-r-2 border-accent rotate-45`}
+            style={{ background: "hsl(var(--background) / 0.5)" }}
+          />
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+
   return (
     <>
       {/* Desktop */}
@@ -92,24 +109,12 @@ const CarCrashCTA = memo(() => {
         className="fixed bottom-8 z-50 pointer-events-none hidden md:block"
         style={{ left: "50%", marginLeft: -80, width: 160, height: 100 }}
       >
-        <motion.div
-          initial={{ x: -80 }}
-          animate={getDesktopLeftAnim()}
-          transition={getTransition()}
-          className="absolute bottom-0"
-        >
+        <motion.div initial={{ x: -80 }} animate={getDesktopLeftAnim()} transition={getTransition()} className="absolute bottom-0">
           <Car size={40} className="text-primary" strokeWidth={1.5} />
         </motion.div>
-
-        <motion.div
-          initial={{ x: 240 }}
-          animate={getDesktopRightAnim()}
-          transition={getTransition()}
-          className="absolute bottom-0"
-        >
+        <motion.div initial={{ x: 240 }} animate={getDesktopRightAnim()} transition={getTransition()} className="absolute bottom-0">
           <Car size={40} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
         </motion.div>
-
         <AnimatePresence>
           {phase !== "driving" && (
             <motion.div
@@ -121,35 +126,8 @@ const CarCrashCTA = memo(() => {
             >💥</motion.div>
           )}
         </AnimatePresence>
-
         <AnimatePresence>
-          {phase === "merged" && bubbleVisible && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.3 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.5 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              className="absolute pointer-events-auto cursor-pointer z-50 flex justify-center"
-              style={{ top: -8, left: 0, right: 0 }}
-              onClick={handleClick}
-            >
-              <motion.div animate={{ y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
-                <div
-                  className="backdrop-blur-md text-accent font-bold text-base px-5 py-2 rounded-xl border-2 border-accent hover:scale-105 active:scale-95 transition-transform duration-150 whitespace-nowrap relative"
-                  style={{
-                    background: "hsl(var(--background) / 0.5)",
-                    boxShadow: "0 0 20px hsl(var(--accent) / 0.4), 0 0 40px hsl(var(--accent) / 0.15)",
-                  }}
-                >
-                  Pomocy!
-                  <div
-                    className="absolute -bottom-[7px] left-1/2 -translate-x-1/2 w-3 h-3 border-b-2 border-r-2 border-accent rotate-45"
-                    style={{ background: "hsl(var(--background) / 0.5)" }}
-                  />
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
+          {phase === "merged" && bubbleVisible && <BubbleContent />}
         </AnimatePresence>
       </div>
 
@@ -158,24 +136,12 @@ const CarCrashCTA = memo(() => {
         className="fixed bottom-[70px] z-50 pointer-events-none md:hidden"
         style={{ left: "50%", marginLeft: -55, width: 110, height: 75 }}
       >
-        <motion.div
-          initial={{ x: -60 }}
-          animate={getMobileLeftAnim()}
-          transition={getTransition()}
-          className="absolute bottom-0"
-        >
+        <motion.div initial={{ x: -60 }} animate={getMobileLeftAnim()} transition={getTransition()} className="absolute bottom-0">
           <Car size={24} className="text-primary" strokeWidth={1.5} />
         </motion.div>
-
-        <motion.div
-          initial={{ x: 170 }}
-          animate={getMobileRightAnim()}
-          transition={getTransition()}
-          className="absolute bottom-0"
-        >
+        <motion.div initial={{ x: 170 }} animate={getMobileRightAnim()} transition={getTransition()} className="absolute bottom-0">
           <Car size={24} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
         </motion.div>
-
         <AnimatePresence>
           {phase !== "driving" && (
             <motion.div
@@ -187,35 +153,8 @@ const CarCrashCTA = memo(() => {
             >💥</motion.div>
           )}
         </AnimatePresence>
-
         <AnimatePresence>
-          {phase === "merged" && bubbleVisible && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.3 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.5 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              className="absolute pointer-events-auto cursor-pointer z-50 flex justify-center"
-              style={{ top: -4, left: 0, right: 0 }}
-              onClick={handleClick}
-            >
-              <motion.div animate={{ y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}>
-                <div
-                  className="backdrop-blur-md text-accent font-bold text-xs px-3 py-1.5 rounded-lg border-2 border-accent active:scale-95 transition-transform duration-150 whitespace-nowrap relative"
-                  style={{
-                    background: "hsl(var(--background) / 0.5)",
-                    boxShadow: "0 0 15px hsl(var(--accent) / 0.4), 0 0 30px hsl(var(--accent) / 0.15)",
-                  }}
-                >
-                  Pomocy!
-                  <div
-                    className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-2 h-2 border-b-2 border-r-2 border-accent rotate-45"
-                    style={{ background: "hsl(var(--background) / 0.5)" }}
-                  />
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
+          {phase === "merged" && bubbleVisible && <BubbleContent size="sm" />}
         </AnimatePresence>
       </div>
     </>

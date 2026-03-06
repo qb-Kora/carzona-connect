@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import { Phone, Mail, MapPin, Send, Clock, CheckCircle } from "lucide-react";
 
-const services = [
+const serviceOptions = [
   "Diagnostyka komputerowa",
   "Mechanika ogólna",
   "Wymiana rozrządu",
@@ -22,14 +22,14 @@ const hours = [
   "14:00", "14:30", "15:00", "15:30", "16:00", "16:30",
 ];
 
-const Contact = () => {
+const Contact = memo(() => {
   const [form, setForm] = useState({
     name: "", phone: "", email: "", service: "", car: "", date: "", time: "", message: "", rodo: false,
   });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const validate = () => {
+  const validate = useCallback(() => {
     const e: Record<string, string> = {};
     if (!form.name.trim()) e.name = "Podaj imię i nazwisko";
     if (!form.phone.trim() || form.phone.replace(/\D/g, "").length < 9) e.phone = "Podaj poprawny numer telefonu";
@@ -40,19 +40,17 @@ const Contact = () => {
     if (!form.rodo) e.rodo = "Wymagana zgoda RODO";
     setErrors(e);
     return Object.keys(e).length === 0;
-  };
+  }, [form]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) {
-      setSubmitted(true);
-    }
-  };
+    if (validate()) setSubmitted(true);
+  }, [validate]);
 
-  const update = (field: string, value: string | boolean) => {
+  const update = useCallback((field: string, value: string | boolean) => {
     setForm(s => ({ ...s, [field]: value }));
-    if (errors[field]) setErrors(e => { const n = { ...e }; delete n[field]; return n; });
-  };
+    setErrors(e => { if (!e[field]) return e; const n = { ...e }; delete n[field]; return n; });
+  }, []);
 
   const inputClass = (field: string) =>
     `w-full px-3 sm:px-4 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl bg-secondary border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all min-h-[44px] ${errors[field] ? "border-destructive" : "border-border"}`;
@@ -73,7 +71,7 @@ const Contact = () => {
             <p className="text-muted-foreground mb-6 text-sm sm:text-base">Twoje zgłoszenie zostało wysłane. Oddzwonimy w ciągu godziny.</p>
             <button
               onClick={() => { setSubmitted(false); setForm({ name: "", phone: "", email: "", service: "", car: "", date: "", time: "", message: "", rodo: false }); }}
-              className="text-accent font-semibold hover:underline min-h-[44px]"
+              className="text-accent font-semibold hover:underline min-h-[44px] touch-manipulation"
             >
               Wyślij kolejne zgłoszenie
             </button>
@@ -101,12 +99,11 @@ const Contact = () => {
         <div className="grid lg:grid-cols-5 gap-5 sm:gap-6 md:gap-8">
           {/* Info cards */}
           <motion.div
-            initial={{ opacity: 0, x: -30, rotateY: 5 }}
-            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="lg:col-span-2 space-y-2.5 sm:space-y-3 md:space-y-4 perspective-grid"
-            style={{ transformPerspective: 1000 }}
+            className="lg:col-span-2 space-y-2.5 sm:space-y-3 md:space-y-4"
           >
             <a
               href="tel:663881585"
@@ -159,12 +156,11 @@ const Contact = () => {
 
           {/* Form */}
           <motion.div
-            initial={{ opacity: 0, x: 30, rotateY: -5 }}
-            whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-3"
-            style={{ transformPerspective: 1000 }}
           >
             <div className="p-4 sm:p-6 md:p-10 rounded-2xl sm:rounded-3xl bg-card border border-border raised-surface">
               <h3 className="font-bold text-foreground text-lg sm:text-xl mb-1.5 sm:mb-2">Zarezerwuj termin</h3>
@@ -200,7 +196,7 @@ const Contact = () => {
                   <label htmlFor="service" className="block text-xs sm:text-sm font-medium text-foreground mb-1.5 sm:mb-2">Usługa *</label>
                   <select id="service" value={form.service} onChange={(e) => update("service", e.target.value)} className={inputClass("service")}>
                     <option value="">Wybierz usługę...</option>
-                    {services.map(s => <option key={s} value={s}>{s}</option>)}
+                    {serviceOptions.map(s => <option key={s} value={s}>{s}</option>)}
                   </select>
                   {errors.service && <p className="text-destructive text-xs mt-1">{errors.service}</p>}
                 </div>
@@ -237,7 +233,7 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-2 w-full bg-accent text-accent-foreground py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base btn-shine hover:shadow-md hover:shadow-accent/15 transition-all duration-300 min-h-[44px]"
+                  className="flex items-center justify-center gap-2 w-full bg-accent text-accent-foreground py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base btn-shine hover:shadow-md hover:shadow-accent/15 transition-all duration-300 min-h-[44px] active:scale-[0.98] touch-manipulation"
                 >
                   <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                   Umów wizytę
@@ -249,6 +245,8 @@ const Contact = () => {
       </div>
     </section>
   );
-};
+});
+
+Contact.displayName = "Contact";
 
 export default Contact;

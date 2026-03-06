@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, memo } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import InteractiveScrews from "./InteractiveScrews";
@@ -35,7 +35,7 @@ const realizations = [
   },
 ];
 
-const Realizations = () => {
+const Realizations = memo(() => {
   const sectionRef = useRef<HTMLElement>(null);
 
   return (
@@ -54,19 +54,15 @@ const Realizations = () => {
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 perspective-grid">
-          {realizations.map((r, i) => {
-            const baseRotateY = i % 2 === 0 ? 5 : -5;
-            return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+          {realizations.map((r, i) => (
             <motion.div
               key={r.title}
-              initial={{ opacity: 0, y: 30, rotateX: 6 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: -1, rotateY: baseRotateY }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="card-hover p-4 sm:p-5 md:p-7 rounded-2xl sm:rounded-3xl group backdrop-blur-sm pointer-events-auto"
-              whileHover={{ rotateX: -3, rotateY: baseRotateY * 1.3, scale: 1.04, z: 30 }}
-              style={{ transformPerspective: 800, transformStyle: "preserve-3d" }}
             >
               <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
                 <h3 className="font-bold text-foreground text-sm sm:text-base md:text-lg leading-tight">{r.title}</h3>
@@ -89,12 +85,13 @@ const Realizations = () => {
                 </div>
               </div>
             </motion.div>
-            );
-          })}
+          ))}
         </div>
       </div>
     </section>
   );
-};
+});
+
+Realizations.displayName = "Realizations";
 
 export default Realizations;

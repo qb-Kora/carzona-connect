@@ -1,6 +1,6 @@
 import { useEffect, useRef, memo } from "react";
 
-const PARTICLE_COUNT = 45;
+const getParticleCount = () => (typeof window !== "undefined" && window.innerWidth < 768) ? 20 : 30;
 
 interface Particle {
   x: number; y: number; size: number;
@@ -18,14 +18,14 @@ const MetalParticles = memo(() => {
     if (!ctx) return;
 
     let w = 0, h = 0;
-    let raf: number;
-    let isVisible = true;
+    let raf = 0;
+    let isVisible = false;
 
     const resize = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
       w = parent.offsetWidth; h = parent.offsetHeight;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -33,7 +33,6 @@ const MetalParticles = memo(() => {
     resize();
     window.addEventListener("resize", resize);
 
-    // Pause when off-screen
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -43,7 +42,8 @@ const MetalParticles = memo(() => {
     );
     observer.observe(canvas);
 
-    const particles: Particle[] = Array.from({ length: PARTICLE_COUNT }, () => ({
+    const count = getParticleCount();
+    const particles: Particle[] = Array.from({ length: count }, () => ({
       x: Math.random() * (w || 500),
       y: Math.random() * (h || 500),
       size: 2 + Math.random() * 4,
@@ -74,7 +74,6 @@ const MetalParticles = memo(() => {
       }
       raf = requestAnimationFrame(animate);
     };
-    raf = requestAnimationFrame(animate);
 
     return () => {
       cancelAnimationFrame(raf);

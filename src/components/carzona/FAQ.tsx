@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import ParallaxSection from "./ParallaxSection";
@@ -17,7 +18,7 @@ const faqs = [
   { q: "Ile kosztuje diagnostyka komputerowa?", a: "Cena diagnostyki komputerowej zaczyna się od 50 zł. Dokładny koszt zależy od zakresu diagnostyki. Zadzwoń, a podamy szczegółową wycenę." },
 ];
 
-const FAQ = () => (
+const FAQ = memo(() => (
   <ParallaxSection imageUrl="https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=1920&q=80&fit=crop" overlayOpacity={0.92}>
     <section id="faq" className="py-16 sm:py-20 md:py-32 relative">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,34 +34,34 @@ const FAQ = () => (
           </p>
         </AnimatedSection>
 
-        <Accordion type="single" collapsible className="space-y-2 sm:space-y-3 perspective-grid">
+        <Accordion type="single" collapsible className="space-y-2 sm:space-y-3">
           {faqs.map((faq, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 15, rotateX: 4 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.06 }}
-              whileHover={{ rotateX: -2, scale: 1.01, z: 10 }}
-              style={{ transformPerspective: 800, transformStyle: "preserve-3d" }}
             >
-            <AccordionItem
-              value={`faq-${i}`}
-              className="bg-card/80 backdrop-blur-sm border border-border rounded-xl sm:rounded-2xl px-4 sm:px-6 data-[state=open]:border-primary/20 transition-colors duration-300"
-            >
-              <AccordionTrigger className="text-left font-semibold text-foreground hover:text-primary transition-colors py-3.5 sm:py-5 text-sm sm:text-base min-h-[44px]">
-                {faq.q}
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground leading-relaxed pb-3.5 sm:pb-5 text-xs sm:text-sm">
-                {faq.a}
-              </AccordionContent>
-            </AccordionItem>
+              <AccordionItem
+                value={`faq-${i}`}
+                className="bg-card/80 backdrop-blur-sm border border-border rounded-xl sm:rounded-2xl px-4 sm:px-6 data-[state=open]:border-primary/20 transition-colors duration-300"
+              >
+                <AccordionTrigger className="text-left font-semibold text-foreground hover:text-primary transition-colors py-3.5 sm:py-5 text-sm sm:text-base min-h-[44px]">
+                  {faq.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed pb-3.5 sm:pb-5 text-xs sm:text-sm">
+                  {faq.a}
+                </AccordionContent>
+              </AccordionItem>
             </motion.div>
           ))}
         </Accordion>
       </div>
     </section>
   </ParallaxSection>
-);
+));
+
+FAQ.displayName = "FAQ";
 
 export default FAQ;

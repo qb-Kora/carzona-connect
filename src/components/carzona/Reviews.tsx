@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import ParallaxSection from "./ParallaxSection";
@@ -13,10 +13,15 @@ const reviews = [
   { name: "Ewa S.", text: "Klimatyzacja naprawiona tego samego dnia. Miło zaskoczona szybkością i ceną. Super warsztat!", rating: 5, car: "Opel Astra J" },
 ];
 
-const Reviews = () => {
+const stars = Array.from({ length: 5 });
+
+const Reviews = memo(() => {
   const [current, setCurrent] = useState(0);
   const perPage = 3;
   const maxPage = Math.ceil(reviews.length / perPage) - 1;
+
+  const prev = useCallback(() => setCurrent(c => Math.max(0, c - 1)), []);
+  const next = useCallback(() => setCurrent(c => Math.min(maxPage, c + 1)), [maxPage]);
 
   return (
     <ParallaxSection imageUrl="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80&fit=crop" overlayOpacity={0.9}>
@@ -35,27 +40,23 @@ const Reviews = () => {
           </AnimatedSection>
 
           {/* Desktop grid */}
-          <div className="hidden md:grid md:grid-cols-3 gap-5 perspective-grid">
+          <div className="hidden md:grid md:grid-cols-3 gap-5">
             <AnimatePresence mode="popLayout">
-              {reviews.slice(current * perPage, current * perPage + perPage).map((review, idx) => {
-                const baseRotateY = idx === 0 ? 6 : idx === 2 ? -6 : 0;
-                return (
+              {reviews.slice(current * perPage, current * perPage + perPage).map((review) => (
                 <motion.div
                   key={review.name}
-                  initial={{ opacity: 0, y: 20, rotateX: 8 }}
-                  animate={{ opacity: 1, y: 0, rotateX: -1, rotateY: baseRotateY }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.4 }}
                   className="card-hover p-6 sm:p-7 rounded-2xl sm:rounded-3xl backdrop-blur-sm"
-                  whileHover={{ rotateX: -3, rotateY: baseRotateY * 1.4, scale: 1.04, z: 35 }}
-                  style={{ transformPerspective: 800, transformStyle: "preserve-3d" }}
                   itemScope
                   itemType="https://schema.org/Review"
                 >
                   <Quote className="w-7 h-7 sm:w-8 sm:h-8 text-primary/15 mb-3 sm:mb-4" />
                   <div className="flex gap-0.5 mb-3 sm:mb-4" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
                     <meta itemProp="ratingValue" content={String(review.rating)} />
-                    {Array.from({ length: review.rating }).map((_, j) => (
+                    {stars.map((_, j) => (
                       <Star key={j} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-accent text-accent" />
                     ))}
                   </div>
@@ -72,8 +73,7 @@ const Reviews = () => {
                     </div>
                   </div>
                 </motion.div>
-              );
-              })}
+              ))}
             </AnimatePresence>
           </div>
 
@@ -90,7 +90,7 @@ const Reviews = () => {
               >
                 <Quote className="w-6 h-6 text-primary/15 mb-2" />
                 <div className="flex gap-0.5 mb-2">
-                  {Array.from({ length: reviews[current].rating }).map((_, j) => (
+                  {stars.map((_, j) => (
                     <Star key={j} className="w-3.5 h-3.5 fill-accent text-accent" />
                   ))}
                 </div>
@@ -113,9 +113,9 @@ const Reviews = () => {
           {/* Nav */}
           <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
             <button
-              onClick={() => setCurrent(c => Math.max(0, c - 1))}
+              onClick={prev}
               disabled={current === 0}
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all disabled:opacity-30 min-h-[44px] min-w-[44px]"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all disabled:opacity-30 min-h-[44px] min-w-[44px] touch-manipulation"
               aria-label="Poprzednie opinie"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -125,7 +125,7 @@ const Reviews = () => {
                 <button
                   key={i}
                   onClick={() => setCurrent(i)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
+                  className={`h-2 rounded-full transition-all duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center ${
                     i === current ? "bg-primary w-7" : "bg-border hover:bg-muted-foreground w-2"
                   }`}
                   aria-label={`Strona ${i + 1}`}
@@ -133,9 +133,9 @@ const Reviews = () => {
               ))}
             </div>
             <button
-              onClick={() => setCurrent(c => Math.min(maxPage, c + 1))}
+              onClick={next}
               disabled={current === maxPage}
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all disabled:opacity-30 min-h-[44px] min-w-[44px]"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all disabled:opacity-30 min-h-[44px] min-w-[44px] touch-manipulation"
               aria-label="Następne opinie"
             >
               <ChevronRight className="w-4 h-4" />
@@ -145,6 +145,8 @@ const Reviews = () => {
       </section>
     </ParallaxSection>
   );
-};
+});
+
+Reviews.displayName = "Reviews";
 
 export default Reviews;

@@ -5,7 +5,6 @@ interface Nut {
   rotation: number; vr: number; size: number; opacity: number;
 }
 
-const NUT_COUNT = 120;
 const PUSH_RADIUS = 90;
 const PUSH_FORCE = 2.5;
 const FRICTION = 0.96;
@@ -15,6 +14,9 @@ interface InteractiveScrewsProps {
   sectionRef?: React.RefObject<HTMLElement>;
 }
 
+// Reduce count on mobile for performance
+const getNutCount = () => (typeof window !== "undefined" && window.innerWidth < 768) ? 40 : 80;
+
 const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nutsRef = useRef<Nut[]>([]);
@@ -22,7 +24,8 @@ const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
   const animFrameRef = useRef<number>(0);
 
   const initNuts = useCallback((w: number, h: number) => {
-    nutsRef.current = Array.from({ length: NUT_COUNT }, () => ({
+    const count = getNutCount();
+    nutsRef.current = Array.from({ length: count }, () => ({
       x: Math.random() * (w - 30) + 15,
       y: Math.random() * (h - 30) + 15,
       vx: 0, vy: 0,
@@ -39,14 +42,14 @@ const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let isVisible = true;
+    let isVisible = false;
 
     const resize = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
       const w = parent.offsetWidth;
       const h = parent.offsetHeight;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       canvas.style.width = w + "px";
@@ -57,7 +60,6 @@ const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
     resize();
     window.addEventListener("resize", resize);
 
-    // Pause when off-screen
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -117,8 +119,8 @@ const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
       const dt = Math.min((time - lastTime) / 16, 3);
       lastTime = time;
 
-      const w = canvas.width / (Math.min(window.devicePixelRatio || 1, 2));
-      const h = canvas.height / (Math.min(window.devicePixelRatio || 1, 2));
+      const w = canvas.width / (Math.min(window.devicePixelRatio || 1, 1.5));
+      const h = canvas.height / (Math.min(window.devicePixelRatio || 1, 1.5));
       ctx.clearRect(0, 0, w, h);
 
       const mouse = mouseRef.current;
@@ -128,9 +130,10 @@ const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
         const nut = nuts[i];
         const dx = nut.x - mouse.x;
         const dy = nut.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        const distSq = dx * dx + dy * dy;
 
-        if (dist < PUSH_RADIUS && dist > 0) {
+        if (distSq < PUSH_RADIUS * PUSH_RADIUS && distSq > 0) {
+          const dist = Math.sqrt(distSq);
           const force = (1 - dist / PUSH_RADIUS) * PUSH_FORCE * dt;
           nut.vx += (dx / dist) * force;
           nut.vy += (dy / dist) * force;
@@ -154,8 +157,6 @@ const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
 
       animFrameRef.current = requestAnimationFrame(animate);
     };
-
-    animFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
       cancelAnimationFrame(animFrameRef.current);
