@@ -3,18 +3,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Car } from "lucide-react";
 
 const CarCrashCTA = memo(() => {
-  const [phase, setPhase] = useState<"driving" | "crash" | "bubble">("driving");
+  const [phase, setPhase] = useState<"driving" | "crash" | "merged">("driving");
   const [visible, setVisible] = useState(true);
   const [bubbleVisible, setBubbleVisible] = useState(false);
 
   useEffect(() => {
     const t1 = setTimeout(() => setPhase("crash"), 2400);
-    const t2 = setTimeout(() => setPhase("bubble"), 3200);
+    const t2 = setTimeout(() => setPhase("merged"), 3200);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
   useEffect(() => {
-    if (phase !== "bubble") return;
+    if (phase !== "merged") return;
     setBubbleVisible(true);
     const interval = setInterval(() => {
       setBubbleVisible(prev => !prev);
@@ -29,23 +29,55 @@ const CarCrashCTA = memo(() => {
 
   if (!visible) return null;
 
-  // Desktop: container 160px, car icon 40px
-  // Center = 80. Left car right edge at center: x = 80-40 = 40. Right car left edge at center: x = 80
-  // Driving: small gap. Crash: touching.
-  const dLeftDrive = 34;   // right edge at 74, gap of 12px
-  const dLeftCrash = 40;   // right edge at 80 = center (touching)
-  const dRightDrive = 86;  // left edge at 86, gap of 12px  
-  const dRightCrash = 80;  // left edge at 80 = center (touching)
-
-  // Mobile: container 110px, car icon 24px
-  // Center = 55. Left: x = 55-24 = 31. Right: x = 55
-  const mLeftDrive = 25;
-  const mLeftCrash = 31;
-  const mRightDrive = 61;
-  const mRightCrash = 55;
-
   const driveTransition = { duration: 2.4, ease: [0.22, 0.68, 0.36, 1] as const };
   const crashTransition = { duration: 0.12, type: "spring" as const, stiffness: 600, damping: 12 };
+  const mergeTransition = { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
+
+  // Desktop: container 160px, car 40px, center=80
+  // After crash they touch at center. Merged: overlap so front wheels share.
+  // Left car: crash at x=40 (right edge at 80), merged at x=52 (overlap 12px)
+  // Right car: crash at x=80 (left edge at 80), merged at x=68 (overlap 12px)
+  const dLeftDrive = 34;
+  const dLeftCrash = 40;
+  const dLeftMerge = 52;
+  const dRightDrive = 86;
+  const dRightCrash = 80;
+  const dRightMerge = 68;
+
+  // Mobile: container 110px, car 24px, center=55
+  const mLeftDrive = 25;
+  const mLeftCrash = 31;
+  const mLeftMerge = 39;
+  const mRightDrive = 61;
+  const mRightCrash = 55;
+  const mRightMerge = 47;
+
+  const getDesktopLeftAnim = () => {
+    if (phase === "driving") return { x: dLeftDrive, rotate: 0 };
+    if (phase === "crash") return { x: dLeftCrash, rotate: 10 };
+    return { x: dLeftMerge, rotate: 15 };
+  };
+  const getDesktopRightAnim = () => {
+    if (phase === "driving") return { x: dRightDrive, rotate: 0 };
+    if (phase === "crash") return { x: dRightCrash, rotate: -10 };
+    return { x: dRightMerge, rotate: -15 };
+  };
+  const getMobileLeftAnim = () => {
+    if (phase === "driving") return { x: mLeftDrive, rotate: 0 };
+    if (phase === "crash") return { x: mLeftCrash, rotate: 10 };
+    return { x: mLeftMerge, rotate: 15 };
+  };
+  const getMobileRightAnim = () => {
+    if (phase === "driving") return { x: mRightDrive, rotate: 0 };
+    if (phase === "crash") return { x: mRightCrash, rotate: -10 };
+    return { x: mRightMerge, rotate: -15 };
+  };
+
+  const getTransition = () => {
+    if (phase === "driving") return driveTransition;
+    if (phase === "crash") return crashTransition;
+    return mergeTransition;
+  };
 
   return (
     <>
@@ -54,27 +86,24 @@ const CarCrashCTA = memo(() => {
         className="fixed bottom-8 z-50 pointer-events-none hidden md:block"
         style={{ left: "50%", marginLeft: -80, width: 160, height: 100 }}
       >
-        {/* Left car — faces right */}
         <motion.div
           initial={{ x: -80 }}
-          animate={phase === "driving" ? { x: dLeftDrive, rotate: 0 } : { x: dLeftCrash, rotate: 10 }}
-          transition={phase === "driving" ? driveTransition : crashTransition}
+          animate={getDesktopLeftAnim()}
+          transition={getTransition()}
           className="absolute bottom-0"
         >
           <Car size={40} className="text-primary" strokeWidth={1.5} />
         </motion.div>
 
-        {/* Right car — faces left (scaleX -1) */}
         <motion.div
           initial={{ x: 240 }}
-          animate={phase === "driving" ? { x: dRightDrive, rotate: 0 } : { x: dRightCrash, rotate: -10 }}
-          transition={phase === "driving" ? driveTransition : crashTransition}
+          animate={getDesktopRightAnim()}
+          transition={getTransition()}
           className="absolute bottom-0"
         >
           <Car size={40} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
         </motion.div>
 
-        {/* Crash flash */}
         <AnimatePresence>
           {phase !== "driving" && (
             <motion.div
@@ -87,9 +116,8 @@ const CarCrashCTA = memo(() => {
           )}
         </AnimatePresence>
 
-        {/* Bubble — centered above cars */}
         <AnimatePresence>
-          {phase === "bubble" && bubbleVisible && (
+          {phase === "merged" && bubbleVisible && (
             <motion.div
               initial={{ opacity: 0, scale: 0.3 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -126,8 +154,8 @@ const CarCrashCTA = memo(() => {
       >
         <motion.div
           initial={{ x: -60 }}
-          animate={phase === "driving" ? { x: mLeftDrive, rotate: 0 } : { x: mLeftCrash, rotate: 10 }}
-          transition={phase === "driving" ? driveTransition : crashTransition}
+          animate={getMobileLeftAnim()}
+          transition={getTransition()}
           className="absolute bottom-0"
         >
           <Car size={24} className="text-primary" strokeWidth={1.5} />
@@ -135,8 +163,8 @@ const CarCrashCTA = memo(() => {
 
         <motion.div
           initial={{ x: 170 }}
-          animate={phase === "driving" ? { x: mRightDrive, rotate: 0 } : { x: mRightCrash, rotate: -10 }}
-          transition={phase === "driving" ? driveTransition : crashTransition}
+          animate={getMobileRightAnim()}
+          transition={getTransition()}
           className="absolute bottom-0"
         >
           <Car size={24} className="text-primary" style={{ transform: "scaleX(-1)" }} strokeWidth={1.5} />
@@ -155,7 +183,7 @@ const CarCrashCTA = memo(() => {
         </AnimatePresence>
 
         <AnimatePresence>
-          {phase === "bubble" && bubbleVisible && (
+          {phase === "merged" && bubbleVisible && (
             <motion.div
               initial={{ opacity: 0, scale: 0.3 }}
               animate={{ opacity: 1, scale: 1 }}
