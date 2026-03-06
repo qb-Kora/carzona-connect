@@ -62,23 +62,23 @@ const CarCrashCTA = memo(() => {
 
   const getDesktopLeftAnim = () => {
     if (phase === "driving") return { x: dLeftDrive, rotate: 0 };
-    if (phase === "crash") return { x: dLeftCrash, rotate: 10 };
-    return { x: dLeftMerge, rotate: 15 };
+    if (phase === "crash") return { x: dLeftCrash, rotate: 6 };
+    return { x: dLeftMerge, rotate: 8 };
   };
   const getDesktopRightAnim = () => {
     if (phase === "driving") return { x: dRightDrive, rotate: 0 };
-    if (phase === "crash") return { x: dRightCrash, rotate: -10 };
-    return { x: dRightMerge, rotate: -15 };
+    if (phase === "crash") return { x: dRightCrash, rotate: -6 };
+    return { x: dRightMerge, rotate: -8 };
   };
   const getMobileLeftAnim = () => {
     if (phase === "driving") return { x: mLeftDrive, rotate: 0 };
-    if (phase === "crash") return { x: mLeftCrash, rotate: 10 };
-    return { x: mLeftMerge, rotate: 15 };
+    if (phase === "crash") return { x: mLeftCrash, rotate: 6 };
+    return { x: mLeftMerge, rotate: 8 };
   };
   const getMobileRightAnim = () => {
     if (phase === "driving") return { x: mRightDrive, rotate: 0 };
-    if (phase === "crash") return { x: mRightCrash, rotate: -10 };
-    return { x: mRightMerge, rotate: -15 };
+    if (phase === "crash") return { x: mRightCrash, rotate: -6 };
+    return { x: mRightMerge, rotate: -8 };
   };
 
   const getTransition = () => {
