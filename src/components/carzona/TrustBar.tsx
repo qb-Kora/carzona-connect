@@ -44,15 +44,18 @@ const TrustBar = () => (
     <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.03] via-transparent to-primary/[0.03]" />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 perspective-grid">
-        {items.map((item, i) => (
+        {items.map((item, i) => {
+          const col4 = i % 4;
+          const baseRotateY = col4 === 0 ? 5 : col4 === 1 ? 2 : col4 === 2 ? -2 : -5;
+          return (
           <motion.div
             key={item.label}
             initial={{ opacity: 0, y: 20, rotateX: 8 }}
-            whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+            whileInView={{ opacity: 1, y: 0, rotateX: -1, rotateY: baseRotateY }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
             className="flex items-center gap-2.5 sm:gap-4 group p-3 sm:p-4 rounded-2xl bg-card/40 border border-border/50 backdrop-blur-sm"
-            whileHover={{ rotateX: -3, rotateY: 4, scale: 1.05, z: 15 }}
+            whileHover={{ rotateX: -3, rotateY: baseRotateY * 1.3, scale: 1.05, z: 20 }}
             style={{ transformPerspective: 600, transformStyle: "preserve-3d" }}
           >
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
@@ -67,7 +70,8 @@ const TrustBar = () => (
               <div className="text-[11px] sm:text-xs md:text-sm text-muted-foreground leading-tight">{item.label}</div>
             </div>
           </motion.div>
-        ))}
+          );
+        })}
       </div>
     </div>
   </section>

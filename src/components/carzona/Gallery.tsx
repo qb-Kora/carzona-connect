@@ -33,16 +33,21 @@ const Gallery = () => {
           </AnimatedSection>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4 perspective-grid">
-            {images.map((img, i) => (
+            {images.map((img, i) => {
+              // Gaming monitor inward curve: left→rotateY positive, center→0, right→negative
+              const col3 = i % 3;
+              const baseRotateY = col3 === 0 ? 6 : col3 === 2 ? -6 : 0;
+              const baseRotateX = -2;
+              return (
               <motion.button
                 key={i}
-                initial={{ opacity: 0, y: 20, rotateX: 5 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                initial={{ opacity: 0, y: 20, rotateX: 8 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: baseRotateX, rotateY: baseRotateY }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
                 onClick={() => setLightbox(i)}
                 className="group relative aspect-[3/2] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer"
-                whileHover={{ rotateX: -4, rotateY: (i % 3 - 1) * 4, scale: 1.05, z: 30 }}
+                whileHover={{ rotateX: baseRotateX - 2, rotateY: baseRotateY * 1.4, scale: 1.06, z: 40 }}
                 style={{ transformPerspective: 700, transformStyle: "preserve-3d" }}
               >
                 <img
@@ -55,7 +60,8 @@ const Gallery = () => {
                   <ZoomIn className="w-6 h-6 sm:w-8 sm:h-8 text-foreground" />
                 </div>
               </motion.button>
-            ))}
+              );
+            })}
           </div>
         </div>
 

@@ -27,16 +27,19 @@ const WhyUs = () => (
         </AnimatedSection>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
-          {reasons.map((reason, i) => (
+          {reasons.map((reason, i) => {
+            const col4 = i % 4;
+            const baseRotateY = col4 === 0 ? 5 : col4 === 1 ? 2 : col4 === 2 ? -2 : -5;
+            return (
             <motion.div
               key={reason.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30, rotateX: 5 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: -1, rotateY: baseRotateY }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
               className="card-hover p-5 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl cursor-default group backdrop-blur-sm"
-              whileHover={{ rotateX: -2, rotateY: 3, scale: 1.02 }}
-              style={{ transformPerspective: 800 }}
+              whileHover={{ rotateX: -3, rotateY: baseRotateY * 1.3, scale: 1.04, z: 25 }}
+              style={{ transformPerspective: 800, transformStyle: "preserve-3d" }}
             >
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-5 group-hover:bg-primary/20 transition-all duration-300">
                 <reason.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
@@ -44,7 +47,8 @@ const WhyUs = () => (
               <h3 className="font-bold text-foreground text-base sm:text-lg mb-1.5 sm:mb-2">{reason.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{reason.desc}</p>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
