@@ -39,7 +39,7 @@ const Footer = memo(() => (
               <li key={s}>
                 <a
                   href="#uslugi"
-                  className="group flex items-center gap-1.5 hover:text-foreground transition-colors min-h-[36px] sm:min-h-0"
+                  className="group flex items-center gap-1.5 neon-hover-text transition-colors min-h-[36px] sm:min-h-0"
                 >
                   <ChevronRight className="w-3 h-3 text-primary/60 group-hover:translate-x-0.5 transition-transform" />
                   {s}
@@ -79,12 +79,12 @@ const Footer = memo(() => (
           </h4>
           <ul className="space-y-3 text-sm text-muted-foreground">
             <li>
-              <a href="tel:663881585" className="hover:text-foreground transition-colors font-medium text-foreground min-h-[36px] inline-flex items-center">
+              <a href="tel:663881585" className="neon-hover-text transition-colors font-medium text-foreground min-h-[36px] inline-flex items-center">
                 663 881 585
               </a>
             </li>
             <li>
-              <a href="mailto:sebastian@carzona.pl" className="hover:text-foreground transition-colors break-all min-h-[36px] inline-flex items-center">
+              <a href="mailto:sebastian@carzona.pl" className="neon-hover-text transition-colors break-all min-h-[36px] inline-flex items-center">
                 sebastian@carzona.pl
               </a>
             </li>
@@ -104,7 +104,7 @@ const Footer = memo(() => (
             href="https://maps.google.com/?q=ul.+Konarskiego+17,+44-274+Rybnik"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors font-medium min-h-[36px]"
+            className="inline-flex items-center gap-1 text-xs text-primary neon-hover-text transition-colors font-medium min-h-[36px]"
           >
             Otwórz w mapach
             <ChevronRight className="w-3 h-3" />
@@ -118,10 +118,11 @@ const Footer = memo(() => (
           © {new Date().getFullYear()} CARZONA · Wszelkie prawa zastrzeżone
         </p>
         <div className="flex gap-5 text-xs text-muted-foreground/60">
-          <a href="#" className="hover:text-foreground transition-colors min-h-[36px] inline-flex items-center">
+          <a href="#" className="neon-hover-text transition-colors min-h-[36px] inline-flex items-center">
             Polityka prywatności
           </a>
-          <a href="#" className="hover:text-foreground transition-colors min-h-[36px] inline-flex items-center">
+          <a href="#" className="neon-hover-text transition-colors min-h-[36px] inline-flex items-center">
+          </a>
             Regulamin
           </a>
         </div>

@@ -53,7 +53,7 @@ const TrustBar = memo(() => (
             transition={{ duration: 0.5, delay: i * 0.1 }}
             className="flex items-center gap-2.5 sm:gap-4 group p-3 sm:p-4 rounded-2xl bg-card/40 border border-border/50 backdrop-blur-sm"
           >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 neon-hover-icon transition-colors duration-300">
               <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             </div>
             <div className="min-w-0">

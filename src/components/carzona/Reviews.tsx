@@ -115,7 +115,7 @@ const Reviews = memo(() => {
             <button
               onClick={prev}
               disabled={current === 0}
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all disabled:opacity-30 min-h-[44px] min-w-[44px] touch-manipulation"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground neon-hover-text neon-hover-border transition-all disabled:opacity-30 min-h-[44px] min-w-[44px] touch-manipulation"
               aria-label="Poprzednie opinie"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -135,7 +135,7 @@ const Reviews = memo(() => {
             <button
               onClick={next}
               disabled={current === maxPage}
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all disabled:opacity-30 min-h-[44px] min-w-[44px] touch-manipulation"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground neon-hover-text neon-hover-border transition-all disabled:opacity-30 min-h-[44px] min-w-[44px] touch-manipulation"
               aria-label="Następne opinie"
             >
               <ChevronRight className="w-4 h-4" />

@@ -97,7 +97,7 @@ const Hero = memo(() => {
             </a>
             <a
               href="tel:663881585"
-              className="flex items-center justify-center gap-2.5 text-foreground px-6 py-3.5 sm:py-4 rounded-2xl border border-border hover:border-primary/40 active:bg-card/80 transition-all duration-300 hover:bg-card/60 font-semibold text-sm sm:text-base min-h-[48px] touch-manipulation"
+              className="flex items-center justify-center gap-2.5 text-foreground px-6 py-3.5 sm:py-4 rounded-2xl border border-border neon-hover-border active:bg-card/80 transition-all duration-300 hover:bg-card/60 font-semibold text-sm sm:text-base min-h-[48px] touch-manipulation"
             >
               <Phone className="w-5 h-5 text-primary" />
               Zadzwoń teraz
