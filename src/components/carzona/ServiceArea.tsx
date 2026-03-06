@@ -190,10 +190,10 @@ const ServiceArea = () => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
         <AnimatedSection>
-          <span className="text-accent text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
+          <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
             Obszar działania
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4">
+          <h2 className="neon-heading text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4">
             Warsztat samochodowy dla mieszkańców Rybnika i okolic
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base md:text-lg mb-5 sm:mb-8">
