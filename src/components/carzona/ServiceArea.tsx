@@ -1,7 +1,7 @@
+import { memo, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import { MapPin } from "lucide-react";
-import { useEffect, useRef, useCallback } from "react";
 
 const cities = [
   "Rybnik", "Żory", "Jastrzębie-Zdrój", "Wodzisław Śląski", "Racibórz",
@@ -9,15 +9,14 @@ const cities = [
   "Gliwice", "Zabrze", "Tychy", "Mikołów", "Ornontowice",
 ];
 
-const LASER_COUNT = 20;
+const LASER_COUNT = 12;
 const MARGIN = 60;
-const MAX_TRAIL = 800;
-const GREEN_SLOTS = new Set([0]);
+const MAX_TRAIL = 400;
 
 interface Laser {
   angle: number;
   speed: number;
-  trail: Float32Array; // [x, y, alpha, x, y, alpha, ...]
+  trail: Float32Array;
   trailLen: number;
   hasBeenOnScreen: boolean;
   phase: "entering" | "exiting" | "done";
@@ -29,7 +28,7 @@ interface Laser {
 const isOnScreen = (x: number, y: number, w: number, h: number) =>
   x >= -MARGIN && x <= w + MARGIN && y >= -MARGIN && y <= h + MARGIN;
 
-const LaserCanvas = () => {
+const LaserCanvas = memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lasersRef = useRef<Laser[]>([]);
 
@@ -64,10 +63,13 @@ const LaserCanvas = () => {
     if (!ctx) return;
 
     let cw = 0, ch = 0;
+    let raf = 0;
+    let isVisible = false;
+
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
       cw = rect.width; ch = rect.height;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = cw * dpr;
       canvas.height = ch * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -75,14 +77,24 @@ const LaserCanvas = () => {
     resize();
     window.addEventListener("resize", resize);
 
+    // Pause when off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !raf) raf = requestAnimationFrame(draw);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     lasersRef.current = Array.from({ length: LASER_COUNT }, (_, i) =>
-      createLaser(cw, ch, GREEN_SLOTS.has(i))
+      createLaser(cw, ch, i === 0)
     );
 
-    let raf: number;
-    const FADE_SPEED = 0.012;
+    const FADE_SPEED = 0.015;
 
     const draw = () => {
+      if (!isVisible) { raf = 0; return; }
       ctx.clearRect(0, 0, cw, ch);
       const lasers = lasersRef.current;
       const time = performance.now() / 1000;
@@ -92,8 +104,7 @@ const LaserCanvas = () => {
         const t = l.trail;
 
         if (l.phase === "entering") {
-          // Add new points with sub-stepping
-          const steps = Math.max(1, Math.ceil(l.speed / 3));
+          const steps = Math.max(1, Math.ceil(l.speed / 4));
           const stepSize = l.speed / steps;
           for (let s = 0; s < steps && l.trailLen < MAX_TRAIL; s++) {
             const prev = (l.trailLen - 1) * 3;
@@ -104,7 +115,6 @@ const LaserCanvas = () => {
             l.trailLen++;
           }
 
-          // Fade older points
           for (let p = 0; p < (l.trailLen - 1) * 3; p += 3) {
             t[p + 2] = Math.max(0, t[p + 2] - FADE_SPEED * 0.5);
           }
@@ -116,47 +126,53 @@ const LaserCanvas = () => {
         } else if (l.phase === "exiting") {
           let allDead = true;
           for (let p = 0; p < l.trailLen * 3; p += 3) {
-            t[p + 2] = Math.max(0, t[p + 2] - FADE_SPEED * 2.5);
+            t[p + 2] = Math.max(0, t[p + 2] - FADE_SPEED * 3);
             if (t[p + 2] > 0) allDead = false;
           }
           if (allDead) l.phase = "done";
         }
 
         if (l.phase === "done") {
-          lasers[i] = createLaser(cw, ch, GREEN_SLOTS.has(i));
+          lasers[i] = createLaser(cw, ch, i === 0);
           continue;
         }
 
-        // Draw — batch all segments into single paths per layer
+        // Draw — simplified 2-pass instead of 3
         if (l.trailLen > 1) {
-          const brightness = l.green ? 1.6 : 1;
           const glowH = l.green ? "84,70%,55%" : "217,91%,60%";
           const coreH = l.green ? "84,70%,85%" : "210,100%,80%";
-          const flicker = 0.6 + 0.4 * Math.sin(time * 2.5 + i * 1.7) * Math.sin(time * 1.3 + i * 0.9);
+          const flicker = 0.6 + 0.4 * Math.sin(time * 2.5 + i * 1.7);
 
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
           ctx.lineCap = "round";
 
-          // Draw in 3 passes but skip every other segment for outer glow
-          for (let layer = 0; layer < 3; layer++) {
-            const skip = layer === 0 ? 3 : 1; // outer glow: skip segments for perf
-            ctx.lineWidth = layer === 0 ? 8 : layer === 1 ? 4 : 1;
-            const alphaFactor = (layer === 0 ? 0.06 : layer === 1 ? 0.12 : 0.5) * brightness;
-            const hsl = layer < 2 ? glowH : coreH;
+          // Glow pass (skip every 2nd segment)
+          ctx.lineWidth = 6;
+          for (let p = 2; p < l.trailLen; p += 2) {
+            const p0 = (p - 2) * 3;
+            const p1 = p * 3;
+            const avg = (t[p0 + 2] + t[p1 + 2]) / 2 * flicker;
+            if (avg < 0.02) continue;
+            ctx.strokeStyle = `hsla(${glowH},${avg * 0.08})`;
+            ctx.beginPath();
+            ctx.moveTo(t[p0], t[p0 + 1]);
+            ctx.lineTo(t[p1], t[p1 + 1]);
+            ctx.stroke();
+          }
 
-            for (let p = skip; p < l.trailLen; p += skip) {
-              const p0 = (p - skip) * 3;
-              const p1 = p * 3;
-              const avg = (t[p0 + 2] + t[p1 + 2]) / 2 * flicker;
-              if (avg < 0.01) continue;
-
-              ctx.strokeStyle = `hsla(${hsl},${avg * alphaFactor})`;
-              ctx.beginPath();
-              ctx.moveTo(t[p0], t[p0 + 1]);
-              ctx.lineTo(t[p1], t[p1 + 1]);
-              ctx.stroke();
-            }
+          // Core pass
+          ctx.lineWidth = 1;
+          for (let p = 1; p < l.trailLen; p++) {
+            const p0 = (p - 1) * 3;
+            const p1 = p * 3;
+            const avg = (t[p0 + 2] + t[p1 + 2]) / 2 * flicker;
+            if (avg < 0.02) continue;
+            ctx.strokeStyle = `hsla(${coreH},${avg * 0.45})`;
+            ctx.beginPath();
+            ctx.moveTo(t[p0], t[p0 + 1]);
+            ctx.lineTo(t[p1], t[p1 + 1]);
+            ctx.stroke();
           }
 
           ctx.restore();
@@ -165,11 +181,11 @@ const LaserCanvas = () => {
 
       raf = requestAnimationFrame(draw);
     };
-    draw();
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      observer.disconnect();
     };
   }, [createLaser]);
 
@@ -177,16 +193,17 @@ const LaserCanvas = () => {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
+      aria-hidden="true"
     />
   );
-};
+});
 
-const ServiceArea = () => (
+LaserCanvas.displayName = "LaserCanvas";
+
+const ServiceArea = memo(() => (
   <section className="py-16 sm:py-20 md:py-32 relative overflow-hidden">
     <div className="absolute inset-0 z-0 bg-background" />
-
     <LaserCanvas />
-
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
         <AnimatedSection>
@@ -207,10 +224,10 @@ const ServiceArea = () => (
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: i * 0.03 }}
-                className={`inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 cursor-default ${
+                className={`inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm transition-colors duration-300 cursor-default ${
                   city === "Rybnik"
-                    ? "bg-accent/10 border border-accent/60 text-accent font-medium hover:border-accent hover:bg-accent/20 hover:text-accent-foreground"
-                    : "bg-card border border-border text-muted-foreground hover:border-primary/30 hover:text-foreground"
+                    ? "bg-accent/10 border border-accent/60 text-accent font-medium"
+                    : "bg-card border border-border text-muted-foreground"
                 }`}
               >
                 <MapPin className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${city === "Rybnik" ? "text-accent" : "text-primary"}`} />
@@ -241,6 +258,8 @@ const ServiceArea = () => (
       </div>
     </div>
   </section>
-);
+));
+
+ServiceArea.displayName = "ServiceArea";
 
 export default ServiceArea;

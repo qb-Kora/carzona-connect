@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import ParallaxSection from "./ParallaxSection";
@@ -10,7 +11,7 @@ const reasons = [
   { icon: HeartHandshake, title: "Indywidualne podejście", desc: "Każdy klient i każde auto traktujemy indywidualnie z pełnym zaangażowaniem." },
 ];
 
-const WhyUs = () => (
+const WhyUs = memo(() => (
   <ParallaxSection imageUrl="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1920&q=80&fit=crop" overlayOpacity={0.88}>
     <section id="dlaczego" className="py-16 sm:py-20 md:py-32 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,25 +22,20 @@ const WhyUs = () => (
           <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
             Zaufaj profesjonalistom
           </h2>
-        <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
+          <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
             CARZONA to nie zwykły warsztat — to miejsce, gdzie pasja do motoryzacji łączy się z najwyższą jakością obsługi.
           </p>
         </AnimatedSection>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
-          {reasons.map((reason, i) => {
-            const col4 = i % 4;
-            const baseRotateY = col4 === 0 ? 5 : col4 === 1 ? 2 : col4 === 2 ? -2 : -5;
-            return (
+          {reasons.map((reason, i) => (
             <motion.div
               key={reason.title}
-              initial={{ opacity: 0, y: 30, rotateX: 5 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: -1, rotateY: baseRotateY }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
               className="card-hover p-5 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl cursor-default group backdrop-blur-sm"
-              whileHover={{ rotateX: -3, rotateY: baseRotateY * 1.3, scale: 1.04, z: 25 }}
-              style={{ transformPerspective: 800, transformStyle: "preserve-3d" }}
             >
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-5 group-hover:bg-primary/20 transition-all duration-300">
                 <reason.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
@@ -47,12 +43,13 @@ const WhyUs = () => (
               <h3 className="font-bold text-foreground text-base sm:text-lg mb-1.5 sm:mb-2">{reason.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{reason.desc}</p>
             </motion.div>
-            );
-          })}
+          ))}
         </div>
       </div>
     </section>
   </ParallaxSection>
-);
+));
+
+WhyUs.displayName = "WhyUs";
 
 export default WhyUs;

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import MetalParticles from "./MetalParticles";
@@ -16,7 +17,7 @@ const services = [
   { icon: CarFront, title: "Rozrząd i sprzęgło", desc: "Wymiana pasków, łańcuchów rozrządu, sprzęgieł i kół dwumasowych.", popular: false },
 ];
 
-const Services = () => (
+const Services = memo(() => (
   <section id="uslugi" className="py-16 sm:py-20 md:py-32 relative">
     <MetalParticles />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,20 +34,14 @@ const Services = () => (
       </AnimatedSection>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
-        {services.map((service, i) => {
-          // Gaming monitor inward curve for 4 columns
-          const col4 = i % 4;
-          const baseRotateY = col4 === 0 ? 5 : col4 === 1 ? 2 : col4 === 2 ? -2 : -5;
-          return (
+        {services.map((service, i) => (
           <motion.div
             key={service.title}
-            initial={{ opacity: 0, y: 30, rotateX: 5 }}
-            whileInView={{ opacity: 1, y: 0, rotateX: -1, rotateY: baseRotateY }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-              className="card-hover p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl cursor-default group"
-              whileHover={{ rotateX: -3, rotateY: baseRotateY * 1.3, scale: 1.04, z: 25 }}
-              style={{ transformPerspective: 800, transformStyle: "preserve-3d" }}
+            className="card-hover p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl cursor-default group"
           >
             {service.popular && (
               <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-accent/15 text-accent text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full">
@@ -65,11 +60,12 @@ const Services = () => (
               Sprawdź szczegóły →
             </a>
           </motion.div>
-          );
-        })}
+        ))}
       </div>
     </div>
   </section>
-);
+));
+
+Services.displayName = "Services";
 
 export default Services;
