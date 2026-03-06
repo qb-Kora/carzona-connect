@@ -13,6 +13,7 @@ const NeonDivider = memo(forwardRef<HTMLDivElement, NeonDividerProps>(({ directi
   const showBottom = direction === "bottom" || direction === "both";
 
   return (
+    <div
       ref={ref}
       className="relative w-full z-20 isolate"
       style={{ height: 0, overflow: "visible", marginTop: -1, marginBottom: -1 }}
