@@ -37,15 +37,17 @@ const Reviews = () => {
           {/* Desktop grid */}
           <div className="hidden md:grid md:grid-cols-3 gap-5 perspective-grid">
             <AnimatePresence mode="popLayout">
-              {reviews.slice(current * perPage, current * perPage + perPage).map((review, idx) => (
+              {reviews.slice(current * perPage, current * perPage + perPage).map((review, idx) => {
+                const baseRotateY = idx === 0 ? 6 : idx === 2 ? -6 : 0;
+                return (
                 <motion.div
                   key={review.name}
                   initial={{ opacity: 0, y: 20, rotateX: 8 }}
-                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                  animate={{ opacity: 1, y: 0, rotateX: -1, rotateY: baseRotateY }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.4 }}
                   className="card-hover p-6 sm:p-7 rounded-2xl sm:rounded-3xl backdrop-blur-sm"
-                  whileHover={{ rotateX: -3, rotateY: idx === 0 ? 4 : idx === 2 ? -4 : 0, scale: 1.03, z: 30 }}
+                  whileHover={{ rotateX: -3, rotateY: baseRotateY * 1.4, scale: 1.04, z: 35 }}
                   style={{ transformPerspective: 800, transformStyle: "preserve-3d" }}
                   itemScope
                   itemType="https://schema.org/Review"
@@ -70,7 +72,8 @@ const Reviews = () => {
                     </div>
                   </div>
                 </motion.div>
-              ))}
+              );
+              })}
             </AnimatePresence>
           </div>
 
