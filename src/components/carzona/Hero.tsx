@@ -45,7 +45,7 @@ const Hero = memo(() => {
         style={{ y: contentY }}
         className="relative z-10 w-full max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-20 sm:py-32 md:py-40"
       >
-        <div className="text-center max-w-4xl mx-auto">
+        <div className="text-center max-w-5xl 2xl:max-w-6xl mx-auto">
           {/* Badge — enhanced with shimmer */}
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -70,10 +70,10 @@ const Hero = memo(() => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[1.6rem] leading-tight sm:text-4xl md:text-5xl lg:text-7xl 2xl:text-8xl font-black tracking-tighter sm:leading-[0.95] md:leading-[0.9] mb-4 sm:mb-8"
+            className="text-[1.6rem] sm:text-4xl md:text-5xl lg:text-[4.2rem] xl:text-7xl 2xl:text-8xl font-black tracking-tighter leading-[1.05] sm:leading-[0.95] md:leading-[0.9] mb-4 sm:mb-8"
           >
             <span className="block neon-heading">Profesjonalny warsztat</span>
-            <span className="block">
+            <span className="block neon-heading">
               <span className="neon-heading">samochodowy</span>{" "}
               <span className="text-gradient-accent">w</span>{" "}
               <span

@@ -46,18 +46,18 @@ const TrustBar = memo(() => (
       className="absolute inset-0 pointer-events-none"
       style={{
         background: [
-          "radial-gradient(ellipse 40% 100% at 50% 50%, hsl(var(--primary) / 0.12) 0%, transparent 60%)",
-          "radial-gradient(ellipse 20% 80% at 50% 50%, hsl(var(--primary) / 0.18) 0%, transparent 50%)",
-          "radial-gradient(ellipse 8% 120% at 50% 50%, hsl(var(--primary) / 0.25) 0%, transparent 40%)",
+          "radial-gradient(ellipse 100% 40% at 50% 50%, hsl(var(--primary) / 0.12) 0%, transparent 60%)",
+          "radial-gradient(ellipse 80% 20% at 50% 50%, hsl(var(--primary) / 0.18) 0%, transparent 50%)",
+          "radial-gradient(ellipse 120% 8% at 50% 50%, hsl(var(--primary) / 0.25) 0%, transparent 40%)",
         ].join(", "),
         animation: "led-pulse 4s ease-in-out infinite",
       }}
     />
-    {/* Thin LED core line */}
+    {/* Horizontal LED core line */}
     <div
-      className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] pointer-events-none"
+      className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] pointer-events-none"
       style={{
-        background: "linear-gradient(to bottom, transparent 5%, hsl(var(--primary) / 0.35) 30%, hsl(var(--primary) / 0.5) 50%, hsl(var(--primary) / 0.35) 70%, transparent 95%)",
+        background: "linear-gradient(to right, transparent 5%, hsl(var(--primary) / 0.35) 30%, hsl(var(--primary) / 0.5) 50%, hsl(var(--primary) / 0.35) 70%, transparent 95%)",
         boxShadow: "0 0 8px 2px hsl(var(--primary) / 0.2), 0 0 20px 4px hsl(var(--primary) / 0.1)",
         animation: "led-pulse 4s ease-in-out infinite",
       }}
