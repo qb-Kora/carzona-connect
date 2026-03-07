@@ -46,9 +46,9 @@ const TrustBar = memo(() => (
       className="absolute inset-0 pointer-events-none"
       style={{
         background: [
-          "radial-gradient(ellipse 100% 40% at 50% 50%, hsl(var(--primary) / 0.12) 0%, transparent 60%)",
-          "radial-gradient(ellipse 80% 20% at 50% 50%, hsl(var(--primary) / 0.18) 0%, transparent 50%)",
-          "radial-gradient(ellipse 120% 8% at 50% 50%, hsl(var(--primary) / 0.25) 0%, transparent 40%)",
+          "radial-gradient(ellipse 120% 80% at 50% 50%, hsl(var(--primary) / 0.14) 0%, transparent 70%)",
+          "radial-gradient(ellipse 90% 60% at 50% 50%, hsl(var(--primary) / 0.20) 0%, transparent 55%)",
+          "radial-gradient(ellipse 70% 30% at 50% 50%, hsl(var(--primary) / 0.28) 0%, transparent 45%)",
         ].join(", "),
         animation: "led-pulse 4s ease-in-out infinite",
       }}
@@ -57,7 +57,7 @@ const TrustBar = memo(() => (
     <div
       className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] pointer-events-none"
       style={{
-        background: "linear-gradient(to right, transparent 5%, hsl(var(--primary) / 0.35) 30%, hsl(var(--primary) / 0.5) 50%, hsl(var(--primary) / 0.35) 70%, transparent 95%)",
+        background: "linear-gradient(to right, transparent 2%, hsl(var(--primary) / 0.4) 20%, hsl(var(--primary) / 0.6) 50%, hsl(var(--primary) / 0.4) 80%, transparent 98%)",
         boxShadow: "0 0 8px 2px hsl(var(--primary) / 0.2), 0 0 20px 4px hsl(var(--primary) / 0.1)",
         animation: "led-pulse 4s ease-in-out infinite",
       }}
