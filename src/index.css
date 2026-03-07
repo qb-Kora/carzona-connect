@@ -233,7 +233,7 @@
         0 0 0 1px hsl(var(--primary) / 0.15),
         0 1px 0 0 hsl(var(--foreground) / 0.05) inset;
       transform: translateY(-8px) scale(1.02);
-      animation: neon-hover-flicker 1.5s ease-in-out infinite;
+      animation: neon-hover-pulse 2.5s ease-in-out infinite;
     }
   }
 
@@ -244,7 +244,7 @@
     .neon-hover-text:hover {
       color: hsl(var(--primary));
       text-shadow: 0 0 8px hsl(var(--primary) / 0.6), 0 0 20px hsl(var(--primary) / 0.25), 0 0 40px hsl(var(--primary) / 0.1);
-      animation: neon-hover-text-flicker 1.5s ease-in-out infinite;
+      animation: neon-hover-text-pulse 2.5s ease-in-out infinite;
     }
   }
 
@@ -255,7 +255,7 @@
     .neon-hover-border:hover {
       border-color: hsl(var(--primary) / 0.5);
       box-shadow: 0 0 8px 1px hsl(var(--primary) / 0.12), 0 0 20px 2px hsl(var(--primary) / 0.06);
-      animation: neon-hover-flicker 1.5s ease-in-out infinite;
+      animation: neon-hover-border-pulse 2.5s ease-in-out infinite;
     }
   }
 
@@ -266,38 +266,56 @@
     .group:hover .neon-hover-icon {
       background-color: hsl(var(--primary) / 0.2);
       box-shadow: 0 0 10px 2px hsl(var(--primary) / 0.15), 0 0 20px 4px hsl(var(--primary) / 0.06);
-      animation: neon-hover-flicker 1.2s ease-in-out infinite;
+      animation: neon-hover-icon-pulse 2s ease-in-out infinite;
     }
   }
 
-  @keyframes neon-hover-flicker {
-    0%, 100% { opacity: 1; }
-    4% { opacity: 0.6; }
-    6% { opacity: 1; }
-    12% { opacity: 0.75; }
-    14% { opacity: 1; }
-    40% { opacity: 1; }
-    42% { opacity: 0.5; }
-    43% { opacity: 0.85; }
-    44% { opacity: 0.55; }
-    46% { opacity: 1; }
-    70% { opacity: 1; }
-    72% { opacity: 0.7; }
-    73% { opacity: 1; }
-    90% { opacity: 1; }
-    92% { opacity: 0.6; }
-    93% { opacity: 1; }
+  @keyframes neon-hover-pulse {
+    0%, 100% {
+      box-shadow: 
+        0 0 12px 2px hsl(var(--primary) / 0.15),
+        0 0 30px 4px hsl(var(--primary) / 0.08),
+        0 25px 60px -15px hsl(var(--primary) / 0.25),
+        0 0 0 1px hsl(var(--primary) / 0.15),
+        0 1px 0 0 hsl(var(--foreground) / 0.05) inset;
+    }
+    50% {
+      box-shadow: 
+        0 0 20px 4px hsl(var(--primary) / 0.25),
+        0 0 50px 8px hsl(var(--primary) / 0.15),
+        0 25px 60px -15px hsl(var(--primary) / 0.35),
+        0 0 0 1px hsl(var(--primary) / 0.25),
+        0 1px 0 0 hsl(var(--foreground) / 0.05) inset;
+    }
   }
 
-  @keyframes neon-hover-text-flicker {
-    0%, 100% { text-shadow: 0 0 8px hsl(var(--primary) / 0.6), 0 0 20px hsl(var(--primary) / 0.25), 0 0 40px hsl(var(--primary) / 0.1); }
-    4% { text-shadow: 0 0 3px hsl(var(--primary) / 0.2), 0 0 8px hsl(var(--primary) / 0.08); }
-    6% { text-shadow: 0 0 8px hsl(var(--primary) / 0.6), 0 0 20px hsl(var(--primary) / 0.25), 0 0 40px hsl(var(--primary) / 0.1); }
-    42% { text-shadow: 0 0 12px hsl(var(--primary) / 0.8), 0 0 30px hsl(var(--primary) / 0.4), 0 0 50px hsl(var(--primary) / 0.15); }
-    44% { text-shadow: 0 0 2px hsl(var(--primary) / 0.15), 0 0 5px hsl(var(--primary) / 0.05); }
-    46% { text-shadow: 0 0 10px hsl(var(--primary) / 0.7), 0 0 25px hsl(var(--primary) / 0.3), 0 0 45px hsl(var(--primary) / 0.12); }
-    72% { text-shadow: 0 0 4px hsl(var(--primary) / 0.25), 0 0 10px hsl(var(--primary) / 0.1); }
-    73% { text-shadow: 0 0 8px hsl(var(--primary) / 0.6), 0 0 20px hsl(var(--primary) / 0.25), 0 0 40px hsl(var(--primary) / 0.1); }
+  @keyframes neon-hover-text-pulse {
+    0%, 100% {
+      text-shadow: 0 0 8px hsl(var(--primary) / 0.6), 0 0 20px hsl(var(--primary) / 0.25), 0 0 40px hsl(var(--primary) / 0.1);
+    }
+    50% {
+      text-shadow: 0 0 14px hsl(var(--primary) / 0.8), 0 0 35px hsl(var(--primary) / 0.4), 0 0 60px hsl(var(--primary) / 0.18);
+    }
+  }
+
+  @keyframes neon-hover-border-pulse {
+    0%, 100% {
+      box-shadow: 0 0 8px 1px hsl(var(--primary) / 0.12), 0 0 20px 2px hsl(var(--primary) / 0.06);
+      border-color: hsl(var(--primary) / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 14px 3px hsl(var(--primary) / 0.2), 0 0 35px 5px hsl(var(--primary) / 0.1);
+      border-color: hsl(var(--primary) / 0.7);
+    }
+  }
+
+  @keyframes neon-hover-icon-pulse {
+    0%, 100% {
+      box-shadow: 0 0 10px 2px hsl(var(--primary) / 0.15), 0 0 20px 4px hsl(var(--primary) / 0.06);
+    }
+    50% {
+      box-shadow: 0 0 18px 4px hsl(var(--primary) / 0.25), 0 0 35px 8px hsl(var(--primary) / 0.1);
+    }
   }
 
   .btn-shine {
