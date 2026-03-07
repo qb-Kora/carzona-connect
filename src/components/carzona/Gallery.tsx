@@ -42,7 +42,7 @@ const Gallery = memo(() => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 onClick={() => setLightbox(i)}
-                className="group relative aspect-[3/2] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer touch-manipulation min-h-[44px]"
+                className="group relative aspect-[3/2] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer touch-manipulation min-h-[44px] border border-border/30"
                 whileTap={{ scale: 0.98 }}
                 aria-label={`Powiększ: ${img.alt}`}
               >
@@ -55,8 +55,18 @@ const Gallery = memo(() => {
                   height={400}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
-                  <ZoomIn className="w-6 h-6 sm:w-8 sm:h-8 text-foreground" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4 pointer-events-none">
+                  <div
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-foreground"
+                    style={{
+                      background: "hsl(var(--card) / 0.7)",
+                      backdropFilter: "blur(8px)",
+                      border: "1px solid hsl(var(--border) / 0.5)",
+                    }}
+                  >
+                    <ZoomIn className="w-3 h-3" />
+                    Powiększ
+                  </div>
                 </div>
               </motion.button>
             ))}

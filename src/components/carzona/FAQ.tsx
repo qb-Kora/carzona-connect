@@ -45,8 +45,18 @@ const FAQ = memo(() => (
             >
               <AccordionItem
                 value={`faq-${i}`}
-                className="bg-card/80 backdrop-blur-sm border border-border rounded-xl sm:rounded-2xl px-4 sm:px-6 data-[state=open]:border-primary/20 transition-colors duration-300"
+                className="rounded-xl sm:rounded-2xl px-4 sm:px-6 border transition-all duration-300 data-[state=open]:border-primary/25 data-[state=closed]:border-border relative overflow-hidden"
+                style={{
+                  background: "linear-gradient(135deg, hsl(var(--card) / 0.85) 0%, hsl(var(--card) / 0.7) 100%)",
+                  backdropFilter: "blur(12px)",
+                }}
               >
+                {/* Left accent on open */}
+                <div className="absolute left-0 top-0 bottom-0 w-[2px] rounded-full opacity-0 data-[state=open]:opacity-100 transition-opacity"
+                  style={{
+                    background: "linear-gradient(180deg, transparent, hsl(var(--primary) / 0.5), transparent)",
+                  }}
+                />
                 <AccordionTrigger className="text-left font-semibold text-foreground neon-hover-text transition-colors py-3.5 sm:py-5 text-sm sm:text-base min-h-[44px]">
                   {faq.q}
                 </AccordionTrigger>
