@@ -72,17 +72,18 @@ const Hero = memo(() => {
             transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="text-[1.6rem] leading-tight sm:text-4xl md:text-5xl lg:text-7xl 2xl:text-8xl 3xl:text-9xl font-black tracking-tighter sm:leading-[0.95] md:leading-[0.9] mb-4 sm:mb-8"
           >
-            <span className="block text-foreground neon-heading">Profesjonalny warsztat</span>
+            <span className="block neon-heading">Profesjonalny warsztat</span>
             <span className="block">
-              <span className="text-foreground neon-heading">samochodowy </span>
+              <span className="neon-heading">samochodowy</span>{" "}
+              <span className="text-gradient-accent">w</span>{" "}
               <span
                 className="bg-clip-text text-transparent"
                 style={{
-                  backgroundImage: "linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(84 70% 55%) 50%, hsl(84 70% 45%) 100%)",
-                  filter: "drop-shadow(0 0 12px hsl(84 70% 50% / 0.5))",
+                  backgroundImage: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(217 91% 70%) 100%)",
+                  filter: "drop-shadow(0 0 10px hsl(217 91% 60% / 0.4))",
                 }}
               >
-                w Rybniku
+                Rybniku
               </span>
             </span>
           </motion.h1>
