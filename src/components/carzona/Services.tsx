@@ -18,16 +18,16 @@ const services = [
 
 const Services = memo(() => (
   <section id="uslugi" className="py-16 sm:py-20 md:py-32 relative">
-    {/* Subtle radial glow instead of particles */}
     <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_30%,hsl(var(--primary)/0.04),transparent)] pointer-events-none" />
     <div className="max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
       <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
-        <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
+        <span className="premium-label neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
           Usługi
         </span>
         <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
           Pełen zakres usług serwisowych
         </h2>
+        <div className="w-16 h-[1px] mx-auto mb-3 sm:mb-4" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), transparent)" }} />
         <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
           Od prostych przeglądów po zaawansowane naprawy — zajmiemy się Twoim autem kompleksowo.
         </p>
@@ -48,16 +48,18 @@ const Services = memo(() => (
               className="absolute top-0 left-4 right-4 h-[1px]"
               style={{
                 background: service.popular
-                  ? "linear-gradient(90deg, transparent, hsl(var(--accent) / 0.4), transparent)"
+                  ? "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.35), transparent)"
                   : "linear-gradient(90deg, transparent, hsl(var(--primary) / 0.2), transparent)",
               }}
             />
             {service.popular && (
               <div
-                className="absolute top-3 right-3 sm:top-4 sm:right-4 text-accent text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-accent/30"
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border"
                 style={{
-                  background: "linear-gradient(135deg, hsl(var(--accent) / 0.12) 0%, hsl(var(--accent) / 0.06) 100%)",
-                  boxShadow: "0 0 8px -2px hsl(var(--accent) / 0.2)",
+                  color: "hsl(var(--gold))",
+                  borderColor: "hsl(var(--gold) / 0.3)",
+                  background: "linear-gradient(135deg, hsl(var(--gold) / 0.1) 0%, hsl(var(--gold) / 0.04) 100%)",
+                  boxShadow: "0 0 8px -2px hsl(var(--gold) / 0.15)",
                 }}
               >
                 Popularne
@@ -66,8 +68,8 @@ const Services = memo(() => (
             <div
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-5 neon-hover-icon transition-colors duration-300"
               style={{
-                background: "linear-gradient(135deg, hsl(var(--primary) / 0.12) 0%, hsl(var(--primary) / 0.05) 100%)",
-                boxShadow: "inset 0 1px 0 0 hsl(var(--primary) / 0.08)",
+                background: "linear-gradient(135deg, hsl(var(--primary) / 0.14) 0%, hsl(var(--primary) / 0.05) 100%)",
+                boxShadow: "inset 0 1px 0 0 hsl(var(--primary) / 0.08), 0 0 12px -4px hsl(var(--primary) / 0.08)",
               }}
             >
               <service.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />

@@ -21,14 +21,19 @@ const ReviewCard = memo(({ review, className = "" }: { review: typeof reviews[0]
     itemScope
     itemType="https://schema.org/Review"
   >
+    {/* Top accent line */}
+    <div
+      className="absolute top-0 left-4 right-4 h-[1px]"
+      style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.2), transparent)" }}
+    />
     {/* Decorative quote */}
     <div
       className="absolute top-4 right-4 w-12 h-12 rounded-full flex items-center justify-center"
       style={{
-        background: "linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, transparent 100%)",
+        background: "linear-gradient(135deg, hsl(var(--gold) / 0.06) 0%, transparent 100%)",
       }}
     >
-      <Quote className="w-5 h-5 text-primary/20" />
+      <Quote className="w-5 h-5" style={{ color: "hsl(var(--gold) / 0.2)" }} />
     </div>
 
     <div className="flex gap-0.5 mb-3 sm:mb-4" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
@@ -36,8 +41,12 @@ const ReviewCard = memo(({ review, className = "" }: { review: typeof reviews[0]
       {stars.map((_, j) => (
         <Star
           key={j}
-          className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-accent text-accent"
-          style={{ filter: "drop-shadow(0 0 3px hsl(var(--accent) / 0.4))" }}
+          className="w-3.5 h-3.5 sm:w-4 sm:h-4"
+          style={{
+            fill: "hsl(var(--gold))",
+            color: "hsl(var(--gold))",
+            filter: "drop-shadow(0 0 3px hsl(var(--gold) / 0.4))",
+          }}
         />
       ))}
     </div>
@@ -46,10 +55,11 @@ const ReviewCard = memo(({ review, className = "" }: { review: typeof reviews[0]
     </p>
     <div className="border-t border-border/50 pt-3 sm:pt-4 flex items-center gap-3 mt-auto">
       <div
-        className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-primary font-bold text-sm"
+        className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm"
         style={{
           background: "linear-gradient(135deg, hsl(var(--primary) / 0.15) 0%, hsl(var(--primary) / 0.06) 100%)",
           boxShadow: "inset 0 1px 0 0 hsl(var(--primary) / 0.1)",
+          color: "hsl(var(--primary))",
         }}
       >
         {review.name.charAt(0)}
@@ -77,12 +87,13 @@ const Reviews = memo(() => {
       <section id="opinie" className="py-16 sm:py-20 md:py-32 relative overflow-hidden">
         <div className="max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
           <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
-            <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
+            <span className="premium-label neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
               Opinie
             </span>
             <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
               Co mówią nasi klienci
             </h2>
+            <div className="w-16 h-[1px] mx-auto mb-3 sm:mb-4" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), transparent)" }} />
             <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
               Zaufanie klientów to nasza największa nagroda. Sprawdź opinie.
             </p>
@@ -120,7 +131,7 @@ const Reviews = memo(() => {
             </AnimatePresence>
           </div>
 
-          {/* Nav — enhanced */}
+          {/* Nav */}
           <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
             <button
               onClick={prev}
@@ -136,17 +147,15 @@ const Reviews = memo(() => {
                   key={i}
                   onClick={() => setCurrent(i)}
                   className={`rounded-full transition-all duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center ${
-                    i === current
-                      ? "w-7"
-                      : "w-2"
+                    i === current ? "w-7" : "w-2"
                   }`}
                   aria-label={`Strona ${i + 1}`}
                 >
                   <span
                     className={`block h-2 rounded-full transition-all duration-300 ${
-                      i === current ? "w-7 bg-primary" : "w-2 bg-border hover:bg-muted-foreground"
+                      i === current ? "w-7" : "w-2 bg-border hover:bg-muted-foreground"
                     }`}
-                    style={i === current ? { boxShadow: "0 0 8px hsl(var(--primary) / 0.4)" } : {}}
+                    style={i === current ? { background: "hsl(var(--gold))", boxShadow: "0 0 8px hsl(var(--gold) / 0.4)" } : {}}
                   />
                 </button>
               ))}

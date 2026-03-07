@@ -16,12 +16,13 @@ const WhyUs = memo(() => (
     <section id="dlaczego" className="py-16 sm:py-20 md:py-32 relative">
       <div className="max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
         <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
-          <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
+          <span className="premium-label neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
             Dlaczego my
           </span>
           <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
             Zaufaj profesjonalistom
           </h2>
+          <div className="w-16 h-[1px] mx-auto mb-3 sm:mb-4" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), transparent)" }} />
           <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
             CARZONA to nie zwykły warsztat — to miejsce, gdzie pasja do motoryzacji łączy się z najwyższą jakością obsługi.
           </p>
@@ -37,6 +38,11 @@ const WhyUs = memo(() => (
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
               className="card-hover p-5 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl cursor-default group backdrop-blur-sm relative overflow-hidden"
             >
+              {/* Top accent line */}
+              <div
+                className="absolute top-0 left-4 right-4 h-[1px]"
+                style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.25), transparent)" }}
+              />
               {/* Number watermark */}
               <span
                 className="absolute -top-2 -right-1 text-[4rem] sm:text-[5rem] font-black leading-none select-none pointer-events-none"
@@ -47,8 +53,8 @@ const WhyUs = memo(() => (
               <div
                 className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-5 neon-hover-icon transition-all duration-300 relative z-10"
                 style={{
-                  background: "linear-gradient(135deg, hsl(var(--primary) / 0.12) 0%, hsl(var(--primary) / 0.05) 100%)",
-                  boxShadow: "inset 0 1px 0 0 hsl(var(--primary) / 0.1)",
+                  background: "linear-gradient(135deg, hsl(var(--primary) / 0.14) 0%, hsl(var(--primary) / 0.05) 100%)",
+                  boxShadow: "inset 0 1px 0 0 hsl(var(--primary) / 0.1), 0 0 12px -4px hsl(var(--primary) / 0.08)",
                 }}
               >
                 <reason.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />

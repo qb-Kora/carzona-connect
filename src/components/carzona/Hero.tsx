@@ -16,13 +16,9 @@ const HeroVideo = memo(() => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    // iOS Safari fallback: ensure play() is called after mount
     const video = videoRef.current;
     if (!video) return;
-    const tryPlay = () => {
-      video.play().catch(() => {});
-    };
-    // Try immediately and also after a short delay for iOS
+    const tryPlay = () => { video.play().catch(() => {}); };
     tryPlay();
     const t = setTimeout(tryPlay, 500);
     return () => clearTimeout(t);
@@ -37,7 +33,7 @@ const HeroVideo = memo(() => {
         loop
         playsInline
         preload="auto"
-        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Crect fill='%230f1117' width='1920' height='1080'/%3E%3C/svg%3E"
+        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Crect fill='%230a0c14' width='1920' height='1080'/%3E%3C/svg%3E"
         className="w-full h-full object-cover"
       >
         <source src="/videos/hero-bg.mp4" type="video/mp4" />
@@ -59,16 +55,19 @@ const Hero = memo(() => {
 
   return (
     <section ref={ref} className="relative h-svh flex items-center justify-center overflow-hidden">
-      {/* Video background — always enabled, plays muted+inline for iOS */}
+      {/* Video background */}
       <motion.div className="absolute inset-0" style={skipParallax ? undefined : { y: videoY }}>
         <HeroVideo />
       </motion.div>
 
-      {/* Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/80 to-background/95" />
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-accent/[0.04]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,hsl(var(--primary)/0.06),transparent)]" />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-accent/[0.12] via-accent/[0.04] to-transparent blur-sm pointer-events-none" />
+      {/* Premium multi-layer overlays */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/75 to-background/95" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.05] via-transparent to-accent/[0.03]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_50%_35%,hsl(var(--primary)/0.08),transparent)]" />
+      {/* Warm gold cinematic strip at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-gold/[0.04] via-accent/[0.06] to-transparent blur-sm pointer-events-none" />
+      {/* Vignette */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_40%,hsl(var(--background)/0.6))]" />
 
       {/* Content */}
       <motion.div
@@ -76,22 +75,24 @@ const Hero = memo(() => {
         className="relative z-10 w-full max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-12 sm:py-16"
       >
         <div className="text-center max-w-5xl 2xl:max-w-6xl mx-auto">
-          {/* Badge */}
+          {/* Premium Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 sm:gap-3 px-5 py-2.5 sm:py-3 rounded-full mb-5 sm:mb-8 border border-accent/20 bg-accent/[0.06]"
+            className="inline-flex items-center gap-2 sm:gap-3 px-5 py-2.5 sm:py-3 rounded-full mb-5 sm:mb-8"
             style={{
-              boxShadow: "0 0 20px -5px hsl(var(--accent) / 0.15), inset 0 1px 0 0 hsl(var(--accent) / 0.1)",
+              background: "linear-gradient(135deg, hsl(var(--gold) / 0.08) 0%, hsl(var(--accent) / 0.06) 100%)",
+              border: "1px solid hsl(var(--gold) / 0.25)",
+              boxShadow: "0 0 20px -5px hsl(var(--gold) / 0.12), inset 0 1px 0 0 hsl(var(--gold) / 0.12)",
             }}
           >
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent" />
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "hsl(var(--gold))" }} />
+              <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "hsl(var(--gold))" }} />
             </span>
-            <span className="text-xs sm:text-sm text-foreground/80">
-              Autoryzowany partner <span className="text-accent font-bold">Q Service Castrol</span>
+            <span className="text-xs sm:text-sm" style={{ color: "hsl(var(--gold))" }}>
+              Autoryzowany partner <span className="font-bold text-accent">Q Service Castrol</span>
             </span>
           </motion.div>
 
@@ -119,6 +120,17 @@ const Hero = memo(() => {
             </span>
           </motion.h1>
 
+          {/* Decorative line under heading */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="w-24 h-[1px] mx-auto mb-5 sm:mb-7"
+            style={{
+              background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), hsl(var(--primary) / 0.4), transparent)",
+            }}
+          />
+
           {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -128,9 +140,9 @@ const Hero = memo(() => {
           >
             <span className="inline-flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
               <span>Szybka diagnostyka</span>
-              <span className="w-1 h-1 rounded-full bg-accent" />
+              <span className="w-1 h-1 rounded-full" style={{ background: "hsl(var(--gold))" }} />
               <span>Uczciwe ceny</span>
-              <span className="w-1 h-1 rounded-full bg-accent" />
+              <span className="w-1 h-1 rounded-full" style={{ background: "hsl(var(--gold))" }} />
               <span>Ponad 1000 napraw rocznie</span>
             </span>
           </motion.p>
@@ -147,7 +159,7 @@ const Hero = memo(() => {
               className="group flex items-center justify-center gap-2.5 px-6 sm:px-10 py-3.5 sm:py-4 rounded-2xl text-sm sm:text-base font-bold btn-shine transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] min-h-[48px] touch-manipulation text-accent-foreground relative overflow-hidden"
               style={{
                 background: "linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(84 70% 50%) 100%)",
-                boxShadow: "0 4px 20px -4px hsl(var(--accent) / 0.4), 0 0 0 1px hsl(var(--accent) / 0.2) inset",
+                boxShadow: "0 4px 24px -4px hsl(var(--accent) / 0.45), 0 0 0 1px hsl(var(--accent) / 0.2) inset, 0 1px 0 0 hsl(84 70% 60% / 0.3) inset",
               }}
             >
               <CalendarCheck className="w-5 h-5" />
@@ -155,14 +167,17 @@ const Hero = memo(() => {
             </a>
             <a
               href="tel:663881585"
-              className="flex items-center justify-center gap-2.5 text-foreground px-6 py-3.5 sm:py-4 rounded-2xl border border-border neon-hover-border active:bg-card/80 transition-all duration-300 hover:bg-card/60 font-semibold text-sm sm:text-base min-h-[48px] touch-manipulation"
+              className="flex items-center justify-center gap-2.5 text-foreground px-6 py-3.5 sm:py-4 rounded-2xl border border-border/80 neon-hover-border active:bg-card/80 transition-all duration-300 hover:bg-card/60 font-semibold text-sm sm:text-base min-h-[48px] touch-manipulation"
+              style={{
+                background: "linear-gradient(135deg, hsl(var(--card) / 0.4) 0%, transparent 100%)",
+              }}
             >
               <Phone className="w-5 h-5 text-primary" />
               Zadzwoń teraz
             </a>
           </motion.div>
 
-          {/* USP Tiles */}
+          {/* USP Tiles — premium styling */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -175,19 +190,26 @@ const Hero = memo(() => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 1.2 + i * 0.1 }}
-                className="rounded-2xl p-3.5 sm:p-5 flex flex-row sm:flex-col items-center gap-3 transition-all duration-300 border border-accent/15 bg-accent/[0.06]"
+                className="rounded-2xl p-3.5 sm:p-5 flex flex-row sm:flex-col items-center gap-3 transition-all duration-300 relative overflow-hidden"
                 style={{
-                  boxShadow: "inset 0 1px 0 0 hsl(var(--accent) / 0.08), 0 4px 16px -4px hsl(var(--background) / 0.5)",
+                  background: "linear-gradient(160deg, hsl(var(--card) / 0.7) 0%, hsl(var(--card) / 0.3) 100%)",
+                  border: "1px solid hsl(var(--border) / 0.6)",
+                  boxShadow: "inset 0 1px 0 0 hsl(var(--foreground) / 0.04), 0 4px 20px -6px hsl(var(--background) / 0.6)",
                 }}
               >
+                {/* Top accent line */}
+                <div
+                  className="absolute top-0 left-6 right-6 h-[1px]"
+                  style={{ background: "linear-gradient(90deg, transparent, hsl(var(--primary) / 0.25), transparent)" }}
+                />
                 <div
                   className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0"
                   style={{
-                    background: "linear-gradient(135deg, hsl(var(--accent) / 0.15) 0%, hsl(var(--accent) / 0.08) 100%)",
-                    boxShadow: "inset 0 1px 0 0 hsl(var(--accent) / 0.12)",
+                    background: "linear-gradient(135deg, hsl(var(--primary) / 0.15) 0%, hsl(var(--primary) / 0.06) 100%)",
+                    boxShadow: "inset 0 1px 0 0 hsl(var(--primary) / 0.12), 0 0 12px -4px hsl(var(--primary) / 0.1)",
                   }}
                 >
-                  <usp.icon className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
+                  <usp.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <div className="text-left sm:text-center min-w-0">
                   <div className="font-semibold text-foreground text-sm leading-snug">{usp.title}</div>
@@ -208,7 +230,7 @@ const Hero = memo(() => {
         className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground text-xs hidden sm:flex min-h-[44px] min-w-[44px] justify-center"
         aria-label="Przewiń do następnej sekcji"
       >
-        <span className="tracking-widest uppercase text-[10px]">Przewiń</span>
+        <span className="tracking-widest uppercase text-[10px]" style={{ color: "hsl(var(--gold) / 0.6)" }}>Przewiń</span>
         <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity }}>
           <ChevronDown className="w-5 h-5" />
         </motion.div>

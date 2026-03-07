@@ -24,7 +24,7 @@ const CarCrashCTA = lazy(() => import("@/components/carzona/CarCrashCTA"));
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
+    <div className="min-h-screen bg-background overflow-x-hidden grain">
       <Header />
       <Hero />
       <NeonDivider direction="top" />

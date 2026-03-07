@@ -4,8 +4,12 @@ import Logo from "./Logo";
 
 const Footer = memo(() => (
   <footer className="relative border-t border-border/50 pt-12 sm:pt-16 md:pt-20 pb-24 md:pb-12 overflow-hidden">
-    {/* Subtle top gradient */}
-    <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-primary/[0.02] to-transparent pointer-events-none" />
+    {/* Premium gradient stripe at top */}
+    <div
+      className="absolute top-0 left-0 right-0 h-[1px]"
+      style={{ background: "linear-gradient(90deg, transparent 5%, hsl(var(--gold) / 0.3) 30%, hsl(var(--primary) / 0.4) 50%, hsl(var(--gold) / 0.3) 70%, transparent 95%)" }}
+    />
+    <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none" />
 
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Top — brand + CTA */}
@@ -25,7 +29,7 @@ const Footer = memo(() => (
           className="inline-flex items-center gap-2.5 text-primary-foreground font-semibold px-6 py-3.5 rounded-xl transition-all text-sm sm:text-base btn-shine min-h-[48px] touch-manipulation active:scale-95"
           style={{
             background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(217 91% 65%) 100%)",
-            boxShadow: "0 4px 16px -4px hsl(var(--primary) / 0.35), inset 0 1px 0 0 hsl(217 91% 70% / 0.3)",
+            boxShadow: "0 4px 20px -4px hsl(var(--primary) / 0.4), inset 0 1px 0 0 hsl(217 91% 70% / 0.3)",
           }}
         >
           <Phone className="w-4 h-4" />
