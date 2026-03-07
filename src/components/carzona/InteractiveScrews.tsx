@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, memo } from "react";
-import { isLowEnd, scaledCount } from "@/hooks/use-device-capability";
+import { isLowEnd, isMidOrLow, scaledCount } from "@/hooks/use-device-capability";
 
 interface Nut {
   x: number; y: number; vx: number; vy: number;
@@ -16,6 +16,7 @@ interface InteractiveScrewsProps {
 }
 
 const lowEnd = isLowEnd();
+const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || "ontouchstart" in window);
 
 const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -73,7 +74,8 @@ const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
     );
     observer.observe(canvas);
 
-    const target = sectionRef?.current || canvas.parentElement;
+    // Disable mouse interaction on mobile/touch — only render static nuts
+    const target = !isMobile ? (sectionRef?.current || canvas.parentElement) : null;
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
@@ -129,16 +131,20 @@ const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
 
       for (let i = 0; i < nuts.length; i++) {
         const nut = nuts[i];
-        const dx = nut.x - mouse.x;
-        const dy = nut.y - mouse.y;
-        const distSq = dx * dx + dy * dy;
 
-        if (distSq < PUSH_RADIUS * PUSH_RADIUS && distSq > 0) {
-          const dist = Math.sqrt(distSq);
-          const force = (1 - dist / PUSH_RADIUS) * PUSH_FORCE * dt;
-          nut.vx += (dx / dist) * force;
-          nut.vy += (dy / dist) * force;
-          nut.vr += (dx > 0 ? 1 : -1) * force * 3;
+        // Only apply mouse interaction on non-mobile
+        if (!isMobile) {
+          const dx = nut.x - mouse.x;
+          const dy = nut.y - mouse.y;
+          const distSq = dx * dx + dy * dy;
+
+          if (distSq < PUSH_RADIUS * PUSH_RADIUS && distSq > 0) {
+            const dist = Math.sqrt(distSq);
+            const force = (1 - dist / PUSH_RADIUS) * PUSH_FORCE * dt;
+            nut.vx += (dx / dist) * force;
+            nut.vy += (dy / dist) * force;
+            nut.vr += (dx > 0 ? 1 : -1) * force * 3;
+          }
         }
 
         nut.x += nut.vx * dt;

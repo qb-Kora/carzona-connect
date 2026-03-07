@@ -33,59 +33,6 @@ const Header = memo(() => {
         scrolled ? "glass-strong shadow-lg shadow-background/50" : "bg-transparent"
       }`}
     >
-      <style>{`
-        .nav-neon {
-          color: hsl(var(--accent));
-          text-shadow: 0 0 8px hsl(var(--accent) / 0.5), 0 0 20px hsl(var(--accent) / 0.2);
-          transition: color 0.3s, text-shadow 0.3s;
-          position: relative;
-          animation: nav-neon-flicker 3.5s ease-in-out infinite;
-        }
-        .nav-neon::after {
-          content: '';
-          position: absolute;
-          bottom: -4px;
-          left: 0;
-          width: 0;
-          height: 2px;
-          background: hsl(var(--accent));
-          box-shadow: 0 0 6px hsl(var(--accent) / 0.8), 0 0 14px hsl(var(--accent) / 0.4);
-          transition: width 0.3s ease;
-        }
-        .nav-neon:hover {
-          color: hsl(var(--primary));
-          text-shadow: 0 0 10px hsl(var(--primary) / 0.6), 0 0 25px hsl(var(--primary) / 0.3), 0 0 50px hsl(var(--primary) / 0.1);
-          animation: none;
-        }
-        .nav-neon:hover::after {
-          width: 100%;
-          background: hsl(var(--accent));
-          box-shadow: 0 0 8px hsl(var(--accent) / 0.9), 0 0 18px hsl(var(--accent) / 0.5), 0 0 30px hsl(var(--accent) / 0.2);
-        }
-        @keyframes nav-neon-flicker {
-          0%, 100% { text-shadow: 0 0 8px hsl(var(--accent) / 0.5), 0 0 20px hsl(var(--accent) / 0.2); }
-          7% { text-shadow: 0 0 3px hsl(var(--accent) / 0.2), 0 0 8px hsl(var(--accent) / 0.08); }
-          8% { text-shadow: 0 0 8px hsl(var(--accent) / 0.5), 0 0 20px hsl(var(--accent) / 0.2); }
-          42% { text-shadow: 0 0 10px hsl(var(--accent) / 0.65), 0 0 28px hsl(var(--accent) / 0.3); }
-          44% { text-shadow: 0 0 4px hsl(var(--accent) / 0.2), 0 0 6px hsl(var(--accent) / 0.06); }
-          45% { text-shadow: 0 0 10px hsl(var(--accent) / 0.65), 0 0 28px hsl(var(--accent) / 0.3); }
-          80% { text-shadow: 0 0 8px hsl(var(--accent) / 0.5), 0 0 20px hsl(var(--accent) / 0.2); }
-          82% { text-shadow: 0 0 3px hsl(var(--accent) / 0.15), 0 0 5px hsl(var(--accent) / 0.05); }
-          83% { text-shadow: 0 0 8px hsl(var(--accent) / 0.5), 0 0 20px hsl(var(--accent) / 0.2); }
-        }
-        .nav-neon-mobile {
-          color: hsl(var(--accent));
-          text-shadow: 0 0 8px hsl(var(--accent) / 0.4), 0 0 16px hsl(var(--accent) / 0.15);
-          transition: color 0.3s, text-shadow 0.3s;
-          animation: nav-neon-flicker 3.5s ease-in-out infinite;
-        }
-        .nav-neon-mobile:hover, .nav-neon-mobile:active {
-          color: hsl(var(--primary));
-          text-shadow: 0 0 10px hsl(var(--primary) / 0.5), 0 0 20px hsl(var(--primary) / 0.25);
-          animation: none;
-        }
-      `}</style>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <a href="#" className="flex items-center text-3xl" aria-label="CARZONA – strona główna">

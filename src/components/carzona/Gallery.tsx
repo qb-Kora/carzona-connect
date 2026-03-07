@@ -5,12 +5,12 @@ import ParallaxSection from "./ParallaxSection";
 import { X, ZoomIn } from "lucide-react";
 
 const images = [
-  { src: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=600&h=400&fit=crop&auto=format", alt: "Stanowisko diagnostyczne CARZONA" },
-  { src: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&h=400&fit=crop&auto=format", alt: "Naprawa silnika w warsztacie" },
-  { src: "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=600&h=400&fit=crop&auto=format", alt: "Profesjonalne narzędzia warsztatowe" },
-  { src: "https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=600&h=400&fit=crop&auto=format", alt: "Serwis układu hamulcowego" },
-  { src: "https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=600&h=400&fit=crop&auto=format", alt: "Diagnostyka komputerowa pojazdu" },
-  { src: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&h=400&fit=crop&auto=format", alt: "Pojazd po serwisie CARZONA" },
+  { src: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=600&h=400&fit=crop&auto=format&fm=webp", alt: "Stanowisko diagnostyczne CARZONA" },
+  { src: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&h=400&fit=crop&auto=format&fm=webp", alt: "Naprawa silnika w warsztacie" },
+  { src: "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=600&h=400&fit=crop&auto=format&fm=webp", alt: "Profesjonalne narzędzia warsztatowe" },
+  { src: "https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=600&h=400&fit=crop&auto=format&fm=webp", alt: "Serwis układu hamulcowego" },
+  { src: "https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=600&h=400&fit=crop&auto=format&fm=webp", alt: "Diagnostyka komputerowa pojazdu" },
+  { src: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&h=400&fit=crop&auto=format&fm=webp", alt: "Pojazd po serwisie CARZONA" },
 ];
 
 const Gallery = memo(() => {
@@ -99,7 +99,7 @@ const Gallery = memo(() => {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                src={images[lightbox].src.replace("w=600&h=400", "w=1200&h=800")}
+                src={images[lightbox].src.replace("w=600&h=400", "w=1200&h=800").replace("&fm=webp", "")}
                 alt={images[lightbox].alt}
                 width={1200}
                 height={800}
