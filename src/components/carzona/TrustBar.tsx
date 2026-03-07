@@ -42,7 +42,7 @@ const items = [
 
 const TrustBar = memo(() => (
   <section id="zaufanie" className="relative py-8 sm:py-12 md:py-16">
-    <div className="absolute inset-0 bg-[radial-gradient(ellipse_180%_100%_at_50%_50%,hsl(var(--primary)/0.08),hsl(var(--primary)/0.04)_40%,transparent_75%)]" />
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_180%_100%_at_50%_50%,hsl(var(--primary)/0.12),hsl(var(--primary)/0.06)_40%,transparent_75%)]" />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {items.map((item, i) => (
