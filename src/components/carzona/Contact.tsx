@@ -1,7 +1,7 @@
 import { useState, memo, useCallback } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
-import { Phone, Mail, MapPin, Send, Clock, CheckCircle, Sparkles } from "lucide-react";
+import { Phone, Mail, MapPin, Send, Clock, CheckCircle } from "lucide-react";
 
 const serviceOptions = [
   "Diagnostyka komputerowa",
@@ -53,7 +53,7 @@ const Contact = memo(() => {
   }, []);
 
   const inputClass = (field: string) =>
-    `w-full px-3 sm:px-4 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl border text-foreground placeholder:text-muted-foreground/60 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all min-h-[44px] ${errors[field] ? "border-destructive bg-destructive/5" : "border-border/60 bg-secondary/80"}`;
+    `w-full px-3 sm:px-4 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl border text-foreground placeholder:text-muted-foreground/60 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all min-h-[44px] ${errors[field] ? "border-destructive bg-destructive/5" : "border-border/60 bg-secondary/80"}`;
 
   if (submitted) {
     return (
@@ -68,6 +68,10 @@ const Contact = memo(() => {
               boxShadow: "0 0 30px -10px hsl(var(--accent) / 0.15)",
             }}
           >
+            <div
+              className="absolute top-0 left-8 right-8 h-[1px]"
+              style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.3), transparent)" }}
+            />
             <div
               className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6"
               style={{
@@ -95,12 +99,13 @@ const Contact = memo(() => {
     <section id="kontakt" className="py-16 sm:py-20 md:py-32 relative">
       <div className="max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
         <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
-          <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
+          <span className="premium-label neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
             Kontakt
           </span>
           <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
             Umów wizytę online
           </h2>
+          <div className="w-16 h-[1px] mx-auto mb-3 sm:mb-4" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), transparent)" }} />
           <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
             Wypełnij formularz — oddzwonimy w ciągu godziny i potwierdzimy termin.
           </p>
@@ -142,7 +147,7 @@ const Contact = memo(() => {
               href="mailto:sebastian@carzona.pl"
               className="group flex items-center gap-3 sm:gap-4 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-border/60 neon-hover-border transition-all duration-300 min-h-[44px]"
               style={{
-                background: "linear-gradient(135deg, hsl(var(--card) / 0.8) 0%, hsl(var(--card) / 0.5) 100%)",
+                background: "linear-gradient(160deg, hsl(var(--card) / 0.8) 0%, hsl(var(--card) / 0.5) 100%)",
                 boxShadow: "inset 0 1px 0 0 hsl(var(--foreground) / 0.03)",
               }}
             >
@@ -161,7 +166,7 @@ const Contact = memo(() => {
             <div
               className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-border/60"
               style={{
-                background: "linear-gradient(135deg, hsl(var(--card) / 0.8) 0%, hsl(var(--card) / 0.5) 100%)",
+                background: "linear-gradient(160deg, hsl(var(--card) / 0.8) 0%, hsl(var(--card) / 0.5) 100%)",
                 boxShadow: "inset 0 1px 0 0 hsl(var(--foreground) / 0.03)",
               }}
             >
@@ -180,7 +185,7 @@ const Contact = memo(() => {
             <div
               className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-border/60"
               style={{
-                background: "linear-gradient(135deg, hsl(var(--card) / 0.8) 0%, hsl(var(--card) / 0.5) 100%)",
+                background: "linear-gradient(160deg, hsl(var(--card) / 0.8) 0%, hsl(var(--card) / 0.5) 100%)",
                 boxShadow: "inset 0 1px 0 0 hsl(var(--foreground) / 0.03)",
               }}
             >
@@ -217,7 +222,7 @@ const Contact = memo(() => {
               {/* Top gradient line */}
               <div
                 className="absolute top-0 left-8 right-8 h-[1px]"
-                style={{ background: "linear-gradient(90deg, transparent, hsl(var(--primary) / 0.3), transparent)" }}
+                style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.3), hsl(var(--primary) / 0.2), transparent)" }}
               />
               <h3 className="font-bold text-foreground text-lg sm:text-xl mb-1.5 sm:mb-2">Zarezerwuj termin</h3>
               <p className="text-muted-foreground text-xs sm:text-sm mb-5 sm:mb-8">Wszystkie pola oznaczone * są wymagane.</p>
@@ -292,7 +297,7 @@ const Contact = memo(() => {
                   className="flex items-center justify-center gap-2 w-full py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base btn-shine transition-all duration-300 min-h-[44px] active:scale-[0.98] touch-manipulation text-accent-foreground relative overflow-hidden"
                   style={{
                     background: "linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(84 70% 50%) 100%)",
-                    boxShadow: "0 4px 20px -4px hsl(var(--accent) / 0.35), inset 0 1px 0 0 hsl(84 70% 60% / 0.3)",
+                    boxShadow: "0 4px 24px -4px hsl(var(--accent) / 0.4), inset 0 1px 0 0 hsl(84 70% 60% / 0.3)",
                   }}
                 >
                   <Send className="w-4 h-4 sm:w-5 sm:h-5" />

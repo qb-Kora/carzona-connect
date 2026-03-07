@@ -23,12 +23,13 @@ const FAQ = memo(() => (
     <section id="faq" className="py-16 sm:py-20 md:py-32 relative">
       <div className="max-w-3xl 2xl:max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
         <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
-          <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
+          <span className="premium-label neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
             FAQ
           </span>
           <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
             Często zadawane pytania
           </h2>
+          <div className="w-16 h-[1px] mx-auto mb-3 sm:mb-4" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), transparent)" }} />
           <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
             Odpowiedzi na najczęściej zadawane pytania naszych klientów.
           </p>
@@ -51,7 +52,11 @@ const FAQ = memo(() => (
                   backdropFilter: "blur(12px)",
                 }}
               >
-                {/* Left accent on open */}
+                {/* Top accent line on open */}
+                <div
+                  className="absolute top-0 left-4 right-4 h-[1px] opacity-0 transition-opacity"
+                  style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.3), transparent)" }}
+                />
                 <div className="absolute left-0 top-0 bottom-0 w-[2px] rounded-full opacity-0 data-[state=open]:opacity-100 transition-opacity"
                   style={{
                     background: "linear-gradient(180deg, transparent, hsl(var(--primary) / 0.5), transparent)",

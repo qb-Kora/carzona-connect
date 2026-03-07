@@ -43,12 +43,13 @@ const Realizations = memo(() => {
       <InteractiveScrews sectionRef={sectionRef} />
       <div className="max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 relative z-10 pointer-events-none">
         <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
-          <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
+          <span className="premium-label neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
             Realizacje
           </span>
           <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
             Nasze ostatnie naprawy
           </h2>
+          <div className="w-16 h-[1px] mx-auto mb-3 sm:mb-4" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), transparent)" }} />
           <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
             Każda naprawa to dla nas wyzwanie, które podejmujemy z pasją.
           </p>
@@ -64,6 +65,15 @@ const Realizations = memo(() => {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="card-hover p-4 sm:p-5 md:p-7 rounded-2xl sm:rounded-3xl group backdrop-blur-sm pointer-events-auto relative overflow-hidden"
             >
+              {/* Top accent line */}
+              <div
+                className="absolute top-0 left-4 right-4 h-[1px]"
+                style={{
+                  background: r.accent
+                    ? "linear-gradient(90deg, transparent, hsl(var(--primary) / 0.25), transparent)"
+                    : "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.2), transparent)",
+                }}
+              />
               {/* Left accent bar */}
               <div
                 className="absolute left-0 top-4 bottom-4 w-[2px] rounded-full"
