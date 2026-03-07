@@ -152,7 +152,7 @@ const Hero = memo(() => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 1.2 + i * 0.1 }}
-                className="rounded-2xl p-3.5 sm:p-5 flex flex-row sm:flex-col items-center gap-3 transition-all duration-300 border border-accent/15 bg-accent/[0.04]"
+                className="rounded-2xl p-3.5 sm:p-5 flex flex-row sm:flex-col items-center gap-3 transition-all duration-300 border border-accent/15 bg-accent/[0.06]"
                 style={{
                   boxShadow: "inset 0 1px 0 0 hsl(var(--accent) / 0.08), 0 4px 16px -4px hsl(var(--background) / 0.5)",
                 }}
