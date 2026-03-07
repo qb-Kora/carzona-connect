@@ -46,9 +46,9 @@ const TrustBar = memo(() => (
       className="absolute inset-0 pointer-events-none"
       style={{
         background: [
-          "radial-gradient(ellipse 40% 100% at 50% 50%, hsl(var(--primary) / 0.12) 0%, transparent 60%)",
-          "radial-gradient(ellipse 20% 80% at 50% 50%, hsl(var(--primary) / 0.18) 0%, transparent 50%)",
-          "radial-gradient(ellipse 8% 120% at 50% 50%, hsl(var(--primary) / 0.25) 0%, transparent 40%)",
+          "radial-gradient(ellipse 100% 40% at 50% 50%, hsl(var(--primary) / 0.12) 0%, transparent 60%)",
+          "radial-gradient(ellipse 80% 20% at 50% 50%, hsl(var(--primary) / 0.18) 0%, transparent 50%)",
+          "radial-gradient(ellipse 120% 8% at 50% 50%, hsl(var(--primary) / 0.25) 0%, transparent 40%)",
         ].join(", "),
         animation: "led-pulse 4s ease-in-out infinite",
       }}
