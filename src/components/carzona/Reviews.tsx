@@ -89,7 +89,7 @@ const Reviews = memo(() => {
           </AnimatedSection>
 
           {/* Desktop grid */}
-          <div className="hidden md:grid md:grid-cols-3 gap-5">
+          <div className="hidden md:grid md:grid-cols-3 gap-5 2xl:gap-7 items-stretch">
             <AnimatePresence mode="popLayout">
               {reviews.slice(current * perPage, current * perPage + perPage).map((review) => (
                 <motion.div
