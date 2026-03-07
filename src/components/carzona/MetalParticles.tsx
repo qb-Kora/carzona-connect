@@ -7,13 +7,13 @@ interface Particle {
   opacity: number; flickerSpeed: number; flickerPhase: number;
 }
 
+const lowEnd = isLowEnd();
+
 const MetalParticles = memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Skip entirely on low-end devices
-  if (isLowEnd()) return null;
-
   useEffect(() => {
+    if (lowEnd) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -83,6 +83,8 @@ const MetalParticles = memo(() => {
       observer.disconnect();
     };
   }, []);
+
+  if (lowEnd) return null;
 
   return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true" />;
 });

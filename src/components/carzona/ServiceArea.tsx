@@ -12,6 +12,8 @@ const cities = [
 
 const MARGIN = 60;
 const MAX_TRAIL = 400;
+const lowEnd = isLowEnd();
+const LASER_COUNT = scaledCount(12, 6, 0);
 
 interface Laser {
   angle: number;
@@ -31,11 +33,6 @@ const isOnScreen = (x: number, y: number, w: number, h: number) =>
 const LaserCanvas = memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lasersRef = useRef<Laser[]>([]);
-
-  // Skip on low-end devices
-  if (isLowEnd()) return null;
-
-  const LASER_COUNT = scaledCount(12, 6, 0);
 
   const createLaser = useCallback((w: number, h: number, green: boolean): Laser => {
     const edge = Math.floor(Math.random() * 4);
@@ -62,6 +59,7 @@ const LaserCanvas = memo(() => {
   }, []);
 
   useEffect(() => {
+    if (lowEnd) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -150,7 +148,6 @@ const LaserCanvas = memo(() => {
           ctx.globalCompositeOperation = "lighter";
           ctx.lineCap = "round";
 
-          // Glow pass (skip every 2nd segment)
           ctx.lineWidth = 6;
           for (let p = 2; p < l.trailLen; p += 2) {
             const p0 = (p - 2) * 3;
@@ -164,7 +161,6 @@ const LaserCanvas = memo(() => {
             ctx.stroke();
           }
 
-          // Core pass
           ctx.lineWidth = 1;
           for (let p = 1; p < l.trailLen; p++) {
             const p0 = (p - 1) * 3;
@@ -190,7 +186,9 @@ const LaserCanvas = memo(() => {
       window.removeEventListener("resize", resize);
       observer.disconnect();
     };
-  }, [createLaser, LASER_COUNT]);
+  }, [createLaser]);
+
+  if (lowEnd) return null;
 
   return (
     <canvas

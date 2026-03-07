@@ -15,14 +15,13 @@ interface InteractiveScrewsProps {
   sectionRef?: React.RefObject<HTMLElement>;
 }
 
+const lowEnd = isLowEnd();
+
 const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nutsRef = useRef<Nut[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animFrameRef = useRef<number>(0);
-
-  // Skip entirely on low-end devices
-  if (isLowEnd()) return null;
 
   const initNuts = useCallback((w: number, h: number) => {
     const count = scaledCount(80, 40, 0);
@@ -38,6 +37,7 @@ const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
   }, []);
 
   useEffect(() => {
+    if (lowEnd) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -167,6 +167,8 @@ const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
       target?.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [initNuts, sectionRef]);
+
+  if (lowEnd) return null;
 
   return (
     <canvas
