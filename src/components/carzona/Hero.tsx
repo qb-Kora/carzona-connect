@@ -11,8 +11,9 @@ const usps = [
 
 const lowEnd = isLowEnd();
 const skipParallax = isMidOrLow();
+const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
-/** Lazy-load video only when hero is visible — saves 9.6 MB on initial load */
+/** Lazy-load video only on desktop when hero is visible */
 const LazyVideo = memo(() => {
   const [show, setShow] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -38,6 +39,7 @@ const LazyVideo = memo(() => {
           className="w-full h-full object-cover"
         >
           <source src="/videos/hero-bg.mp4" type="video/mp4" />
+          <track kind="captions" />
         </video>
       ) : (
         <div className="w-full h-full bg-background" />
@@ -58,9 +60,9 @@ const Hero = memo(() => {
 
   return (
     <section ref={ref} className="relative h-svh flex items-center justify-center overflow-hidden">
-      {/* Video background — lazy loaded, no parallax on mid/low */}
+      {/* Video background — disabled on mobile & low-end to save bandwidth */}
       <motion.div className="absolute inset-0" style={skipParallax ? undefined : { y: videoY }}>
-        {lowEnd ? <div className="w-full h-[120%] bg-background" /> : <LazyVideo />}
+        {lowEnd || isMobile ? <div className="w-full h-[120%] bg-background" /> : <LazyVideo />}
       </motion.div>
 
       {/* Overlays */}

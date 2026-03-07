@@ -19,7 +19,7 @@ const faqs = [
 ];
 
 const FAQ = memo(() => (
-  <ParallaxSection imageUrl="https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=1920&q=80&fit=crop" overlayOpacity={0.92}>
+  <ParallaxSection imageUrl="https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=1920&q=80&fit=crop&auto=format" overlayOpacity={0.92}>
     <section id="faq" className="py-16 sm:py-20 md:py-32 relative">
       <div className="max-w-3xl 2xl:max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
         <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">

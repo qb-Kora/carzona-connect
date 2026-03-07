@@ -1,6 +1,7 @@
 import { useRef, memo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ReactNode } from "react";
+import { isMidOrLow } from "@/hooks/use-device-capability";
 
 interface Props {
   children: ReactNode;
@@ -8,6 +9,8 @@ interface Props {
   className?: string;
   overlayOpacity?: number;
 }
+
+const skipParallax = isMidOrLow();
 
 const ParallaxSection = memo(({ children, imageUrl, className = "", overlayOpacity = 0.82 }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -18,24 +21,46 @@ const ParallaxSection = memo(({ children, imageUrl, className = "", overlayOpaci
 
   const y = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
 
+  // Use smaller images on mobile, add webp format
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const optimizedUrl = imageUrl
+    .replace(/w=\d+/, isMobile ? "w=800" : "w=1200")
+    .replace(/q=\d+/, isMobile ? "q=60" : "q=75")
+    + (imageUrl.includes("&fm=") ? "" : "&fm=webp");
+
   return (
     <div ref={ref} className={`relative overflow-hidden ${className}`}>
-      {/* Parallax background image with dimensions for CLS */}
-      <motion.div
-        style={{ y }}
-        className="absolute inset-0 -top-[12%] -bottom-[12%]"
-      >
-        <img
-          src={imageUrl}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          width={1920}
-          height={1080}
-          className="w-full h-full object-cover"
-        />
-      </motion.div>
+      {/* Parallax background image — skip parallax transform on mobile */}
+      {skipParallax ? (
+        <div className="absolute inset-0">
+          <img
+            src={optimizedUrl}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            width={isMobile ? 800 : 1200}
+            height={isMobile ? 450 : 675}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <motion.div
+          style={{ y }}
+          className="absolute inset-0 -top-[12%] -bottom-[12%]"
+        >
+          <img
+            src={optimizedUrl}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            width={1200}
+            height={675}
+            className="w-full h-full object-cover"
+          />
+        </motion.div>
+      )}
 
       {/* Dark overlay */}
       <div

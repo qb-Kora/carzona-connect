@@ -37,7 +37,7 @@ const Footer = memo(() => (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-6 mb-10 sm:mb-14">
         {/* Usługi */}
         <div>
-          <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
             <div
               className="w-6 h-6 rounded-lg flex items-center justify-center"
               style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.06))" }}
@@ -45,7 +45,7 @@ const Footer = memo(() => (
               <Wrench className="w-3 h-3 text-primary" />
             </div>
             Usługi
-          </h4>
+          </h3>
           <ul className="space-y-2.5 text-sm text-muted-foreground">
             {["Mechanika ogólna", "Diagnostyka komputerowa", "Hamulce i zawieszenie", "Serwis klimatyzacji", "Przeglądy okresowe"].map((s) => (
               <li key={s}>
@@ -63,7 +63,7 @@ const Footer = memo(() => (
 
         {/* Godziny */}
         <div>
-          <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
             <div
               className="w-6 h-6 rounded-lg flex items-center justify-center"
               style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.06))" }}
@@ -71,7 +71,7 @@ const Footer = memo(() => (
               <Clock className="w-3 h-3 text-primary" />
             </div>
             Godziny otwarcia
-          </h4>
+          </h3>
           <ul className="space-y-2.5 text-sm text-muted-foreground">
             <li className="flex justify-between max-w-[200px]">
               <span>Pon – Pt</span>
@@ -83,14 +83,14 @@ const Footer = memo(() => (
             </li>
             <li className="flex justify-between max-w-[200px]">
               <span>Niedziela</span>
-              <span className="text-destructive/80 font-medium">Zamknięte</span>
+              <span className="text-destructive font-medium">Zamknięte</span>
             </li>
           </ul>
         </div>
 
         {/* Kontakt */}
         <div>
-          <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
             <div
               className="w-6 h-6 rounded-lg flex items-center justify-center"
               style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.06))" }}
@@ -98,7 +98,7 @@ const Footer = memo(() => (
               <Mail className="w-3 h-3 text-primary" />
             </div>
             Kontakt
-          </h4>
+          </h3>
           <ul className="space-y-3 text-sm text-muted-foreground">
             <li>
               <a href="tel:663881585" className="neon-hover-text transition-colors font-medium text-foreground min-h-[36px] inline-flex items-center">
@@ -115,7 +115,7 @@ const Footer = memo(() => (
 
         {/* Adres */}
         <div>
-          <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
+          <h3 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
             <div
               className="w-6 h-6 rounded-lg flex items-center justify-center"
               style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.06))" }}
@@ -123,7 +123,7 @@ const Footer = memo(() => (
               <MapPin className="w-3 h-3 text-primary" />
             </div>
             Gdzie jesteśmy
-          </h4>
+          </h3>
           <address className="not-italic text-sm text-muted-foreground leading-relaxed mb-3">
             ul. Konarskiego 17<br />44-274 Rybnik
           </address>
@@ -141,10 +141,10 @@ const Footer = memo(() => (
 
       {/* Bottom bar */}
       <div className="border-t border-border/30 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="text-xs text-muted-foreground/50">
+        <p className="text-xs text-muted-foreground">
           © {new Date().getFullYear()} CARZONA · Wszelkie prawa zastrzeżone
         </p>
-        <div className="flex gap-5 text-xs text-muted-foreground/50">
+        <div className="flex gap-5 text-xs text-muted-foreground">
           <a href="#" className="neon-hover-text transition-colors min-h-[36px] inline-flex items-center">
             Polityka prywatności
           </a>
