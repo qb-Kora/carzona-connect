@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect, memo } from "react";
+import { useRef, useEffect, memo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Phone, CalendarCheck, ChevronDown, Cpu, Clock, ShieldCheck } from "lucide-react";
-import { isLowEnd, isMidOrLow } from "@/hooks/use-device-capability";
+import { isMidOrLow } from "@/hooks/use-device-capability";
 
 const usps = [
   { icon: Cpu, title: "Diagnostyka komputerowa", desc: "Nowoczesny sprzęt diagnostyczny" },
@@ -9,45 +9,44 @@ const usps = [
   { icon: ShieldCheck, title: "Gwarancja na usługi", desc: "Pewność i spokój po naprawie" },
 ];
 
-const lowEnd = isLowEnd();
 const skipParallax = isMidOrLow();
-const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
-/** Lazy-load video only on desktop when hero is visible */
-const LazyVideo = memo(() => {
-  const [show, setShow] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+/** Direct video render — no lazy loading for above-the-fold hero */
+const HeroVideo = memo(() => {
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setShow(true); io.disconnect(); } },
-      { threshold: 0 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    // iOS Safari fallback: ensure play() is called after mount
+    const video = videoRef.current;
+    if (!video) return;
+    const tryPlay = () => {
+      video.play().catch(() => {});
+    };
+    // Try immediately and also after a short delay for iOS
+    tryPlay();
+    const t = setTimeout(tryPlay, 500);
+    return () => clearTimeout(t);
   }, []);
 
   return (
-    <div ref={ref} className="w-full h-[120%]">
-      {show ? (
-        <video
-          autoPlay muted loop playsInline
-          preload="metadata"
-          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Crect fill='%230f1117'/%3E%3C/svg%3E"
-          className="w-full h-full object-cover"
-        >
-          <source src="/videos/hero-bg.mp4" type="video/mp4" />
-          <track kind="captions" />
-        </video>
-      ) : (
-        <div className="w-full h-full bg-background" />
-      )}
+    <div className="w-full h-[120%]">
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Crect fill='%230f1117' width='1920' height='1080'/%3E%3C/svg%3E"
+        className="w-full h-full object-cover"
+      >
+        <source src="/videos/hero-bg.mp4" type="video/mp4" />
+        <track kind="captions" />
+      </video>
     </div>
   );
 });
-LazyVideo.displayName = "LazyVideo";
+HeroVideo.displayName = "HeroVideo";
 
 const Hero = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
