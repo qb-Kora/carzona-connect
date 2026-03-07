@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo } from "react";
+import { useState, useEffect, useCallback, memo, forwardRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Car } from "lucide-react";
 
@@ -101,7 +101,9 @@ const CarCrashCTA = memo(() => {
         </div>
       </motion.div>
     </motion.div>
-  );
+  ));
+
+  BubbleContent.displayName = "BubbleContent";
 
   return (
     <>
