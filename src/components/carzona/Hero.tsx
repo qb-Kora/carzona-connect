@@ -43,7 +43,7 @@ const Hero = memo(() => {
       {/* Content */}
       <motion.div
         style={{ y: contentY }}
-        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32 md:py-40"
+        className="relative z-10 w-full max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-20 sm:py-32 md:py-40"
       >
         <div className="text-center max-w-4xl mx-auto">
           {/* Badge — enhanced with shimmer */}
@@ -70,7 +70,7 @@ const Hero = memo(() => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[1.6rem] leading-tight sm:text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter sm:leading-[0.95] md:leading-[0.9] mb-4 sm:mb-8"
+            className="text-[1.6rem] leading-tight sm:text-4xl md:text-5xl lg:text-7xl 2xl:text-8xl font-black tracking-tighter sm:leading-[0.95] md:leading-[0.9] mb-4 sm:mb-8"
           >
             <span className="block">Profesjonalny warsztat</span>
             <span className="block">
