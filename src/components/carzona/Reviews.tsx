@@ -15,6 +15,55 @@ const reviews = [
 
 const stars = Array.from({ length: 5 });
 
+const ReviewCard = memo(({ review, className = "" }: { review: typeof reviews[0]; className?: string }) => (
+  <div
+    className={`card-hover p-6 sm:p-7 rounded-2xl sm:rounded-3xl backdrop-blur-sm relative overflow-hidden ${className}`}
+    itemScope
+    itemType="https://schema.org/Review"
+  >
+    {/* Decorative quote */}
+    <div
+      className="absolute top-4 right-4 w-12 h-12 rounded-full flex items-center justify-center"
+      style={{
+        background: "linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, transparent 100%)",
+      }}
+    >
+      <Quote className="w-5 h-5 text-primary/20" />
+    </div>
+
+    <div className="flex gap-0.5 mb-3 sm:mb-4" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
+      <meta itemProp="ratingValue" content={String(review.rating)} />
+      {stars.map((_, j) => (
+        <Star
+          key={j}
+          className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-accent text-accent"
+          style={{ filter: "drop-shadow(0 0 3px hsl(var(--accent) / 0.4))" }}
+        />
+      ))}
+    </div>
+    <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm italic" itemProp="reviewBody">
+      „{review.text}"
+    </p>
+    <div className="border-t border-border/50 pt-3 sm:pt-4 flex items-center gap-3">
+      <div
+        className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-primary font-bold text-sm"
+        style={{
+          background: "linear-gradient(135deg, hsl(var(--primary) / 0.15) 0%, hsl(var(--primary) / 0.06) 100%)",
+          boxShadow: "inset 0 1px 0 0 hsl(var(--primary) / 0.1)",
+        }}
+      >
+        {review.name.charAt(0)}
+      </div>
+      <div>
+        <div className="font-semibold text-foreground text-sm" itemProp="author">{review.name}</div>
+        <div className="text-xs text-muted-foreground">{review.car}</div>
+      </div>
+    </div>
+  </div>
+));
+
+ReviewCard.displayName = "ReviewCard";
+
 const Reviews = memo(() => {
   const [current, setCurrent] = useState(0);
   const perPage = 3;
@@ -49,29 +98,8 @@ const Reviews = memo(() => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.4 }}
-                  className="card-hover p-6 sm:p-7 rounded-2xl sm:rounded-3xl backdrop-blur-sm"
-                  itemScope
-                  itemType="https://schema.org/Review"
                 >
-                  <Quote className="w-7 h-7 sm:w-8 sm:h-8 text-primary/15 mb-3 sm:mb-4" />
-                  <div className="flex gap-0.5 mb-3 sm:mb-4" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
-                    <meta itemProp="ratingValue" content={String(review.rating)} />
-                    {stars.map((_, j) => (
-                      <Star key={j} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-accent text-accent" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm" itemProp="reviewBody">
-                    "{review.text}"
-                  </p>
-                  <div className="border-t border-border pt-3 sm:pt-4 flex items-center gap-3">
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
-                      {review.name.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-foreground text-sm" itemProp="author">{review.name}</div>
-                      <div className="text-xs text-muted-foreground">{review.car}</div>
-                    </div>
-                  </div>
+                  <ReviewCard review={review} />
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -86,31 +114,13 @@ const Reviews = memo(() => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -40 }}
                 transition={{ duration: 0.3 }}
-                className="card-hover p-4 sm:p-5 rounded-2xl backdrop-blur-sm"
               >
-                <Quote className="w-6 h-6 text-primary/15 mb-2" />
-                <div className="flex gap-0.5 mb-2">
-                  {stars.map((_, j) => (
-                    <Star key={j} className="w-3.5 h-3.5 fill-accent text-accent" />
-                  ))}
-                </div>
-                <p className="text-muted-foreground leading-relaxed mb-4 text-sm">
-                  "{reviews[current].text}"
-                </p>
-                <div className="border-t border-border pt-3 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
-                    {reviews[current].name.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-foreground text-sm">{reviews[current].name}</div>
-                    <div className="text-xs text-muted-foreground">{reviews[current].car}</div>
-                  </div>
-                </div>
+                <ReviewCard review={reviews[current]} />
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Nav */}
+          {/* Nav — enhanced */}
           <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
             <button
               onClick={prev}
@@ -125,11 +135,20 @@ const Reviews = memo(() => {
                 <button
                   key={i}
                   onClick={() => setCurrent(i)}
-                  className={`h-2 rounded-full transition-all duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center ${
-                    i === current ? "bg-primary w-7" : "bg-border hover:bg-muted-foreground w-2"
+                  className={`rounded-full transition-all duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                    i === current
+                      ? "w-7"
+                      : "w-2"
                   }`}
                   aria-label={`Strona ${i + 1}`}
-                />
+                >
+                  <span
+                    className={`block h-2 rounded-full transition-all duration-300 ${
+                      i === current ? "w-7 bg-primary" : "w-2 bg-border hover:bg-muted-foreground"
+                    }`}
+                    style={i === current ? { boxShadow: "0 0 8px hsl(var(--primary) / 0.4)" } : {}}
+                  />
+                </button>
               ))}
             </div>
             <button

@@ -4,6 +4,9 @@ import Logo from "./Logo";
 
 const Footer = memo(() => (
   <footer className="relative border-t border-border/50 pt-12 sm:pt-16 md:pt-20 pb-24 md:pb-12 overflow-hidden">
+    {/* Subtle top gradient */}
+    <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-primary/[0.02] to-transparent pointer-events-none" />
+
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Top — brand + CTA */}
       <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10 sm:mb-14">
@@ -19,7 +22,11 @@ const Footer = memo(() => (
         </div>
         <a
           href="tel:663881585"
-          className="inline-flex items-center gap-2.5 bg-primary hover:bg-primary/90 active:scale-95 text-primary-foreground font-semibold px-6 py-3.5 rounded-xl transition-all text-sm sm:text-base btn-shine min-h-[48px] touch-manipulation"
+          className="inline-flex items-center gap-2.5 text-primary-foreground font-semibold px-6 py-3.5 rounded-xl transition-all text-sm sm:text-base btn-shine min-h-[48px] touch-manipulation active:scale-95"
+          style={{
+            background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(217 91% 65%) 100%)",
+            boxShadow: "0 4px 16px -4px hsl(var(--primary) / 0.35), inset 0 1px 0 0 hsl(217 91% 70% / 0.3)",
+          }}
         >
           <Phone className="w-4 h-4" />
           Zadzwoń: 663 881 585
@@ -31,7 +38,12 @@ const Footer = memo(() => (
         {/* Usługi */}
         <div>
           <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
-            <Wrench className="w-4 h-4 text-primary" />
+            <div
+              className="w-6 h-6 rounded-lg flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.06))" }}
+            >
+              <Wrench className="w-3 h-3 text-primary" />
+            </div>
             Usługi
           </h4>
           <ul className="space-y-2.5 text-sm text-muted-foreground">
@@ -41,7 +53,7 @@ const Footer = memo(() => (
                   href="#uslugi"
                   className="group flex items-center gap-1.5 neon-hover-text transition-colors min-h-[36px] sm:min-h-0"
                 >
-                  <ChevronRight className="w-3 h-3 text-primary/60 group-hover:translate-x-0.5 transition-transform" />
+                  <ChevronRight className="w-3 h-3 text-primary/40 group-hover:translate-x-0.5 transition-transform" />
                   {s}
                 </a>
               </li>
@@ -52,7 +64,12 @@ const Footer = memo(() => (
         {/* Godziny */}
         <div>
           <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
-            <Clock className="w-4 h-4 text-primary" />
+            <div
+              className="w-6 h-6 rounded-lg flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.06))" }}
+            >
+              <Clock className="w-3 h-3 text-primary" />
+            </div>
             Godziny otwarcia
           </h4>
           <ul className="space-y-2.5 text-sm text-muted-foreground">
@@ -74,7 +91,12 @@ const Footer = memo(() => (
         {/* Kontakt */}
         <div>
           <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
-            <Mail className="w-4 h-4 text-primary" />
+            <div
+              className="w-6 h-6 rounded-lg flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.06))" }}
+            >
+              <Mail className="w-3 h-3 text-primary" />
+            </div>
             Kontakt
           </h4>
           <ul className="space-y-3 text-sm text-muted-foreground">
@@ -94,7 +116,12 @@ const Footer = memo(() => (
         {/* Adres */}
         <div>
           <h4 className="font-semibold text-foreground text-sm mb-4 flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-primary" />
+            <div
+              className="w-6 h-6 rounded-lg flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.06))" }}
+            >
+              <MapPin className="w-3 h-3 text-primary" />
+            </div>
             Gdzie jesteśmy
           </h4>
           <address className="not-italic text-sm text-muted-foreground leading-relaxed mb-3">
@@ -113,11 +140,11 @@ const Footer = memo(() => (
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-border/50 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="text-xs text-muted-foreground/60">
+      <div className="border-t border-border/30 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p className="text-xs text-muted-foreground/50">
           © {new Date().getFullYear()} CARZONA · Wszelkie prawa zastrzeżone
         </p>
-        <div className="flex gap-5 text-xs text-muted-foreground/60">
+        <div className="flex gap-5 text-xs text-muted-foreground/50">
           <a href="#" className="neon-hover-text transition-colors min-h-[36px] inline-flex items-center">
             Polityka prywatności
           </a>

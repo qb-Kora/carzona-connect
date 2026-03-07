@@ -110,7 +110,11 @@ const Header = memo(() => {
             </a>
             <a
               href="#kontakt"
-              className="hidden md:inline-flex items-center gap-2 backdrop-blur-md text-accent font-bold px-5 py-2.5 rounded-xl border border-accent/60 hover:border-accent hover:scale-105 active:scale-95 transition-all duration-200 text-sm whitespace-nowrap bg-transparent min-h-[44px] touch-manipulation"
+              className="hidden md:inline-flex items-center gap-2 backdrop-blur-md font-bold px-5 py-2.5 rounded-xl border border-accent/40 hover:border-accent hover:scale-105 active:scale-95 transition-all duration-200 text-sm whitespace-nowrap min-h-[44px] touch-manipulation text-accent"
+              style={{
+                background: "linear-gradient(135deg, hsl(var(--accent) / 0.08) 0%, transparent 100%)",
+                boxShadow: "0 0 12px -4px hsl(var(--accent) / 0.2), inset 0 1px 0 0 hsl(var(--accent) / 0.1)",
+              }}
             >
               Umów wizytę
             </a>

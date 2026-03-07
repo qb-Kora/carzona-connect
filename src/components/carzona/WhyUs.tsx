@@ -5,10 +5,10 @@ import ParallaxSection from "./ParallaxSection";
 import { CheckCircle2, Timer, Banknote, HeartHandshake } from "lucide-react";
 
 const reasons = [
-  { icon: CheckCircle2, title: "Jakość bez kompromisów", desc: "Certyfikowane części i materiały eksploatacyjne Castrol. Każda naprawa z gwarancją." },
-  { icon: Timer, title: "Szybka realizacja", desc: "Szanujemy Twój czas. Większość napraw wykonujemy w ciągu 24h." },
-  { icon: Banknote, title: "Uczciwe ceny", desc: "Transparentna wycena bez ukrytych kosztów. Zawsze wiesz, za co płacisz." },
-  { icon: HeartHandshake, title: "Indywidualne podejście", desc: "Każdy klient i każde auto traktujemy indywidualnie z pełnym zaangażowaniem." },
+  { icon: CheckCircle2, title: "Jakość bez kompromisów", desc: "Certyfikowane części i materiały eksploatacyjne Castrol. Każda naprawa z gwarancją.", num: "01" },
+  { icon: Timer, title: "Szybka realizacja", desc: "Szanujemy Twój czas. Większość napraw wykonujemy w ciągu 24h.", num: "02" },
+  { icon: Banknote, title: "Uczciwe ceny", desc: "Transparentna wycena bez ukrytych kosztów. Zawsze wiesz, za co płacisz.", num: "03" },
+  { icon: HeartHandshake, title: "Indywidualne podejście", desc: "Każdy klient i każde auto traktujemy indywidualnie z pełnym zaangażowaniem.", num: "04" },
 ];
 
 const WhyUs = memo(() => (
@@ -35,13 +35,26 @@ const WhyUs = memo(() => (
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="card-hover p-5 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl cursor-default group backdrop-blur-sm"
+              className="card-hover p-5 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl cursor-default group backdrop-blur-sm relative overflow-hidden"
             >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-5 neon-hover-icon transition-all duration-300">
+              {/* Number watermark */}
+              <span
+                className="absolute -top-2 -right-1 text-[4rem] sm:text-[5rem] font-black leading-none select-none pointer-events-none"
+                style={{ color: "hsl(var(--primary) / 0.04)" }}
+              >
+                {reason.num}
+              </span>
+              <div
+                className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-5 neon-hover-icon transition-all duration-300 relative z-10"
+                style={{
+                  background: "linear-gradient(135deg, hsl(var(--primary) / 0.12) 0%, hsl(var(--primary) / 0.05) 100%)",
+                  boxShadow: "inset 0 1px 0 0 hsl(var(--primary) / 0.1)",
+                }}
+              >
                 <reason.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
               </div>
-              <h3 className="font-bold text-foreground text-base sm:text-lg mb-1.5 sm:mb-2">{reason.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{reason.desc}</p>
+              <h3 className="font-bold text-foreground text-base sm:text-lg mb-1.5 sm:mb-2 relative z-10">{reason.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed relative z-10">{reason.desc}</p>
             </motion.div>
           ))}
         </div>

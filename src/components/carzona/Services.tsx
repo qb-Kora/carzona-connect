@@ -41,23 +41,45 @@ const Services = memo(() => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-            className="card-hover p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl cursor-default group"
+            className="card-hover p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl cursor-default group relative"
           >
+            {/* Top accent line */}
+            <div
+              className="absolute top-0 left-4 right-4 h-[1px]"
+              style={{
+                background: service.popular
+                  ? "linear-gradient(90deg, transparent, hsl(var(--accent) / 0.4), transparent)"
+                  : "linear-gradient(90deg, transparent, hsl(var(--primary) / 0.2), transparent)",
+              }}
+            />
             {service.popular && (
-              <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-accent/15 text-accent text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full">
+              <div
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 text-accent text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-accent/30"
+                style={{
+                  background: "linear-gradient(135deg, hsl(var(--accent) / 0.12) 0%, hsl(var(--accent) / 0.06) 100%)",
+                  boxShadow: "0 0 8px -2px hsl(var(--accent) / 0.2)",
+                }}
+              >
                 Popularne
               </div>
             )}
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-5 neon-hover-icon transition-colors duration-300">
+            <div
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-5 neon-hover-icon transition-colors duration-300"
+              style={{
+                background: "linear-gradient(135deg, hsl(var(--primary) / 0.12) 0%, hsl(var(--primary) / 0.05) 100%)",
+                boxShadow: "inset 0 1px 0 0 hsl(var(--primary) / 0.08)",
+              }}
+            >
               <service.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
             </div>
             <h3 className="font-semibold text-foreground text-sm sm:text-base mb-1.5 sm:mb-2">{service.title}</h3>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-3 sm:mb-4">{service.desc}</p>
             <a
               href="#kontakt"
-              className="inline-flex text-xs sm:text-sm text-primary font-medium hover:text-accent transition-colors duration-300 min-h-[44px] items-center"
+              className="inline-flex text-xs sm:text-sm text-primary font-medium neon-hover-text transition-colors duration-300 min-h-[44px] items-center gap-1"
             >
-              Sprawdź szczegóły →
+              Sprawdź szczegóły
+              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </a>
           </motion.div>
         ))}

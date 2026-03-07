@@ -11,14 +11,17 @@ const highlights = [
 
 const LocalSEO = memo(() => (
   <section className="py-14 sm:py-16 md:py-28 relative">
-    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent pointer-events-none" />
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_50%,hsl(var(--primary)/0.03),transparent)] pointer-events-none" />
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <AnimatedSection>
         <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
           {highlights.map(({ icon: Icon, label }) => (
             <span
               key={label}
-              className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium text-muted-foreground bg-card border border-border/60 rounded-full px-3 py-1.5"
+              className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium text-muted-foreground rounded-full px-3 py-1.5 border border-border/40"
+              style={{
+                background: "linear-gradient(135deg, hsl(var(--card) / 0.7) 0%, hsl(var(--card) / 0.4) 100%)",
+              }}
             >
               <Icon className="w-3 h-3 text-primary" />
               {label}
@@ -27,9 +30,13 @@ const LocalSEO = memo(() => (
         </div>
 
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight mb-2 text-foreground">
-          Mechanik samochodowy Rybnik
+          Mechanik samochodowy <span className="text-gradient">Rybnik</span>
         </h2>
-        <p className="text-primary/70 text-xs sm:text-sm font-medium mb-5 sm:mb-7">
+        <p className="text-primary/60 text-xs sm:text-sm font-medium mb-5 sm:mb-7 flex items-center gap-2">
+          <span
+            className="inline-block w-8 h-[1px]"
+            style={{ background: "linear-gradient(90deg, hsl(var(--primary) / 0.5), transparent)" }}
+          />
           Twój zaufany serwis w sercu Śląska
         </p>
 
