@@ -1,6 +1,6 @@
 import { useRef, memo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Phone, CalendarCheck, ChevronDown, Cpu, Clock, ShieldCheck, Sparkles } from "lucide-react";
+import { Phone, CalendarCheck, ChevronDown, Cpu, Clock, ShieldCheck } from "lucide-react";
 
 const usps = [
   { icon: Cpu, title: "Diagnostyka komputerowa", desc: "Nowoczesny sprzęt diagnostyczny" },
@@ -65,37 +65,27 @@ const Hero = memo(() => {
             </span>
           </motion.div>
 
-          {/* H1 — Industrial Metallic Neon 2026 */}
-           <motion.h1
-             initial={{ opacity: 0, y: 40 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-             className="text-[1.8rem] leading-tight sm:text-5xl md:text-6xl lg:text-8xl 2xl:text-9xl font-black tracking-tighter sm:leading-[0.92] md:leading-[0.88] mb-4 sm:mb-8 uppercase"
-           >
-             <span className="block text-foreground">
-               <span className="inline-block">Warsztat</span>
-             </span>
-             <span className="block mb-2 sm:mb-4">
-               <span
-                 className="inline-block bg-clip-text text-transparent font-black"
-                 style={{
-                   backgroundImage: "linear-gradient(90deg, hsl(217 91% 65%) 0%, hsl(217 91% 75%) 25%, hsl(84 70% 50%) 50%, hsl(217 91% 65%) 100%)",
-                   backgroundSize: "200% 100%",
-                   animation: "metalShift 8s ease-in-out infinite",
-                 }}
-               >
-                 SAMOCHODOWY
-               </span>
-             </span>
-             <span className="block text-accent font-black text-[1.4rem] sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl tracking-wider"
-               style={{
-                 textShadow: "0 0 20px hsl(84 70% 50% / 0.6), 0 0 40px hsl(84 70% 50% / 0.3), inset 0 2px 0 0 hsl(84 70% 60%)",
-                 letterSpacing: "0.08em",
-               }}
-             >
-               W RYBNIKU
-             </span>
-           </motion.h1>
+          {/* H1 — Neon Workshop 2026 */}
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="text-[1.6rem] leading-tight sm:text-4xl md:text-5xl lg:text-7xl 2xl:text-8xl 3xl:text-9xl font-black tracking-tighter sm:leading-[0.95] md:leading-[0.9] mb-4 sm:mb-8"
+          >
+            <span className="block text-foreground neon-heading">Profesjonalny warsztat</span>
+            <span className="block">
+              <span className="text-foreground neon-heading">samochodowy </span>
+              <span
+                className="bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: "linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(84 70% 55%) 50%, hsl(84 70% 45%) 100%)",
+                  filter: "drop-shadow(0 0 12px hsl(84 70% 50% / 0.5))",
+                }}
+              >
+                w Rybniku
+              </span>
+            </span>
+          </motion.h1>
 
           {/* Subtitle — refined with separator dots */}
           <motion.p
