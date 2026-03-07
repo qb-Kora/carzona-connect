@@ -1,4 +1,4 @@
-import { useRef, memo } from "react";
+import { useRef, memo, forwardRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ReactNode } from "react";
 import { isMidOrLow } from "@/hooks/use-device-capability";
@@ -12,7 +12,7 @@ interface Props {
 
 const skipParallax = isMidOrLow();
 
-const ParallaxSection = memo(({ children, imageUrl, className = "", overlayOpacity = 0.82 }: Props) => {
+const ParallaxSection = memo(forwardRef<HTMLDivElement, Props>(({ children, imageUrl, className = "", overlayOpacity = 0.82 }, _ref) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -75,7 +75,7 @@ const ParallaxSection = memo(({ children, imageUrl, className = "", overlayOpaci
       </div>
     </div>
   );
-});
+}));
 
 ParallaxSection.displayName = "ParallaxSection";
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo } from "react";
+import { useState, useEffect, useCallback, memo, forwardRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Car } from "lucide-react";
 
@@ -74,8 +74,9 @@ const CarCrashCTA = memo(() => {
     return mergeTransition;
   };
 
-  const BubbleContent = ({ size = "base" }: { size?: "base" | "sm" }) => (
+  const BubbleContent = forwardRef<HTMLDivElement, { size?: "base" | "sm" }>(({ size = "base" }, ref) => (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, scale: 0.3 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.5 }}
@@ -100,7 +101,9 @@ const CarCrashCTA = memo(() => {
         </div>
       </motion.div>
     </motion.div>
-  );
+  ));
+
+  BubbleContent.displayName = "BubbleContent";
 
   return (
     <>
