@@ -27,7 +27,8 @@ function CountUp({ target, suffix }: { target: number; suffix: string }) {
 
   return (
     <span ref={ref} className="tabular-nums">
-      {count.toLocaleString("pl-PL")}{suffix}
+      {count.toLocaleString("pl-PL")}
+      {suffix}
     </span>
   );
 }
@@ -40,20 +41,8 @@ const items = [
 ];
 
 const TrustBar = memo(() => (
-  <section id="zaufanie" className="relative py-8 sm:py-12 md:py-16"
-    style={{
-      background: "radial-gradient(ellipse 100% 100% at 50% 50%, hsl(var(--primary) / 0.18) 0%, hsl(var(--primary) / 0.08) 40%, transparent 75%)",
-    }}
-  >
-    {/* Horizontal LED core line */}
-    <div
-      className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] pointer-events-none"
-      style={{
-        background: "linear-gradient(to right, transparent 2%, hsl(var(--primary) / 0.4) 20%, hsl(var(--primary) / 0.6) 50%, hsl(var(--primary) / 0.4) 80%, transparent 98%)",
-        boxShadow: "0 0 8px 2px hsl(var(--primary) / 0.2), 0 0 20px 4px hsl(var(--primary) / 0.1)",
-        animation: "led-pulse 4s ease-in-out infinite",
-      }}
-    />
+  <section id="zaufanie" className="relative py-8 sm:py-12 md:py-16">
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,hsl(var(--primary)/0.04),transparent)]" />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {items.map((item, i) => (
@@ -69,7 +58,8 @@ const TrustBar = memo(() => (
               boxShadow: "inset 0 1px 0 0 hsl(var(--foreground) / 0.03), 0 4px 16px -4px hsl(var(--background) / 0.5)",
             }}
           >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 neon-hover-icon transition-colors duration-300"
+            <div
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 neon-hover-icon transition-colors duration-300"
               style={{
                 background: "linear-gradient(135deg, hsl(var(--primary) / 0.12) 0%, hsl(var(--primary) / 0.06) 100%)",
               }}
