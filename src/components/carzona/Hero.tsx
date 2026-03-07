@@ -64,8 +64,8 @@ const Hero = memo(() => {
       <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/75 to-background/95" />
       <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.05] via-transparent to-accent/[0.03]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_50%_35%,hsl(var(--primary)/0.08),transparent)]" />
-      {/* Warm gold cinematic strip at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-gold/[0.04] via-accent/[0.06] to-transparent blur-sm pointer-events-none" />
+       {/* Warm green cinematic strip at bottom */}
+       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-accent/[0.04] via-accent/[0.06] to-transparent blur-sm pointer-events-none" />
       {/* Vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_40%,hsl(var(--background)/0.6))]" />
 
@@ -76,25 +76,25 @@ const Hero = memo(() => {
       >
         <div className="text-center max-w-5xl 2xl:max-w-6xl mx-auto">
           {/* Premium Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 sm:gap-3 px-5 py-2.5 sm:py-3 rounded-full mb-5 sm:mb-8"
-            style={{
-              background: "linear-gradient(135deg, hsl(var(--gold) / 0.08) 0%, hsl(var(--accent) / 0.06) 100%)",
-              border: "1px solid hsl(var(--gold) / 0.25)",
-              boxShadow: "0 0 20px -5px hsl(var(--gold) / 0.12), inset 0 1px 0 0 hsl(var(--gold) / 0.12)",
-            }}
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "hsl(var(--gold))" }} />
-              <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "hsl(var(--gold))" }} />
-            </span>
-            <span className="text-xs sm:text-sm" style={{ color: "hsl(var(--gold))" }}>
-              Autoryzowany partner <span className="font-bold text-accent">Q Service Castrol</span>
-            </span>
-          </motion.div>
+           <motion.div
+             initial={{ opacity: 0, y: 20, scale: 0.9 }}
+             animate={{ opacity: 1, y: 0, scale: 1 }}
+             transition={{ duration: 0.6, delay: 0.2 }}
+             className="inline-flex items-center gap-2 sm:gap-3 px-5 py-2.5 sm:py-3 rounded-full mb-5 sm:mb-8"
+             style={{
+               background: "linear-gradient(135deg, hsl(var(--accent) / 0.08) 0%, hsl(var(--accent) / 0.06) 100%)",
+               border: "1px solid hsl(var(--accent) / 0.25)",
+               boxShadow: "0 0 20px -5px hsl(var(--accent) / 0.12), inset 0 1px 0 0 hsl(var(--accent) / 0.12)",
+             }}
+           >
+             <span className="relative flex h-2 w-2">
+               <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "hsl(var(--accent))" }} />
+               <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "hsl(var(--accent))" }} />
+             </span>
+             <span className="text-xs sm:text-sm" style={{ color: "hsl(var(--accent))" }}>
+               Autoryzowany partner <span className="font-bold text-accent">Q Service Castrol</span>
+             </span>
+           </motion.div>
 
           {/* H1 */}
           <motion.h1
