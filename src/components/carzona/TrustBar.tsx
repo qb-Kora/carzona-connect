@@ -41,7 +41,7 @@ const items = [
 
 const TrustBar = memo(() => (
   <section id="zaufanie" className="relative py-8 sm:py-12 md:py-16">
-    <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.03] via-transparent to-primary/[0.03]" />
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_50%,hsl(var(--primary)/0.04),transparent)]" />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {items.map((item, i) => (
@@ -51,9 +51,17 @@ const TrustBar = memo(() => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="flex items-center gap-2.5 sm:gap-4 group p-3 sm:p-4 rounded-2xl bg-card/40 border border-border/50 backdrop-blur-sm"
+            className="group flex items-center gap-2.5 sm:gap-4 p-3 sm:p-4 rounded-2xl border border-border/50 backdrop-blur-sm relative overflow-hidden"
+            style={{
+              background: "linear-gradient(135deg, hsl(var(--card) / 0.6) 0%, hsl(var(--card) / 0.3) 100%)",
+              boxShadow: "inset 0 1px 0 0 hsl(var(--foreground) / 0.03), 0 4px 16px -4px hsl(var(--background) / 0.5)",
+            }}
           >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 neon-hover-icon transition-colors duration-300">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 neon-hover-icon transition-colors duration-300"
+              style={{
+                background: "linear-gradient(135deg, hsl(var(--primary) / 0.12) 0%, hsl(var(--primary) / 0.06) 100%)",
+              }}
+            >
               <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             </div>
             <div className="min-w-0">
