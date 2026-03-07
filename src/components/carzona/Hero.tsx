@@ -1,7 +1,7 @@
-import { useRef, memo } from "react";
+import { useRef, useState, useEffect, memo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Phone, CalendarCheck, ChevronDown, Cpu, Clock, ShieldCheck } from "lucide-react";
-import { isLowEnd } from "@/hooks/use-device-capability";
+import { isLowEnd, isMidOrLow } from "@/hooks/use-device-capability";
 
 const usps = [
   { icon: Cpu, title: "Diagnostyka komputerowa", desc: "Nowoczesny sprzęt diagnostyczny" },
@@ -10,6 +10,42 @@ const usps = [
 ];
 
 const lowEnd = isLowEnd();
+const skipParallax = isMidOrLow();
+
+/** Lazy-load video only when hero is visible — saves 9.6 MB on initial load */
+const LazyVideo = memo(() => {
+  const [show, setShow] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setShow(true); io.disconnect(); } },
+      { threshold: 0 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="w-full h-[120%]">
+      {show ? (
+        <video
+          autoPlay muted loop playsInline
+          preload="metadata"
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Crect fill='%230f1117'/%3E%3C/svg%3E"
+          className="w-full h-full object-cover"
+        >
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+        </video>
+      ) : (
+        <div className="w-full h-full bg-background" />
+      )}
+    </div>
+  );
+});
+LazyVideo.displayName = "LazyVideo";
 
 const Hero = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
@@ -17,28 +53,14 @@ const Hero = memo(() => {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", lowEnd ? "0%" : "30%"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", lowEnd ? "0%" : "15%"]);
+  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", skipParallax ? "0%" : "30%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", skipParallax ? "0%" : "15%"]);
 
   return (
     <section ref={ref} className="relative h-svh flex items-center justify-center overflow-hidden">
-      {/* Video background with parallax — poster fallback on low-end */}
-      <motion.div className="absolute inset-0" style={lowEnd ? undefined : { y: videoY }}>
-        {lowEnd ? (
-          <div className="w-full h-[120%] bg-background" />
-        ) : (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Crect fill='%230f1117'/%3E%3C/svg%3E"
-            className="w-full h-[120%] object-cover"
-          >
-            <source src="/videos/hero-bg.mp4" type="video/mp4" />
-          </video>
-        )}
+      {/* Video background — lazy loaded, no parallax on mid/low */}
+      <motion.div className="absolute inset-0" style={skipParallax ? undefined : { y: videoY }}>
+        {lowEnd ? <div className="w-full h-[120%] bg-background" /> : <LazyVideo />}
       </motion.div>
 
       {/* Overlays */}
@@ -49,7 +71,7 @@ const Hero = memo(() => {
 
       {/* Content */}
       <motion.div
-        style={lowEnd ? undefined : { y: contentY }}
+        style={skipParallax ? undefined : { y: contentY }}
         className="relative z-10 w-full max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-12 sm:py-16"
       >
         <div className="text-center max-w-5xl 2xl:max-w-6xl mx-auto">
