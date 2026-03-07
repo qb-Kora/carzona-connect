@@ -41,12 +41,12 @@ const Realizations = memo(() => {
   return (
     <section ref={sectionRef} id="realizacje" className="py-16 sm:py-20 md:py-32 relative">
       <InteractiveScrews sectionRef={sectionRef} />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pointer-events-none">
+      <div className="max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 relative z-10 pointer-events-none">
         <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
           <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
             Realizacje
           </span>
-          <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
+          <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
             Nasze ostatnie naprawy
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">

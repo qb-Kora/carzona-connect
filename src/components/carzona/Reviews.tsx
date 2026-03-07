@@ -17,7 +17,7 @@ const stars = Array.from({ length: 5 });
 
 const ReviewCard = memo(({ review, className = "" }: { review: typeof reviews[0]; className?: string }) => (
   <div
-    className={`card-hover p-6 sm:p-7 rounded-2xl sm:rounded-3xl backdrop-blur-sm relative overflow-hidden ${className}`}
+    className={`card-hover p-6 sm:p-7 2xl:p-8 rounded-2xl sm:rounded-3xl backdrop-blur-sm relative overflow-hidden h-full flex flex-col ${className}`}
     itemScope
     itemType="https://schema.org/Review"
   >
@@ -41,10 +41,10 @@ const ReviewCard = memo(({ review, className = "" }: { review: typeof reviews[0]
         />
       ))}
     </div>
-    <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm italic" itemProp="reviewBody">
+    <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm 2xl:text-base italic flex-1" itemProp="reviewBody">
       „{review.text}"
     </p>
-    <div className="border-t border-border/50 pt-3 sm:pt-4 flex items-center gap-3">
+    <div className="border-t border-border/50 pt-3 sm:pt-4 flex items-center gap-3 mt-auto">
       <div
         className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-primary font-bold text-sm"
         style={{
@@ -75,12 +75,12 @@ const Reviews = memo(() => {
   return (
     <ParallaxSection imageUrl="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80&fit=crop" overlayOpacity={0.9}>
       <section id="opinie" className="py-16 sm:py-20 md:py-32 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
           <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
             <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
               Opinie
             </span>
-            <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
+            <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
               Co mówią nasi klienci
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
@@ -89,7 +89,7 @@ const Reviews = memo(() => {
           </AnimatedSection>
 
           {/* Desktop grid */}
-          <div className="hidden md:grid md:grid-cols-3 gap-5">
+          <div className="hidden md:grid md:grid-cols-3 gap-5 2xl:gap-7 items-stretch">
             <AnimatePresence mode="popLayout">
               {reviews.slice(current * perPage, current * perPage + perPage).map((review) => (
                 <motion.div

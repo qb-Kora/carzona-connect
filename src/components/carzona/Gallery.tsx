@@ -20,12 +20,12 @@ const Gallery = memo(() => {
   return (
     <ParallaxSection imageUrl="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=1920&q=80&fit=crop&auto=format" overlayOpacity={0.85}>
       <section id="galeria" className="py-16 sm:py-20 md:py-32 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
           <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
             <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
               Realizacje
             </span>
-            <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
+            <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
               Nasz warsztat w akcji
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base md:text-lg">
@@ -33,7 +33,7 @@ const Gallery = memo(() => {
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4 2xl:gap-5">
             {images.map((img, i) => (
               <motion.button
                 key={i}
