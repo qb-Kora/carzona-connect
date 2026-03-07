@@ -45,7 +45,7 @@ const Hero = memo(() => {
         style={{ y: contentY }}
         className="relative z-10 w-full max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-20 sm:py-32 md:py-40"
       >
-        <div className="text-center max-w-4xl mx-auto">
+        <div className="text-center max-w-5xl 2xl:max-w-6xl mx-auto">
           {/* Badge — enhanced with shimmer */}
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
