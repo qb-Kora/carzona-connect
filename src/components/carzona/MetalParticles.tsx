@@ -1,6 +1,5 @@
 import { useEffect, useRef, memo } from "react";
-
-const getParticleCount = () => (typeof window !== "undefined" && window.innerWidth < 768) ? 20 : 30;
+import { isLowEnd, scaledCount } from "@/hooks/use-device-capability";
 
 interface Particle {
   x: number; y: number; size: number;
@@ -10,6 +9,9 @@ interface Particle {
 
 const MetalParticles = memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Skip entirely on low-end devices
+  if (isLowEnd()) return null;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -42,7 +44,7 @@ const MetalParticles = memo(() => {
     );
     observer.observe(canvas);
 
-    const count = getParticleCount();
+    const count = scaledCount(30, 15, 0);
     const particles: Particle[] = Array.from({ length: count }, () => ({
       x: Math.random() * (w || 500),
       y: Math.random() * (h || 500),

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, memo } from "react";
+import { isLowEnd, scaledCount } from "@/hooks/use-device-capability";
 
 interface Nut {
   x: number; y: number; vx: number; vy: number;
@@ -14,17 +15,17 @@ interface InteractiveScrewsProps {
   sectionRef?: React.RefObject<HTMLElement>;
 }
 
-// Reduce count on mobile for performance
-const getNutCount = () => (typeof window !== "undefined" && window.innerWidth < 768) ? 40 : 80;
-
 const InteractiveScrews = memo(({ sectionRef }: InteractiveScrewsProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nutsRef = useRef<Nut[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animFrameRef = useRef<number>(0);
 
+  // Skip entirely on low-end devices
+  if (isLowEnd()) return null;
+
   const initNuts = useCallback((w: number, h: number) => {
-    const count = getNutCount();
+    const count = scaledCount(80, 40, 0);
     nutsRef.current = Array.from({ length: count }, () => ({
       x: Math.random() * (w - 30) + 15,
       y: Math.random() * (h - 30) + 15,

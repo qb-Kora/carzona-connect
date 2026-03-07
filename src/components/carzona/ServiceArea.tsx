@@ -2,6 +2,7 @@ import { memo, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import { MapPin } from "lucide-react";
+import { isLowEnd, scaledCount } from "@/hooks/use-device-capability";
 
 const cities = [
   "Rybnik", "Żory", "Jastrzębie-Zdrój", "Wodzisław Śląski", "Racibórz",
@@ -9,7 +10,6 @@ const cities = [
   "Gliwice", "Zabrze", "Tychy", "Mikołów", "Ornontowice",
 ];
 
-const LASER_COUNT = 12;
 const MARGIN = 60;
 const MAX_TRAIL = 400;
 
@@ -31,6 +31,11 @@ const isOnScreen = (x: number, y: number, w: number, h: number) =>
 const LaserCanvas = memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lasersRef = useRef<Laser[]>([]);
+
+  // Skip on low-end devices
+  if (isLowEnd()) return null;
+
+  const LASER_COUNT = scaledCount(12, 6, 0);
 
   const createLaser = useCallback((w: number, h: number, green: boolean): Laser => {
     const edge = Math.floor(Math.random() * 4);
@@ -77,7 +82,6 @@ const LaserCanvas = memo(() => {
     resize();
     window.addEventListener("resize", resize);
 
-    // Pause when off-screen
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -137,7 +141,6 @@ const LaserCanvas = memo(() => {
           continue;
         }
 
-        // Draw — simplified 2-pass instead of 3
         if (l.trailLen > 1) {
           const glowH = l.green ? "84,70%,55%" : "217,91%,60%";
           const coreH = l.green ? "84,70%,85%" : "210,100%,80%";
@@ -187,7 +190,7 @@ const LaserCanvas = memo(() => {
       window.removeEventListener("resize", resize);
       observer.disconnect();
     };
-  }, [createLaser]);
+  }, [createLaser, LASER_COUNT]);
 
   return (
     <canvas
