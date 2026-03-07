@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
-import MetalParticles from "./MetalParticles";
 import {
   Wrench, Cpu, Gauge, Droplets, Disc, CarFront, Thermometer, Shield
 } from "lucide-react";
@@ -19,7 +18,8 @@ const services = [
 
 const Services = memo(() => (
   <section id="uslugi" className="py-16 sm:py-20 md:py-32 relative">
-    <MetalParticles />
+    {/* Subtle radial glow instead of particles */}
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_30%,hsl(var(--primary)/0.04),transparent)] pointer-events-none" />
     <div className="max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
       <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
         <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
