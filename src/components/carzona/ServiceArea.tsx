@@ -142,32 +142,49 @@ const LaserCanvas = memo(() => {
         if (l.trailLen > 1) {
           const glowH = l.green ? "84,70%,55%" : "217,91%,60%";
           const coreH = l.green ? "84,70%,85%" : "210,100%,80%";
-          const flicker = 0.6 + 0.4 * Math.sin(time * 2.5 + i * 1.7);
+          const brightMul = l.green ? 1.6 : 1;
+          const flicker = 0.7 + 0.3 * Math.sin(time * 2.5 + i * 1.7);
 
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
           ctx.lineCap = "round";
 
-          ctx.lineWidth = 6;
-          for (let p = 2; p < l.trailLen; p += 2) {
+          // Outer glow — wide & soft
+          ctx.lineWidth = 10;
+          for (let p = 2; p < l.trailLen; p += 3) {
             const p0 = (p - 2) * 3;
             const p1 = p * 3;
-            const avg = (t[p0 + 2] + t[p1 + 2]) / 2 * flicker;
+            const avg = (t[p0 + 2] + t[p1 + 2]) / 2 * flicker * brightMul;
             if (avg < 0.02) continue;
-            ctx.strokeStyle = `hsla(${glowH},${avg * 0.08})`;
+            ctx.strokeStyle = `hsla(${glowH},${avg * 0.12})`;
             ctx.beginPath();
             ctx.moveTo(t[p0], t[p0 + 1]);
             ctx.lineTo(t[p1], t[p1 + 1]);
             ctx.stroke();
           }
 
-          ctx.lineWidth = 1;
+          // Mid glow
+          ctx.lineWidth = 4;
+          for (let p = 1; p < l.trailLen; p += 2) {
+            const p0 = (p - 1) * 3;
+            const p1 = p * 3;
+            const avg = (t[p0 + 2] + t[p1 + 2]) / 2 * flicker * brightMul;
+            if (avg < 0.02) continue;
+            ctx.strokeStyle = `hsla(${glowH},${avg * 0.25})`;
+            ctx.beginPath();
+            ctx.moveTo(t[p0], t[p0 + 1]);
+            ctx.lineTo(t[p1], t[p1 + 1]);
+            ctx.stroke();
+          }
+
+          // Core — bright & thin
+          ctx.lineWidth = 1.5;
           for (let p = 1; p < l.trailLen; p++) {
             const p0 = (p - 1) * 3;
             const p1 = p * 3;
-            const avg = (t[p0 + 2] + t[p1 + 2]) / 2 * flicker;
+            const avg = (t[p0 + 2] + t[p1 + 2]) / 2 * flicker * brightMul;
             if (avg < 0.02) continue;
-            ctx.strokeStyle = `hsla(${coreH},${avg * 0.45})`;
+            ctx.strokeStyle = `hsla(${coreH},${avg * 0.7})`;
             ctx.beginPath();
             ctx.moveTo(t[p0], t[p0 + 1]);
             ctx.lineTo(t[p1], t[p1 + 1]);
@@ -211,7 +228,7 @@ const ServiceArea = memo(() => (
           <span className="neon-label text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3 sm:mb-4 block">
             Obszar działania
           </span>
-          <h2 className="neon-heading text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4">
+          <h2 className="neon-heading text-2xl sm:text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
             Warsztat samochodowy dla mieszkańców Rybnika i okolic
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base md:text-lg mb-5 sm:mb-8">

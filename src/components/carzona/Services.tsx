@@ -72,8 +72,8 @@ const Services = memo(() => (
             >
               <service.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
             </div>
-            <h3 className="font-semibold text-foreground text-sm sm:text-base mb-1.5 sm:mb-2">{service.title}</h3>
-            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-3 sm:mb-4">{service.desc}</p>
+            <h3 className="font-semibold text-foreground text-sm sm:text-base md:text-lg mb-1.5 sm:mb-2">{service.title}</h3>
+            <p className="text-xs sm:text-sm md:text-sm text-muted-foreground leading-relaxed mb-3 sm:mb-4">{service.desc}</p>
             <a
               href="#kontakt"
               className="inline-flex text-xs sm:text-sm text-primary font-medium neon-hover-text transition-colors duration-300 min-h-[44px] items-center gap-1"
