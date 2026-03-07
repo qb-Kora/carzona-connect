@@ -3,6 +3,10 @@ import Header from "@/components/carzona/Header";
 import Hero from "@/components/carzona/Hero";
 import NeonDivider from "@/components/carzona/NeonDivider";
 
+const SectionPlaceholder = ({ height = "h-96" }: { height?: string }) => (
+  <div className={`${height} w-full bg-background`} />
+);
+
 // Lazy load below-the-fold sections
 const TrustBar = lazy(() => import("@/components/carzona/TrustBar"));
 const WhyUs = lazy(() => import("@/components/carzona/WhyUs"));
