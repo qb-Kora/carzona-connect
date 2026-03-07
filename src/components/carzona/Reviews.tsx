@@ -17,7 +17,7 @@ const stars = Array.from({ length: 5 });
 
 const ReviewCard = memo(({ review, className = "" }: { review: typeof reviews[0]; className?: string }) => (
   <div
-    className={`card-hover p-6 sm:p-7 rounded-2xl sm:rounded-3xl backdrop-blur-sm relative overflow-hidden ${className}`}
+    className={`card-hover p-6 sm:p-7 2xl:p-8 rounded-2xl sm:rounded-3xl backdrop-blur-sm relative overflow-hidden h-full flex flex-col ${className}`}
     itemScope
     itemType="https://schema.org/Review"
   >
