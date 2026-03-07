@@ -41,10 +41,10 @@ const ReviewCard = memo(({ review, className = "" }: { review: typeof reviews[0]
         />
       ))}
     </div>
-    <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm italic" itemProp="reviewBody">
+    <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm 2xl:text-base italic flex-1" itemProp="reviewBody">
       „{review.text}"
     </p>
-    <div className="border-t border-border/50 pt-3 sm:pt-4 flex items-center gap-3">
+    <div className="border-t border-border/50 pt-3 sm:pt-4 flex items-center gap-3 mt-auto">
       <div
         className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-primary font-bold text-sm"
         style={{
