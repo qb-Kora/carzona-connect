@@ -18,7 +18,7 @@ const Hero = memo(() => {
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   return (
-    <section ref={ref} className="relative min-h-[85svh] lg:min-h-[90svh] flex items-center justify-center overflow-hidden">
+    <section ref={ref} className="relative h-svh flex items-center justify-center overflow-hidden">
       {/* Video background with parallax */}
       <motion.div className="absolute inset-0" style={{ y: videoY }}>
         <video
@@ -43,7 +43,7 @@ const Hero = memo(() => {
       {/* Content */}
       <motion.div
         style={{ y: contentY }}
-        className="relative z-10 w-full max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-16 sm:py-24 md:py-28"
+        className="relative z-10 w-full max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-12 sm:py-16"
       >
         <div className="text-center max-w-5xl 2xl:max-w-6xl mx-auto">
           {/* Badge — enhanced with shimmer */}
