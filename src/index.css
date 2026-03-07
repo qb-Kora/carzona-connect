@@ -353,11 +353,16 @@
     }
   }
 
-  @keyframes neon-hover-text-flicker {
-    0%, 100% { text-shadow: 0 0 6px hsl(var(--primary) / 0.5), 0 0 14px hsl(var(--primary) / 0.18); }
-    15% { text-shadow: 0 0 8px hsl(var(--primary) / 0.7), 0 0 20px hsl(var(--primary) / 0.3); }
-    50% { text-shadow: 0 0 7px hsl(var(--primary) / 0.6), 0 0 16px hsl(var(--primary) / 0.22); }
-  }
+   @keyframes neon-hover-text-flicker {
+     0%, 100% { text-shadow: 0 0 6px hsl(var(--primary) / 0.5), 0 0 14px hsl(var(--primary) / 0.18); }
+     15% { text-shadow: 0 0 8px hsl(var(--primary) / 0.7), 0 0 20px hsl(var(--primary) / 0.3); }
+     50% { text-shadow: 0 0 7px hsl(var(--primary) / 0.6), 0 0 16px hsl(var(--primary) / 0.22); }
+   }
+
+   @keyframes metalShift {
+     0%, 100% { background-position: 0% center; }
+     50% { background-position: 100% center; }
+   }
 
   .btn-shine {
     position: relative;
