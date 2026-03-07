@@ -18,7 +18,7 @@ const Hero = memo(() => {
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   return (
-    <section ref={ref} className="relative min-h-[85svh] lg:min-h-[90svh] flex items-center justify-center overflow-hidden">
+    <section ref={ref} className="relative h-svh flex items-center justify-center overflow-hidden">
       {/* Video background with parallax */}
       <motion.div className="absolute inset-0" style={{ y: videoY }}>
         <video
@@ -43,7 +43,7 @@ const Hero = memo(() => {
       {/* Content */}
       <motion.div
         style={{ y: contentY }}
-        className="relative z-10 w-full max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-16 sm:py-24 md:py-28"
+        className="relative z-10 w-full max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-12 sm:py-16"
       >
         <div className="text-center max-w-5xl 2xl:max-w-6xl mx-auto">
           {/* Badge — enhanced with shimmer */}
@@ -70,7 +70,8 @@ const Hero = memo(() => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[1.6rem] sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl 2xl:text-7xl font-black tracking-tighter leading-[1.05] sm:leading-[0.95] md:leading-[0.9] mb-4 sm:mb-8"
+            className="font-black tracking-tighter leading-[0.95] mb-4 sm:mb-6"
+            style={{ fontSize: "clamp(1.6rem, 5vw, 4.5rem)" }}
           >
             <span className="block neon-heading">Profesjonalny warsztat</span>
             <span className="block neon-heading">
