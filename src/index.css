@@ -108,6 +108,15 @@
       transform: translateX(-200%) !important;
     }
   }
+
+  /* Reduced motion — disable all animations for accessibility & perf */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
 @layer utilities {
@@ -362,6 +371,27 @@
    @keyframes metalShift {
      0%, 100% { background-position: 0% center; }
      50% { background-position: 100% center; }
+   }
+
+   /* NeonDivider animations — shared globally instead of inline <style> */
+   .neon-divider-line {
+     animation: neon-divider-flicker 3s ease-in-out infinite;
+   }
+   .neon-divider-glow {
+     animation: neon-divider-glow 3s ease-in-out infinite;
+   }
+   @keyframes neon-divider-flicker {
+     0%, 100% { opacity: 0.5; }
+     15% { opacity: 0.9; }
+     30% { opacity: 0.65; }
+     50% { opacity: 0.85; }
+     70% { opacity: 0.5; }
+   }
+   @keyframes neon-divider-glow {
+     0%, 100% { opacity: 0.12; }
+     25% { opacity: 0.32; }
+     50% { opacity: 0.18; }
+     75% { opacity: 0.3; }
    }
 
    @keyframes led-pulse {

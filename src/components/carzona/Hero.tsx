@@ -1,6 +1,7 @@
 import { useRef, memo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Phone, CalendarCheck, ChevronDown, Cpu, Clock, ShieldCheck } from "lucide-react";
+import { isLowEnd } from "@/hooks/use-device-capability";
 
 const usps = [
   { icon: Cpu, title: "Diagnostyka komputerowa", desc: "Nowoczesny sprzęt diagnostyczny" },
@@ -8,33 +9,39 @@ const usps = [
   { icon: ShieldCheck, title: "Gwarancja na usługi", desc: "Pewność i spokój po naprawie" },
 ];
 
+const lowEnd = isLowEnd();
+
 const Hero = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
-  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", lowEnd ? "0%" : "30%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", lowEnd ? "0%" : "15%"]);
 
   return (
     <section ref={ref} className="relative h-svh flex items-center justify-center overflow-hidden">
-      {/* Video background with parallax */}
-      <motion.div className="absolute inset-0" style={{ y: videoY }}>
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Crect fill='%230f1117'/%3E%3C/svg%3E"
-          className="w-full h-[120%] object-cover"
-        >
-          <source src="/videos/hero-bg.mp4" type="video/mp4" />
-        </video>
+      {/* Video background with parallax — poster fallback on low-end */}
+      <motion.div className="absolute inset-0" style={lowEnd ? undefined : { y: videoY }}>
+        {lowEnd ? (
+          <div className="w-full h-[120%] bg-background" />
+        ) : (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Crect fill='%230f1117'/%3E%3C/svg%3E"
+            className="w-full h-[120%] object-cover"
+          >
+            <source src="/videos/hero-bg.mp4" type="video/mp4" />
+          </video>
+        )}
       </motion.div>
 
-      {/* Enhanced overlays with richer gradients */}
+      {/* Overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/80 to-background/95" />
       <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-accent/[0.04]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,hsl(var(--primary)/0.06),transparent)]" />
@@ -42,16 +49,16 @@ const Hero = memo(() => {
 
       {/* Content */}
       <motion.div
-        style={{ y: contentY }}
+        style={lowEnd ? undefined : { y: contentY }}
         className="relative z-10 w-full max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-12 sm:py-16"
       >
         <div className="text-center max-w-5xl 2xl:max-w-6xl mx-auto">
-          {/* Badge — enhanced with shimmer */}
+          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 sm:gap-3 px-5 py-2.5 sm:py-3 rounded-full mb-5 sm:mb-8 border border-accent/20 bg-accent/[0.06] backdrop-blur-xl"
+            className="inline-flex items-center gap-2 sm:gap-3 px-5 py-2.5 sm:py-3 rounded-full mb-5 sm:mb-8 border border-accent/20 bg-accent/[0.06]"
             style={{
               boxShadow: "0 0 20px -5px hsl(var(--accent) / 0.15), inset 0 1px 0 0 hsl(var(--accent) / 0.1)",
             }}
@@ -65,7 +72,7 @@ const Hero = memo(() => {
             </span>
           </motion.div>
 
-          {/* H1 — Neon Workshop 2026 */}
+          {/* H1 */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -89,7 +96,7 @@ const Hero = memo(() => {
             </span>
           </motion.h1>
 
-          {/* Subtitle — refined with separator dots */}
+          {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -105,7 +112,7 @@ const Hero = memo(() => {
             </span>
           </motion.p>
 
-          {/* CTAs — enhanced with gradient and glow */}
+          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -125,14 +132,14 @@ const Hero = memo(() => {
             </a>
             <a
               href="tel:663881585"
-              className="flex items-center justify-center gap-2.5 text-foreground px-6 py-3.5 sm:py-4 rounded-2xl border border-border neon-hover-border active:bg-card/80 transition-all duration-300 hover:bg-card/60 font-semibold text-sm sm:text-base min-h-[48px] touch-manipulation backdrop-blur-sm"
+              className="flex items-center justify-center gap-2.5 text-foreground px-6 py-3.5 sm:py-4 rounded-2xl border border-border neon-hover-border active:bg-card/80 transition-all duration-300 hover:bg-card/60 font-semibold text-sm sm:text-base min-h-[48px] touch-manipulation"
             >
               <Phone className="w-5 h-5 text-primary" />
               Zadzwoń teraz
             </a>
           </motion.div>
 
-          {/* USP Tiles — enhanced with gradient borders and depth */}
+          {/* USP Tiles */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -145,7 +152,7 @@ const Hero = memo(() => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 1.2 + i * 0.1 }}
-                className="rounded-2xl p-3.5 sm:p-5 flex flex-row sm:flex-col items-center gap-3 transition-all duration-300 backdrop-blur-xl border border-accent/15 bg-accent/[0.04]"
+                className="rounded-2xl p-3.5 sm:p-5 flex flex-row sm:flex-col items-center gap-3 transition-all duration-300 border border-accent/15 bg-accent/[0.06]"
                 style={{
                   boxShadow: "inset 0 1px 0 0 hsl(var(--accent) / 0.08), 0 4px 16px -4px hsl(var(--background) / 0.5)",
                 }}

@@ -2,6 +2,7 @@ import { memo, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "./AnimatedSection";
 import { MapPin } from "lucide-react";
+import { isLowEnd, scaledCount } from "@/hooks/use-device-capability";
 
 const cities = [
   "Rybnik", "Żory", "Jastrzębie-Zdrój", "Wodzisław Śląski", "Racibórz",
@@ -9,9 +10,10 @@ const cities = [
   "Gliwice", "Zabrze", "Tychy", "Mikołów", "Ornontowice",
 ];
 
-const LASER_COUNT = 12;
 const MARGIN = 60;
 const MAX_TRAIL = 400;
+const lowEnd = isLowEnd();
+const LASER_COUNT = scaledCount(12, 6, 0);
 
 interface Laser {
   angle: number;
@@ -57,6 +59,7 @@ const LaserCanvas = memo(() => {
   }, []);
 
   useEffect(() => {
+    if (lowEnd) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -77,7 +80,6 @@ const LaserCanvas = memo(() => {
     resize();
     window.addEventListener("resize", resize);
 
-    // Pause when off-screen
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -137,7 +139,6 @@ const LaserCanvas = memo(() => {
           continue;
         }
 
-        // Draw — simplified 2-pass instead of 3
         if (l.trailLen > 1) {
           const glowH = l.green ? "84,70%,55%" : "217,91%,60%";
           const coreH = l.green ? "84,70%,85%" : "210,100%,80%";
@@ -147,7 +148,6 @@ const LaserCanvas = memo(() => {
           ctx.globalCompositeOperation = "lighter";
           ctx.lineCap = "round";
 
-          // Glow pass (skip every 2nd segment)
           ctx.lineWidth = 6;
           for (let p = 2; p < l.trailLen; p += 2) {
             const p0 = (p - 2) * 3;
@@ -161,7 +161,6 @@ const LaserCanvas = memo(() => {
             ctx.stroke();
           }
 
-          // Core pass
           ctx.lineWidth = 1;
           for (let p = 1; p < l.trailLen; p++) {
             const p0 = (p - 1) * 3;
@@ -188,6 +187,8 @@ const LaserCanvas = memo(() => {
       observer.disconnect();
     };
   }, [createLaser]);
+
+  if (lowEnd) return null;
 
   return (
     <canvas
