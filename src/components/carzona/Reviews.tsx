@@ -41,7 +41,7 @@ const ReviewCard = memo(({ review, className = "" }: { review: typeof reviews[0]
         />
       ))}
     </div>
-    <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm 2xl:text-base italic flex-1" itemProp="reviewBody">
+    <p className="text-foreground/70 leading-relaxed mb-5 sm:mb-6 text-sm 2xl:text-base italic flex-1" itemProp="reviewBody">
       „{review.text}"
     </p>
     <div className="border-t border-border/50 pt-3 sm:pt-4 flex items-center gap-3 mt-auto">
@@ -73,7 +73,7 @@ const Reviews = memo(() => {
   const next = useCallback(() => setCurrent(c => Math.min(maxPage, c + 1)), [maxPage]);
 
   return (
-    <ParallaxSection imageUrl="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80&fit=crop" overlayOpacity={0.9}>
+    <ParallaxSection imageUrl="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80&fit=crop&auto=format" overlayOpacity={0.9}>
       <section id="opinie" className="py-16 sm:py-20 md:py-32 relative overflow-hidden">
         <div className="max-w-7xl 3xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
           <AnimatedSection className="text-center mb-10 sm:mb-12 md:mb-16">
