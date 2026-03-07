@@ -40,18 +40,11 @@ const items = [
 ];
 
 const TrustBar = memo(() => (
-  <section id="zaufanie" className="relative py-8 sm:py-12 md:py-16 overflow-hidden">
-    {/* LED strip glow — sharp center core */}
-    <div
-      className="absolute -inset-x-[20%] inset-y-0 pointer-events-none"
-      style={{
-        background: [
-          "radial-gradient(ellipse 100% 100% at 50% 50%, hsl(var(--primary) / 0.16) 0%, hsl(var(--primary) / 0.06) 50%, transparent 80%)",
-          "radial-gradient(ellipse 60% 80% at 50% 50%, hsl(var(--primary) / 0.22) 0%, transparent 60%)",
-        ].join(", "),
-        animation: "led-pulse 4s ease-in-out infinite",
-      }}
-    />
+  <section id="zaufanie" className="relative py-8 sm:py-12 md:py-16"
+    style={{
+      background: "radial-gradient(ellipse 100% 100% at 50% 50%, hsl(var(--primary) / 0.18) 0%, hsl(var(--primary) / 0.08) 40%, transparent 75%)",
+    }}
+  >
     {/* Horizontal LED core line */}
     <div
       className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] pointer-events-none"
