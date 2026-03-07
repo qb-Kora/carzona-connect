@@ -10,17 +10,24 @@ let cachedLevel: DeviceLevel | null = null;
 function detect(): DeviceLevel {
   if (typeof window === "undefined") return "high";
 
-  // iPad Mini 4 = 2 cores, low memory, old GPU
-  const cores = navigator.hardwareConcurrency || 2;
-  const memory = (navigator as any).deviceMemory || 2; // GB
+  const cores = navigator.hardwareConcurrency || 0;
+  const memory = (navigator as any).deviceMemory || 0; // GB, often 0 on iOS
   const isMobile = window.innerWidth < 768;
   const isTablet = window.innerWidth >= 768 && window.innerWidth < 1200;
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // iOS Safari doesn't reliably expose cores/memory — don't penalise unknown
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
   if (prefersReduced) return "low";
-  if (cores <= 2 || memory <= 2) return "low";
-  if (cores <= 4 || memory <= 4 || isMobile) return "mid";
-  if (isTablet) return "mid";
+
+  // Only mark as low if we *positively know* it's weak hardware
+  // (cores reported AND very low, with memory also reported AND very low)
+  if (!isIOS && cores > 0 && cores <= 2 && memory > 0 && memory <= 2) return "low";
+
+  if (isMobile || isTablet) return "mid";
+  if (cores > 0 && cores <= 4) return "mid";
   return "high";
 }
 
