@@ -70,10 +70,10 @@ const Hero = memo(() => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[1.6rem] leading-tight sm:text-4xl md:text-5xl lg:text-7xl 2xl:text-8xl font-black tracking-tighter leading-[1.1] sm:leading-[0.95] md:leading-[0.9] mb-4 sm:mb-8"
+            className="text-[1.6rem] sm:text-4xl md:text-5xl lg:text-[4.2rem] xl:text-7xl 2xl:text-8xl font-black tracking-tighter leading-[1.05] sm:leading-[0.95] md:leading-[0.9] mb-4 sm:mb-8"
           >
             <span className="block neon-heading">Profesjonalny warsztat</span>
-            <span className="block">
+            <span className="block neon-heading">
               <span className="neon-heading">samochodowy</span>{" "}
               <span className="text-gradient-accent">w</span>{" "}
               <span
