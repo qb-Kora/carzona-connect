@@ -43,12 +43,11 @@ const TrustBar = memo(() => (
   <section id="zaufanie" className="relative py-8 sm:py-12 md:py-16 overflow-hidden">
     {/* LED strip glow — sharp center core */}
     <div
-      className="absolute inset-0 pointer-events-none"
+      className="absolute -inset-x-[20%] inset-y-0 pointer-events-none"
       style={{
         background: [
-          "radial-gradient(ellipse 120% 80% at 50% 50%, hsl(var(--primary) / 0.14) 0%, transparent 70%)",
-          "radial-gradient(ellipse 90% 60% at 50% 50%, hsl(var(--primary) / 0.20) 0%, transparent 55%)",
-          "radial-gradient(ellipse 70% 30% at 50% 50%, hsl(var(--primary) / 0.28) 0%, transparent 45%)",
+          "radial-gradient(ellipse 100% 100% at 50% 50%, hsl(var(--primary) / 0.16) 0%, hsl(var(--primary) / 0.06) 50%, transparent 80%)",
+          "radial-gradient(ellipse 60% 80% at 50% 50%, hsl(var(--primary) / 0.22) 0%, transparent 60%)",
         ].join(", "),
         animation: "led-pulse 4s ease-in-out infinite",
       }}
