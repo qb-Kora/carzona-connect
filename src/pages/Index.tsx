@@ -3,6 +3,10 @@ import Header from "@/components/carzona/Header";
 import Hero from "@/components/carzona/Hero";
 import NeonDivider from "@/components/carzona/NeonDivider";
 
+const SectionPlaceholder = ({ height = "h-96" }: { height?: string }) => (
+  <div className={`${height} w-full bg-background`} />
+);
+
 // Lazy load below-the-fold sections
 const TrustBar = lazy(() => import("@/components/carzona/TrustBar"));
 const WhyUs = lazy(() => import("@/components/carzona/WhyUs"));
@@ -23,28 +27,48 @@ const Index = () => {
     <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       <Hero />
-      <Suspense fallback={null}>
-        <NeonDivider direction="top" />
+      <NeonDivider direction="top" />
+      <Suspense fallback={<SectionPlaceholder />}>
         <TrustBar />
-        <NeonDivider />
+      </Suspense>
+      <NeonDivider />
+      <Suspense fallback={<SectionPlaceholder />}>
         <WhyUs />
-        <NeonDivider />
+      </Suspense>
+      <NeonDivider />
+      <Suspense fallback={<SectionPlaceholder />}>
         <Services />
-        <NeonDivider />
+      </Suspense>
+      <NeonDivider />
+      <Suspense fallback={<SectionPlaceholder />}>
         <Reviews />
-        <NeonDivider />
+      </Suspense>
+      <NeonDivider />
+      <Suspense fallback={<SectionPlaceholder />}>
         <Realizations />
-        <NeonDivider />
+      </Suspense>
+      <NeonDivider />
+      <Suspense fallback={<SectionPlaceholder />}>
         <Gallery />
-        <NeonDivider />
+      </Suspense>
+      <NeonDivider />
+      <Suspense fallback={<SectionPlaceholder />}>
         <ServiceArea />
-        <NeonDivider />
+      </Suspense>
+      <NeonDivider />
+      <Suspense fallback={<SectionPlaceholder />}>
         <FAQ />
-        <NeonDivider />
+      </Suspense>
+      <NeonDivider />
+      <Suspense fallback={<SectionPlaceholder />}>
         <Contact />
-        <NeonDivider />
+      </Suspense>
+      <NeonDivider />
+      <Suspense fallback={<SectionPlaceholder height="h-40" />}>
         <LocalSEO />
-        <NeonDivider color="primary" />
+      </Suspense>
+      <NeonDivider color="primary" />
+      <Suspense fallback={null}>
         <Footer />
         <MobileCTA />
         <CarCrashCTA />

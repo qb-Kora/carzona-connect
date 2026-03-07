@@ -62,7 +62,7 @@ const Hero = memo(() => {
     <section ref={ref} className="relative h-svh flex items-center justify-center overflow-hidden">
       {/* Video background — disabled on mobile & low-end to save bandwidth */}
       <motion.div className="absolute inset-0" style={skipParallax ? undefined : { y: videoY }}>
-        {lowEnd || isMobile ? <div className="w-full h-[120%] bg-background" /> : <LazyVideo />}
+        {lowEnd ? <div className="w-full h-[120%] bg-background" /> : <LazyVideo />}
       </motion.div>
 
       {/* Overlays */}
