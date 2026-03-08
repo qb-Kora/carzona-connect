@@ -29,8 +29,7 @@ const GarageDoorLoader = ({ onComplete }: { onComplete: () => void }) => {
       className="fixed inset-0 z-[10000] pointer-events-auto"
       aria-hidden="true"
     >
-      {/* Dark workshop behind the door */}
-      <div className="absolute inset-0 bg-[hsl(228,18%,3%)]" />
+      {/* Transparent background - page shows through */}
 
       {/* Garage door panels */}
       <div
