@@ -1,7 +1,8 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useCallback } from "react";
 import Header from "@/components/carzona/Header";
 import Hero from "@/components/carzona/Hero";
 import NeonDivider from "@/components/carzona/NeonDivider";
+import GarageDoorLoader from "@/components/carzona/GarageDoorLoader";
 
 const SectionPlaceholder = ({ height = "h-96" }: { height?: string }) => (
   <div className={`${height} w-full bg-background`} />
@@ -23,8 +24,13 @@ const MobileCTA = lazy(() => import("@/components/carzona/MobileCTA"));
 const CarCrashCTA = lazy(() => import("@/components/carzona/CarCrashCTA"));
 
 const Index = () => {
+  const [loaded, setLoaded] = useState(false);
+  const handleLoaded = useCallback(() => setLoaded(true), []);
+
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden grain">
+    <>
+      {!loaded && <GarageDoorLoader onComplete={handleLoaded} />}
+      <div className="min-h-screen bg-background overflow-x-hidden grain">
       <Header />
       <Hero />
       <NeonDivider direction="top" />
