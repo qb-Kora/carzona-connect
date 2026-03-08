@@ -431,6 +431,21 @@
      50% { opacity: 1; }
    }
 
+   @keyframes garage-progress {
+     0% { width: 0%; }
+     100% { width: 100%; }
+   }
+
+   @keyframes garage-pulse {
+     0%, 100% { opacity: 0.4; }
+     50% { opacity: 0.8; }
+   }
+
+   @keyframes garage-light-spill {
+     0% { opacity: 0; }
+     100% { opacity: 1; }
+   }
+
   .btn-shine {
     position: relative;
     overflow: hidden;
