@@ -79,7 +79,8 @@ const Index = () => {
         <MobileCTA />
         <CarCrashCTA />
       </Suspense>
-    </div>
+      </div>
+    </>
   );
 };
 
