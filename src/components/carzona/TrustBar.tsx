@@ -37,7 +37,7 @@ const items = [
   { icon: Award, value: 15, suffix: "+", label: "Lat doświadczenia" },
   { icon: Shield, value: 100, suffix: "%", label: "Gwarancja na usługi" },
   { icon: Users, value: 3000, suffix: "+", label: "Zadowolonych klientów" },
-  { icon: Cpu, value: 0, suffix: "", label: "Nowoczesny sprzęt" },
+  { icon: Cpu, value: 10, suffix: "+", label: "Certyfikacji i szkoleń" },
 ];
 
 const TrustBar = memo(() => (
