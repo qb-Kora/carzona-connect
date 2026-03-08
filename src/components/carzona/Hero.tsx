@@ -120,16 +120,6 @@ const Hero = memo(() => {
             </span>
           </motion.h1>
 
-          {/* Decorative line under heading */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="w-24 h-[1px] mx-auto mb-5 sm:mb-7"
-            style={{
-              background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.5), hsl(var(--primary) / 0.4), transparent)",
-            }}
-          />
 
           {/* Subtitle */}
           <motion.p
